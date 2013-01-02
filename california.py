@@ -4,12 +4,6 @@ import re
 import sys
 import dogcatcher
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?CA.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 voter_state = "CA"
 source = "State"
 
@@ -138,7 +132,7 @@ for county in county_data:
   else:
     hours = ""
 
-  fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+  fips = dogcatcher.fips_find(county_name, voter_state)
 
   result.append([authority_name, first_name, last_name, county_name, fips,
   street, city, address_state, zip_code,
@@ -153,7 +147,7 @@ for county in county_data:
 
 #This outputs the results to a separate text file.
 
-output = open(cidr + "california.txt", "w")
+output = open(cdir + "california.txt", "w")
 for r in result:
   output.write("\t".join(r))
   output.write("\n")

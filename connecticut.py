@@ -216,9 +216,9 @@ for item in abse:
         zip_code = zip_re.findall(csz)[0].strip().title()
 
     if street:
-        fips, county_name = dogcatcher.maps_fips(city, address_state, zip_code, fips_names, fips_numbers)
+        fips, county_name = dogcatcher.maps_fips(city, address_state, zip_code)
     else:
-        fips, county_name = dogcatcher.maps_fips(po_city, po_state, po_zip_code, fips_names, fips_numbers)
+        fips, county_name = dogcatcher.maps_fips(po_city, po_state, po_zip_code)
 
     result.append([authority_name, first_name, last_name, town_name, fips, county_name,
     street, city, address_state, zip_code,

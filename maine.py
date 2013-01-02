@@ -12,12 +12,6 @@ h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?ME.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 file_path = cdir + "maine-clerks.html"
 
 url = "http://www.maine.gov/sos/cec/elec/munic.shtml"
@@ -166,9 +160,9 @@ for county in county_data:
 
 	try:
 		if street:
-			fips, county_name = dogcatcher.maps_fips(town_name, "ME", zip_code, fips_names, fips_numbers)
+			fips, county_name = dogcatcher.maps_fips(town_name, "ME", zip_code)
 		else:
-			fips, county_name = dogcatcher.maps_fips(town_name, "ME", po_zip_code, fips_names, fips_numbers)
+			fips, county_name = dogcatcher.maps_fips(town_name, "ME", po_zip_code)
 
 	except: #Several towns don't work correctly in the Google Maps API.
 
@@ -183,7 +177,7 @@ for county in county_data:
 			print town_name
 			sys.exit()
 
-		fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+		fips = dogcatcher.fips_find(county_name, voter_state)
 
 
 	result.append([authority_name, first_name, last_name, town_name, county_name, fips,

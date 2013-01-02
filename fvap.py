@@ -9,12 +9,6 @@ h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?WY.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 
 file_path = "C:\Users\pkoms\Documents\TurboVote\Scraping\state_list.csv"
 
@@ -80,13 +74,19 @@ for i in range(0, len(states)):
 
 	jurisdiction_data = jurisdiction_re.findall(data)
 
+
+	#acquiring the FIPs lists that are necessary later
+	fips_re_string = ".+?" + voter_state + ".+?\n"
+	fips_data_re = re.compile(fips_re_string)
+	fips_data = dogcatcher.make_fips_data(fips_data_re)
+	fips_numbers = dogcatcher.make_fips_numbers(fips_data)
+	fips_names = dogcatcher.make_fips_names(fips_data)
+
 	
 	
 	for jurisdiction in jurisdiction_data:
 
 		jurisdiction_name = jurisdiction_name_re.findall(jurisdiction)[0]
-		first_name = ""
-		last_name = ""
 
 			#grab & format address
 		try:
@@ -190,7 +190,7 @@ for i in range(0, len(states)):
 
 #This outputs the results to two separate text files: one for counties in the US, and one for cities.
 
-output = open("C:\Users\pkoms\Documents\TurboVote\Scraping\\fvap_city.txt", "w")
+output = open(cdir + "fvap_city.txt", "w")
 for c in city_result:
 	r = h.unescape(r)
 	output.write("\t".join(c))
@@ -198,7 +198,7 @@ for c in city_result:
 output.close()
 
 
-output = open("C:\Users\pkoms\Documents\TurboVote\Scraping\\fvap_county.txt", "w")
+output = open(cdir + "fvap_county.txt", "w")
 for c in county_result:
 	r = h.unescape(r)
 	output.write("\t".join(c))

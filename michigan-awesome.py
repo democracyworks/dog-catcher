@@ -12,12 +12,6 @@ h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?MI.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 voter_state = "MI"
 source = "State"
 
@@ -165,7 +159,7 @@ for county in county_data:
 	if county_name == "Wayne" and street == "2 Woodward Ave":
 		street = street + " Suite 502"
 
-	fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+	fips = dogcatcher.fips_find(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
@@ -364,7 +358,7 @@ for town_id in municipality_list:
 
 	print [address]
 
-	fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+	fips = dogcatcher.fips_find(county_name, voter_state)
 	
 	result.append([authority_name, first_name, last_name, town_name, county_name, fips,
 	street, city, address_state, zip_code,

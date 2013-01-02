@@ -2,17 +2,16 @@ import urllib
 import re
 import sys
 import dogcatcher
+import os
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?FL.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
+h = HTMLParser.HTMLParser()
+
+cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time in testing.)
 
 url = "http://www.sos.state.oh.us/SOS/elections/electionsofficials/boeDirectory.aspx#dir"
-file_path = "C:\Users\pkoms\Documents\TurboVote\Scraping\ohio-clerks.html"
+file_path = cdir + "ohio-clerks.html"
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
 output.write(data)
@@ -79,7 +78,7 @@ for county in county_data:
 	address_state = state_re.findall(csz)[0].strip()
 	zip_code = zip_code_re.findall(csz)[0].strip()
 
-	fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+	fips = dogcatcher.fips_find(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips
 	street, city, address_state, zip_code,
@@ -90,9 +89,10 @@ for county in county_data:
 	reg_phone, reg_fax, reg_email, reg_website, reg_hours,
 	phone, fax, email, website, hours, voter_state, source, review])
 
-output = open("C:\Users\pkoms\Documents\TurboVote\Scraping\ohio.txt", "w")
+output = open(cdir + "ohio.txt", "w")
 
 for r in result:
+	r = h.unescape(r)
 	output.write("\t".join(r))
 	output.write("\n")
 output.close()

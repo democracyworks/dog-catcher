@@ -9,12 +9,6 @@ import dogcatcher
 
 h = HTMLParser.HTMLParser()
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?MA.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 voter_state = "MA"
 source = "State"
 
@@ -176,9 +170,9 @@ for town in town_data:
   base_url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=%s"
 
   if street:
-    fips, county_name = dogcatcher.maps_fips(city, address_state, zip_code, fips_names, fips_numbers)
+    fips, county_name = dogcatcher.maps_fips(city, address_state, zip_code)
   else:
-    fips, county_name = dogcatcher.maps_fips(po_city, po_state, po_zip_code, fips_names, fips_numbers)
+    fips, county_name = dogcatcher.maps_fips(po_city, po_state, po_zip_code)
 
 
   result.append([authority_name, first_name, last_name, town_name, fips,

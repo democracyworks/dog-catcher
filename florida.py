@@ -5,12 +5,6 @@ import sys
 import xlrd
 import dogcatcher
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?FL.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 voter_state = "FL"
@@ -81,7 +75,7 @@ for row in range(1, data.nrows):
 
 	website = dogcatcher.website_clean(data.cell(row,14).value.rstrip().replace("//","+++++"))
 
-	fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+	fips = dogcatcher.fips_find(county_name, voter_state)
 	
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
@@ -96,6 +90,7 @@ for row in range(1, data.nrows):
 
 output = open(cidr + "florida.txt", "w")
 for r in result:
+	r = h.unescape(r)
 	output.write("\t".join(r))
 	output.write("\n")
 output.close()

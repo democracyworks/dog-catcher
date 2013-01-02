@@ -9,11 +9,7 @@ h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?ID.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
+
 
 voter_state = "ID"
 source = "State"
@@ -102,20 +98,16 @@ for county in county_data:
 	street = street.replace("\n",", ").replace("\r","").replace(" ,",",").strip(" \n/,")
 
 	if po_street:
-		if street:
-			city = city_re.findall(csz)[0]
-			address_state = state_re.findall(csz)[0]
-			zip_code = zip_re.findall(csz)[0]
 		po_city = city_re.findall(csz)[0].strip()
 		po_state = state_re.findall(csz)[0].strip()
 		po_zip_code = zip_re.findall(csz)[0].strip()
-	else:
+	if street:
 		city = city_re.findall(csz)[0].strip()
 		address_state = state_re.findall(csz)[0].strip()
 		zip_code = zip_re.findall(csz)[0].strip()
 
 
-	fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+	fips = dogcatcher.fips_find(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,

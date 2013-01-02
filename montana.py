@@ -12,12 +12,6 @@ h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?MT.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 voter_state = "MT"
 source = "State"
 
@@ -191,7 +185,7 @@ for i in range(0, len(counties)):
         phone = dogcatcher.phone_clean(phones[2], "406")
         fax = dogcatcher.phone_clean(phones[0], "406")
 
-    fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+    fips = dogcatcher.fips_find(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, county_name, fips,
         street, city, address_state, zip_code,

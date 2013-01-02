@@ -5,12 +5,6 @@ import sys
 import dogcatcher
 import os
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?NY.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 #Every county is on a different webpage, so we have to grab every webpage. To do so, we grab a list of counties and then grab a series of web pages based on that list.
@@ -149,7 +143,7 @@ for item in county_names:
 	if county_name == "Genesee":
 		po_street = "P.O. Box 284"
 
-	fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+	fips = dogcatcher.fips_find(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
@@ -163,9 +157,10 @@ for item in county_names:
 
 #This outputs the results to a separate text file.
 
-output = open(cidr + "new_york.txt", "w")
+output = open(cdir + "new_york.txt", "w")
 
 for r in result:
+	r = h.unescape(r)
 	output.write("\t".join(r))
 	output.write("\n")
 output.close()

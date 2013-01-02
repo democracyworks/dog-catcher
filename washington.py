@@ -101,7 +101,7 @@ for county in county_data:
 
 	print "----------------------------------------------------------"
 
-	fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+	fips = dogcatcher.fips_find(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 		street, city, address_state, zip_code,

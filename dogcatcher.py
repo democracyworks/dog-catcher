@@ -41,60 +41,25 @@ def begin(state):
 	return authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review
 
 
-def make_fips_data(state_re):
-	"breaks the raw FIPS data into a list of county/state/number triples."
+def fips_find(county_name, voter_state):
+	"takes a county name and identifies its associated FIPS value"
 
 	import os
+	import re
 
 	cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 	fips_path = cdir + "fips.txt"
 
-	fips_all = open(fips_path).read()
-
-	fips_data = state_re.findall(fips_all)
-
-	return fips_data
-
-
-def make_fips_numbers(fips_data):
-	"takes a list of FIPs county/state/number triples and generates a list of FIPS numbers in order."	
-
-	import re
-
-	fips_numbers_re = re.compile("\d+")
-	fips_numbers = []
-	
-	for fip in fips_data:
-		fips_numbers.append(fips_numbers_re.findall(fip)[0])
-
-	return fips_numbers
-
-
-def make_fips_names(fips_data):
-	"takes a list of FIPs county/state/number triples and generates a list of county names in order."
-
-	import re
-
-	fips_names_re = re.compile("(.+?)\t")
-	fips_names = []
-
-	for fip in fips_data:
-		fips_names.append(fips_names_re.findall(fip)[0])
-
-	return fips_names
-
-
-def fips_find(county_name, fips_names, fips_numbers):
-	"takes a county name and identifies its associated FIPS value"
+	fips_text = open(fips_path).read()
 
 	if "St " in county_name:
 		county_name = county_name.replace("St ","St. ")
 
-	for fips_name in fips_names:
-		if county_name.lower() == fips_name.lower():
-			fips = fips_numbers[fips_names.index(fips_name)]
-			break
+	fips_re_string = county_name + "\t" + voter_state + "\t" + "(\d+)"
+	fips_re = re.compile(fips_re_string)
+
+	fips = fips_re.findall(fips_text)[0]
 
 	return fips
 
@@ -251,7 +216,7 @@ def maps_fips(city, state, zip_code, fips_names, fips_numbers):
 
 	#We already have a function to match county name to FIPs. Go us!
 
-	fips = fips_find(county_name, fips_names, fips_numbers)
+	fips = fips_find(county_name, state)
 
 	#Google will shut us off if we query it too quickly, so we have this to slow it down.
 

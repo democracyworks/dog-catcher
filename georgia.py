@@ -7,12 +7,6 @@ import dogcatcher
 voter_state = "GA"
 source = "State"
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?NY.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 #Every county is a different item in a dropdown menu, so we have to cycle through them all.
@@ -167,7 +161,7 @@ for county_name in county_list:
 			zip_code = paren[0].strip("()")
 		street = street.replace(paren[0],"").strip(", \n/")
 		
-	fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+	fips = dogcatcher.fips_find(county_name, voter_state)
 	
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,

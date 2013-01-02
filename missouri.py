@@ -160,7 +160,7 @@ for county_title in county_list:
 		fips = "510"
 		county_name = "St. Louis"
 	else:
-		fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+		fips = dogcatcher.fips_find(county_name, voter_state)
 
 
 	if "City" not in county_name:

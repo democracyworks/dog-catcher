@@ -271,11 +271,7 @@ for county in abs_counties:
     authority_name = authority_name_re.findall(county)[0].replace(county_name,"").replace("Co.","").strip()
     reg_authority_name = authority_name_re.findall(reg_county)[0].replace(county_name,"").replace("Co.","").strip()
 
-    for fips_name in fips_names:
-        if fips_name in county_name:
-            fips = fips_numbers[fips_names.index(fips_name)]
-            break
-
+    fips = dogcatcher.fips_find(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, county_name, fips,
     street, city, address_state, zip_code,

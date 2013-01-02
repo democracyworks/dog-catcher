@@ -11,12 +11,6 @@ h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?OK.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 voter_state = "OK"
 source = "state"
 
@@ -205,7 +199,7 @@ for i in range(0,77):
     reg_email = "info@elections.ok.gov"
 
     
-    fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+    fips = dogcatcher.fips_find(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, county_name, fips,
     street, city, address_state, zip_code,

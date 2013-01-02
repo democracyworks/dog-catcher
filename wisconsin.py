@@ -11,13 +11,6 @@ h = HTMLParser.HTMLParser()
 voter_state = "WI"
 source = "State"
 
-#acquiring the FIPs lists that are necessary later
-
-fips_data_re = re.compile(".+?WI.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 result = [("authority_name", "first_name", "last_name", "town_name", "county_name", "fips",
     "street", "city", "address_state", "zip_code",
     "po_street", "po_city", "po_state", "po_zip_code",
@@ -117,8 +110,6 @@ for town in town_data:
         print [town]
         print town_item
         print email
-    
-    fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
 
     #This does some additional cleaning of the town before obtaining the address, including removing the town name and every deputy clerk's name.
 
@@ -156,6 +147,8 @@ for town in town_data:
         zip_code = zip_re.findall(csz)[0].strip()
 
     #counts = counts + count_re.findall(town)[0]
+
+    fips = dogcatcher.fips_find(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, town_name, county_name, fips,
     street, city, address_state, zip_code,

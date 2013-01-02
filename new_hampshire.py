@@ -5,14 +5,10 @@ import json
 import time
 import dogcatcher
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?CA.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 voter_state = "NH"
 source = "State"
+
+cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 #Currently I grab the CSV file by hand. At some point, I will need to grab it using mechanize.
 
@@ -144,19 +140,19 @@ for town in town_data:
 
 
 	if street:
-		fips, county_name = dogcatcher.maps_fips(city, address_state, zip_code, fips_names, fips_numbers)
+		fips, county_name = dogcatcher.maps_fips(city, address_state, zip_code)
 	else:
-		fips, county_name = dogcatcher.maps_fips(po_city, po_state, po_zip_code, fips_names, fips_numbers)
+		fips, county_name = dogcatcher.maps_fips(po_city, po_state, po_zip_code)
 
 	#Both of these towns aren't found well in Google's data.
 
 	if town_name == "Pinkham's Grant":
 		county_name = "Coos"
-		fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+		fips = dogcatcher.fips_find(county_name, voter_state)
 
 	if town_name == "Sargent's Purchase":
 		county_name = "Coos"
-		fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+		fips = dogcatcher.fips_find(county_name, voter_state)
 
 	#The authority name is consistent from county to county and not included in the data.
 
@@ -182,7 +178,7 @@ for item in result:
 			result.pop(i-x)
 			x = x + 1
 
-output = open("C:\Users\pkoms\Documents\TurboVote\Scraping\\new_hampshire.txt", "w")
+output = open(cdir + "new_hampshire.txt", "w")
 for r in result:
 	output.write("\t".join(r))
 	output.write("\n")
