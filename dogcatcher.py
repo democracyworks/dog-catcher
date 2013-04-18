@@ -51,17 +51,18 @@ def fips_find(county_name, voter_state):
 
 	fips_path = cdir + "fips.txt"
 
-	fips_text = open(fips_path).read()
+	fips_text = open(fips_path).read().lower()
 
 	if "St " in county_name:
 		county_name = county_name.replace("St ","St. ")
 
-	fips_re_string = county_name + "\t" + voter_state + "\t" + "(\d+)"
+	fips_re_string = county_name.lower() + "\t" + voter_state.lower() + "\t" + "(\d+)"
+
 	fips_re = re.compile(fips_re_string)
 
 	fips = fips_re.findall(fips_text)[0]
 
-	return fips
+	return fips.title()
 
 def insert(original, new, pos):
 	"Inserts a string into a larger string."

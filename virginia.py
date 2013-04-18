@@ -1,5 +1,3 @@
-# -*- coding: latin-1 -*-
-
 import urllib
 import re
 import sys
@@ -7,17 +5,68 @@ import dogcatcher
 import HTMLParser
 import os
 import urllib2
+import mechanize
+
+voter_state = "VA"
+source = "State"
 
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
+#Every county is a different item in a dropdown menu, so we have to cycle through them all.
+#To do so, we grab the dropdown menu, extract a list of counties, then grab a series of web pages based on that list.
+#This grabs a page containing a list of GA counties and writes it to a file. Writing it isn't strictly necessary, but saves some run time in the long run.
 
-#The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
+file_path = cdir + "va-counties.html"
+url = "https://www.voterinfo.sbe.virginia.gov/PublicSite/Public/FT2/PublicContactLookup.aspx"
 
-voter_state = "VA"
-source = "State"
+# data = urllib.urlopen(url).read()
+# output = open(file_path,"w")
+# output.write(data)
+# output.close()
 
+data = open(file_path).read().replace("&amp;","and")
+
+#This extracts a list of option titles as referred to in the HTML of the drop-down menu from the webpage grabbed earlier
+
+county_list_re = re.compile("option value=\"(.+?)\"")
+county_name_re = re.compile("option value=\".+?\">(.+?)<")
+county_list = county_list_re.findall(data)
+county_names = county_name_re.findall(data)
+
+trim_re = re.compile("Voter Registration Office Contact Information.+?\s+</td>\s+</tr>\s+</div>\s+</div>\s+</table>", re.DOTALL)
+space_re = re.compile("\n\s+")
+break_re = re.compile("<[/tablerd]+>[<>/tablerd\s]+<[/tablerd]+>")
+
+#This uses the mechanize package to submit every item in county_list--the list of county names as used in the menu--and grab a webpage based on each one.
+
+final_data = ""
+file_path = cdir + "va-clerks.html"
+
+# for county in county_list:
+
+# 	print county
+	
+# 	br = mechanize.Browser() #Creates a mechanize browser object.
+# 	br.set_handle_robots(False) # ignore robots
+# 	br.open(url) #Opens the page.
+# 	br.select_form(name = "aspnetForm") #The drop-down menu is titled form1.
+# 	br["ctl00$ContentPlaceHolder1$usrCounty$cboCounty"] = [county,] #It takes an input called ctl00$ContentPlaceHolder1$usrCounty$cboCounty.
+# 	res = br.submit() #res is the resulting page when we submit the inputs from earlier
+# 	content = res.read() #this creates a string of the page.
+# 	trimmed_content = trim_re.findall(content)[0] #this trims the page down to only what we need.
+# 	for item in break_re.findall(trimmed_content):
+# 		trimmed_content = trimmed_content.replace(item,"")
+# 	for item in space_re.findall(trimmed_content):
+# 		trimmed_content = trimmed_content.replace(item,"\t\n")
+# 	trimmed_content = trimmed_content.replace("\r","").replace("ctl00_ContentPlaceHolder1_usrLocalityRegContact","")
+# 	final_data = final_data + trimmed_content
+
+
+# output = open(file_path,"w")
+# output.write(final_data)
+# output.close()
 
 result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "street", "city", "address_state", "zip_code",
@@ -29,78 +78,139 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
 
-file_path = cdir + "virginia-clerks.pdf"
-url = "http://www.nngov.com/voter-registrar/downloads/absentee.pdf"
-user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
-headers = {'User-Agent' : user_agent}
+county_re = re.compile("Voter Registration Office Contact Information.+?(?=Voter Registration Office Contact Information)", re.DOTALL)
 
-req = urllib2.Request(url, "", headers)
-pdf = urllib2.urlopen(req).read()
+name_re = re.compile("<span id=\"_lblGeneralRegistrar\" class=\"lblDisplay\">(.+?)</span>")
 
-data = dogcatcher.pdf_to_text(pdf)
-output = open(file_path, "w")
-output.write(data)
-output.close()
+phone_re = re.compile("Phone:.+?(\d{3}-\d{3}.+?)<", re.DOTALL)
+fax_re = re.compile("Fax:.+?(\d{3}-\d{3}.+?)<", re.DOTALL)
+email_re = re.compile("Email:.+?>(.+?@.+?)<", re.DOTALL)
+website_re = re.compile("DarkSlateBlue\">(.+?)</font")
 
-data = open(file_path).read()
+mailing_address_re = re.compile("Mailing Address</span>.+?lblZipText.+?<span", re.DOTALL)
+address_re = re.compile("Physical Address:.+?</div", re.DOTALL)
 
-first_part_re = re.compile("(.+?)\nAccomack",re.DOTALL)
+street_re = re.compile("Address line #\d.+?>([^<>]*?\d[^<>]+?)<")
+po_re = re.compile(">(P[ \.]*O .+?)<")
 
-county_re = re.compile("\n[^\n]+? C.+?· \d{4}",re.DOTALL)
-county_name_re = re.compile(".+? C.+")
+city_re = re.compile("lblCity.+?>(.+?)</span")
+state_re = re.compile("usrState_lblView.+?>(.+?)</span")
+zip_re = re.compile("usrZipCode.+?>(.+?)</span")
 
-phone_re = re.compile("\(\d{3}\) \d{3} · \d{4}")
+data = open(file_path).read().replace("&Amp;","and")
 
-address_re = re.compile("  .+?\n.+?\d{5}[\d-]* *\n", re.DOTALL)
-csz_re = re.compile(" *([^,\n]+?, [A-Z][A-Z] *\d{5}[\d-]*)")
-city_re = re.compile("(.+?),")
-state_re = re.compile(" ([A-Z][A-Z]) ")
-zip_re = re.compile(" (\d{5}[\d-]*)")
+county_list = county_re.findall(data)
 
-data = data.replace(first_part_re.findall(data)[0],"")
+for county in county_list:
 
-county_data = county_re.findall(data)
+	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
 
-for county in county_data:
+	county_name = county_names[county_list.index(county)].title().replace(" County","")
 
-    authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
+	authority_name = "Voter Registration Office"
 
-    authority_name = "Voter Registration Office"
-
-    county_name = county_name_re.findall(county)[0].replace(" County","").replace("Appomatox","Appomattox").replace("&","and").replace("Lunenberg","Lunenburg").strip()
-
-    phone = dogcatcher.phone_find(phone_re, county)
+	print "______________________________________________________________________\n" + county_name
 
 
-    #There is only one address; it either does or does not contain a PO Box. We identify whether it does, and then find the city, state, and zip code as appropriate.
+	try:
+		name = name_re.findall(county)[0]
+	except:
+		name = ""
 
-    address = address_re.findall(county)[0]
+	first_name, last_name, review = dogcatcher.split_name(name, review)
 
-    csz = csz_re.findall(address)[0]
+	mailing_address = mailing_address_re.findall(county)[0]
 
-    if "PO Box" in address:
-        po_city = city_re.findall(csz)[0].strip()
-        po_state = state_re.findall(csz)[0].strip()
-        po_zip_code = zip_re.findall(csz)[0].strip()
-        po_street = address.replace(po_city,"").replace(po_state,"").replace(po_zip_code,"").strip(" \n,").replace("\n",", ")
-    else:
-        city = city_re.findall(csz)[0].strip()
-        address_state = state_re.findall(csz)[0].strip()
-        zip_code = zip_re.findall(csz)[0].strip()
-        street = address.replace(city,"").replace(address_state,"").replace(zip_code,"").strip(" \n,").replace("\n",", ")
+	try:
+		po_street = po_re.findall(mailing_address)[0].strip()
+	except:
+		po_street = ""
+
+	street = ""
+
+	for item in street_re.findall(mailing_address):
+		street = (street + ", " + item).strip(", ")
+
+	street = street.replace(po_street, "").replace(", , ",", ").strip(", ")
+
+
+	if street:
+	 	city = city_re.findall(mailing_address)[0].strip()
+	 	address_state = state_re.findall(mailing_address)[0].strip()
+	 	zip_code = zip_re.findall(mailing_address)[0].strip()
+	 	if po_street:
+	 		po_city = city
+	 		po_state = address_state
+	 		po_zip_code = zip_code
+	else: 
+	 	po_city = city_re.findall(mailing_address)[0].strip()
+		po_state = state_re.findall(mailing_address)[0].strip()
+	 	po_zip_code = zip_re.findall(mailing_address)[0].strip()
 
 
 
-    fips = dogcatcher.fips_find(county_name, voter_state)
+	if not street or not po_street: #if either a street address or PO Box is missing, we might be able to find it in the main address.
+		address_all = address_re.findall(county) #not all counties have a regular address, so we need to check for that.
+		if not address_all:
+			pass
+		else:
+			address = address_all[0]
+			street_all = street_re.findall(address)
+			if street_all == street_re.findall(mailing_address): #some of the counties' regular addresses are identical to the mailing address.
+				pass
+			else:
+				if not po_street and po_re.findall(address):
+					po_street = po_re.findall(address)[0]
+					po_city = city_re.findall(address)[0].strip()
+					po_state = state_re.findall(address)[0].strip()
+	 				po_zip_code = zip_re.findall(address)[0].strip()
 
-    result.append([authority_name, first_name, last_name, county_name, fips,
-        street, city, address_state, zip_code,
-        po_street, po_city, po_state, po_zip_code,
-        reg_authority_name, reg_first, reg_last,
-        reg_street, reg_city, reg_state, reg_zip_code,
-        reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code,
-        reg_phone, reg_fax, reg_email, reg_website, reg_hours,
-        phone, fax, email, website, hours, voter_state, source, review])
+
+				elif not street and street_all:
+
+
+					street = ""
+
+					for item in street_all:
+						street = (street + ", " + item).strip(", ")
+
+						street = street.replace(po_street, "").replace(", , ",", ").strip(", ")
+
+						city = city_re.findall(address)[0].strip()
+						address_state = state_re.findall(address)[0].strip()
+						zip_code = zip_re.findall(address)[0].strip()
+
+
+
+	print street + ", " + city + ", " + address_state + " " + zip_code
+
+	print po_street + ", " + po_city + ", " + po_state + " " + po_zip_code
+
+
+
+	phone = dogcatcher.phone_find(phone_re, county)
+	fax = dogcatcher.phone_find(fax_re,county)
+	email = dogcatcher.find_emails(email_re, county)
+
+	try:
+		if county_name == "Staunton City":
+			website = "http://www.staunton.va.us/directory/departments-h-z/registrar/how-to-vote"
+		else:
+			website = dogcatcher.website_find(website_re, county)
+	except:
+		website = ""
+
+	fips = dogcatcher.fips_find(county_name, voter_state)
+	
+	result.append([authority_name, first_name, last_name, county_name, fips,
+	street, city, address_state, zip_code,
+	po_street, po_city, po_state, po_zip_code,
+	reg_authority_name, reg_first, reg_last,
+	reg_street, reg_city, reg_state, reg_zip_code,
+	reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code,
+	reg_phone, reg_fax, reg_email, reg_website, reg_hours,
+	phone, fax, email, website, hours, voter_state, source, review])
+
 
 #This outputs the results to a separate text file.
 

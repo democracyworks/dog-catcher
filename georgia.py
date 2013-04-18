@@ -21,7 +21,7 @@ output = open(file_path,"w")
 output.write(data)
 output.close()
 
-data = open(file_paths)
+data = open(file_path).read()
 
 #This extracts a list of county names as referred to in the HTML of the drop-down menu from the webpage grabbed earlier
 
@@ -92,9 +92,9 @@ for county_name in county_list:
 
 	phone = dogcatcher.phone_find(phone_re, county)
 	
-	fax = dogcatcher.fax_find(fax_re,county)
+	fax = dogcatcher.phone_find(fax_re,county)
 
-	email = dogcatcher.email_find(email_re, county)
+	email = dogcatcher.find_email(email_re, county)
 
 	try:
 		website = dogcatcher.website_find(website_re, county)
