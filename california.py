@@ -64,7 +64,8 @@ for county in county_data:
 
   print county_data_item[0]
 
-  print authority_name + " | " + first_name + " " + last_name
+  #print authority_name + " | " + first_name + " " + last_name
+
 
   #This section generates the address. It does so by identifying whether there are one or two address-looking things in the data. (CA explicitly prints a separate mailing address when counties have them.)
   #CA addresses are formatted "Street\nCity, State, Zip"
@@ -133,6 +134,8 @@ for county in county_data:
     hours = ""
 
   fips = dogcatcher.fips_find(county_name, voter_state)
+
+  print street
 
   result.append([authority_name, first_name, last_name, county_name, fips,
   street, city, address_state, zip_code,

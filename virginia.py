@@ -68,7 +68,16 @@ file_path = cdir + "va-clerks.html"
 # output.write(final_data)
 # output.close()
 
-result = [("authority_name", "first_name", "last_name", "county_name", "fips",
+county_result = [("authority_name", "first_name", "last_name", "county_name", "fips",
+    "street", "city", "address_state", "zip_code",
+    "po_street", "po_city", "po_state", "po_zip_code",
+    "reg_authority_name", "reg_first", "reg_last",
+    "reg_street", "reg_city", "reg_state", "reg_zip_code",
+    "reg_po_street", "reg_po_city", "reg_po_state", "reg_po_zip_code",
+    "reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
+    "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
+
+city_result = [("authority_name", "first_name", "last_name", "town_name", "fips",
     "street", "city", "address_state", "zip_code",
     "po_street", "po_city", "po_state", "po_zip_code",
     "reg_authority_name", "reg_first", "reg_last",
@@ -202,21 +211,38 @@ for county in county_list:
 
 	fips = dogcatcher.fips_find(county_name, voter_state)
 	
-	result.append([authority_name, first_name, last_name, county_name, fips,
-	street, city, address_state, zip_code,
-	po_street, po_city, po_state, po_zip_code,
-	reg_authority_name, reg_first, reg_last,
-	reg_street, reg_city, reg_state, reg_zip_code,
-	reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code,
-	reg_phone, reg_fax, reg_email, reg_website, reg_hours,
-	phone, fax, email, website, hours, voter_state, source, review])
+	if "City" not in county_name:
+		county_result.append([authority_name, first_name, last_name, county_name, fips,
+		street, city, address_state, zip_code,
+		po_street, po_city, po_state, po_zip_code,
+		reg_authority_name, reg_first, reg_last,
+		reg_street, reg_city, reg_state, reg_zip_code,
+		reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code,
+		reg_phone, reg_fax, reg_email, reg_website, reg_hours,
+		phone, fax, email, website, hours, voter_state, source, review])
+	else:
+		print county_name
+		city_result.append([authority_name, first_name, last_name, county_name, "", fips,
+		street, city, address_state, zip_code,
+		po_street, po_city, po_state, po_zip_code,
+		reg_authority_name, reg_first, reg_last,
+		reg_street, reg_city, reg_state, reg_zip_code,
+		reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code,
+		reg_phone, reg_fax, reg_email, reg_website, reg_hours,
+		phone, fax, email, website, hours, voter_state, source, review])
 
+#This outputs the results to two separate text files: one for counties in MO, and one for cities.
 
-#This outputs the results to a separate text file.
+output = open(cdir + "virginia-counties.txt", "w")
+for r in county_result:
+	r = h.unescape(r)
+	output.write("\t".join(r))
+	output.write("\n")
+output.close()
 
-output = open(cdir + "virginia.txt", "w")
-for r in result:
-    r = h.unescape(r)
-    output.write("\t".join(r))
-    output.write("\n")
+output = open(cdir + "virginia-cities.txt", "w")
+for r in city_result:
+	r = h.unescape(r)
+	output.write("\t".join(r))
+	output.write("\n")
 output.close()
