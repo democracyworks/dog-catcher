@@ -1,4 +1,3 @@
-
 def begin(state):
 	"This function sets null values for almost every variable, and sets all of the Address/State values to the state to begin with."
 	street = ""
@@ -41,7 +40,7 @@ def begin(state):
 	return authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review
 
 
-def fips_find(county_name, voter_state):
+def find_fips(county_name, voter_state):
 	"takes a county name and identifies its associated FIPS value"
 
 	import os
@@ -69,7 +68,7 @@ def insert(original, new, pos):
 	return original[:pos] + new + original[pos:]
 
 
-def phone_find(phone_re, county, areacode = ""):
+def find_phone(phone_re, county, areacode = ""):
 	"Identifies everything that looks like a phone #, and then puts them into a list."
 
 	import re
@@ -77,7 +76,7 @@ def phone_find(phone_re, county, areacode = ""):
 	phone = ""
 
 	for item in phone_re.findall(county):
-		item = phone_clean(item, areacode)
+		item = clean_phone(item, areacode)
 		phone = phone + item + ", "
 
 	phone = phone.strip(", ")
@@ -85,7 +84,7 @@ def phone_find(phone_re, county, areacode = ""):
 	return phone
 
 
-def phone_clean(phone, areacode = ""):
+def clean_phone(phone, areacode = ""):
 	"Breaks the phone down into digits; assesses what modifications need to be made to those digits; then puts those digits back together into a (555) 555-5555-formatted phone number."
 
 	import re
@@ -142,7 +141,7 @@ def find_emails(email_re, county):
 
 
 
-def website_find(website_re, county):
+def find_website(website_re, county):
 	"This function finds and cleans website URLs from data. website_clean is run separately because we may sometimes want to run it directly from the scraper."
 
 	import re
@@ -150,7 +149,7 @@ def website_find(website_re, county):
 	website = ""
 
 	for item in website_re.findall(county):
-		item = website_clean(item)
+		item = clean_website(item)
 		website = website + item + ", "
 
 	website = website.strip(", ")
@@ -158,7 +157,7 @@ def website_find(website_re, county):
 	return website
 
 
-def website_clean(website):
+def clean_website(website):
 	"This function cleans website URLs."
 
 	website = website.replace("//","+++++")
