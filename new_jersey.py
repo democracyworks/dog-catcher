@@ -64,6 +64,7 @@ data = data.replace(" and<br>\n",", ")
 data = data.replace("-4:30pm","-4:30pm<br")
 #fixing an edge case in Mercer County
 data = data.replace("(FAX) 609-989-6888<br>\nOffice Hours: 8:00am-4:00pm","(FAX) 609-989-6888<br>\nOffice Hours: 8:00am-4:00pm<br>")
+data = dogcatcher.po_standardize(data)
 
 county_data = county_data_re.findall(data)
 
@@ -129,15 +130,11 @@ for county in county_data:
 		po_state = state_re.findall(csz)[0]
 		po_zip_code = zip_re.findall(csz)[0]
 
-	print [street]
-
 	#This isolates the registrar data from the complete county.
 	registrar = registrar_re.findall(county)[0]
 
 	registrar_name = name_re.findall(registrar)[0]
 	reg_first, reg_last, review = dogcatcher.split_name(registrar_name, review)
-
-	print reg_first, reg_last
 
 	reg_phone = dogcatcher.phone_find(phone_re, registrar)
 
@@ -153,17 +150,18 @@ for county in county_data:
 	#So we first find the address, remove the registrar's name, and clean up a few html tags.
 	#That can leave a mess of commas, so we clean that up.
 	#We then extract the City, State, and Zip (CSZ) and check for a PO Box.
-	#We then remove the CSZ and PO box from the address to form the street, and check whether it exists.
-	#We then check whether there's anything left to be a street address. If there is, we clean it and trim it down to one line.
+	#We then remove the CSZ and PO box from the address to form the street address, and check whether it exists.
+	#If it does, we clean it and trim it down to one line.
 	#Based on whether there's a street address and a PO Box at this point, we assign the city, state, and zip accordingly.
 
 	address = address_re.findall(registrar)[0].replace(registrar_name,"").replace("<br>",", ")
-	address = address.replace("</b>","").replace("<br />","").replace("</font>","")
+
+	address = address.replace("</b>","").replace("<br />","").replace("</font>","").replace("\t","")
+
 	for item in comma_fix_re.findall(address):
 		address = address.replace(item,"")
 
 	print "__________________________"
-	print address
 
 	csz = csz_re.findall(address)[0].strip("\t ")
 	try:
@@ -205,6 +203,7 @@ for county in county_data:
 		reg_po_state = state_re.findall(csz)[0]
 		reg_po_zip_code = zip_re.findall(csz)[0]
 
+	print [reg_street]
 
 	authority_name = "County Clerk"
 
@@ -226,8 +225,4 @@ for county in county_data:
 
 #This outputs the results to a separate text file.
 
-output = open(cdir + "new_jersey.txt", "w")
-for r in result:
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)
