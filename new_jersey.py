@@ -81,11 +81,11 @@ for county in county_data:
 	clerk_name = name_re.findall(clerk)[0]	
 	first_name, last_name, review = dogcatcher.split_name(clerk_name, review)
 
-	phone = dogcatcher.phone_find(phone_re, clerk)
+	phone = dogcatcher.find_phone(phone_re, clerk)
 
-	fax = dogcatcher.phone_find(fax_re, clerk)
+	fax = dogcatcher.find_phone(fax_re, clerk)
 
-	website = dogcatcher.website_find(website_re, clerk)
+	website = dogcatcher.find_website(website_re, clerk)
 
 	hours = " ".join(hours_re.findall(clerk)[0].replace("<br>\n"," ").split())
 
@@ -136,13 +136,13 @@ for county in county_data:
 	registrar_name = name_re.findall(registrar)[0]
 	reg_first, reg_last, review = dogcatcher.split_name(registrar_name, review)
 
-	reg_phone = dogcatcher.phone_find(phone_re, registrar)
+	reg_phone = dogcatcher.find_phone(phone_re, registrar)
 
-	reg_fax = dogcatcher.phone_find(fax_re, registrar)
+	reg_fax = dogcatcher.find_phone(fax_re, registrar)
 
 	reg_phone = reg_phone.replace("201-336-7073", "201-336-7000")
 
-	website = dogcatcher.website_find(website_re, registrar)
+	website = dogcatcher.find_website(website_re, registrar)
 
 	reg_hours = " ".join(hours_re.findall(registrar)[0].replace("<br>\n"," ").split())
 
@@ -212,7 +212,7 @@ for county in county_data:
 	else:
 		reg_authority_name = "Superintendent of Elections"
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
