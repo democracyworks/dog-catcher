@@ -216,7 +216,7 @@ def maps_fips(city, state, zip_code):
 
 	#We already have a function to match county name to FIPs. Go us!
 
-	fips = fips_find(county_name, state)
+	fips = find_fips(county_name, state)
 
 	#Google will shut us off if we query it too quickly, so we have this to slow it down.
 
