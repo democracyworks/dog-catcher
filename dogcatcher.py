@@ -176,7 +176,7 @@ def website_clean(website):
 	return website
 
 
-def maps_fips(city, state, zip_code, fips_names, fips_numbers):
+def maps_fips(city, state, zip_code):
 	"This function identifies FIPS values for towns where county data isn't available in the data set."
 
 	import time
@@ -221,7 +221,7 @@ def maps_fips(city, state, zip_code, fips_names, fips_numbers):
 
 	#Google will shut us off if we query it too quickly, so we have this to slow it down.
 
-	time.sleep(2)
+	time.sleep(1.5)
 
 	if not fips:
 		print address
@@ -288,6 +288,14 @@ def split_name(official_name, review, ignore = ""):
 
 	return first_name, last_name, review
 
+def output(result, state, edir):
+	"Outputs results to a file named using the state's lowercased abbreviation."
+	output = open(edir + state.lower() + ".txt", "w")
+	for r in result:
+		output.write("\t".join(r))
+		output.write("\n")
+	output.close()
+
 
 def pdf_to_text(data): 
 	"Converts a PDF to text, as neatly as can reasonably be hoped. Found from Herb Lainchbury in http://www.herblainchbury.com/2010_05_01_archive.html"
@@ -311,3 +319,19 @@ def pdf_to_text(data):
 	outfp.close() 
 	fp.close() 
 	return t
+
+def po_standardize(data):
+	"Converts PO Box, P.O. Box, PO. Box, and any other exciting variations into a standard format."
+
+	import re
+
+	po_re = re.compile("P[ \.]*O[ \.]* [BD]")	
+
+	for po in po_re.findall(data):
+		if "PO " not in po:
+			if "B" in po:
+				data = data.replace(po, "PO B",1)
+			elif "D" in po:
+				data = data.replace(po, "PO D",1)
+
+	return data
