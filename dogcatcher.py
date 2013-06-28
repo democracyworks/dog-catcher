@@ -175,7 +175,7 @@ def clean_website(website):
 	return website
 
 
-def maps_fips(city, state, zip_code):
+def map_fips(city, state, zip_code):
 	"This function identifies FIPS values for towns where county data isn't available in the data set."
 
 	import time
