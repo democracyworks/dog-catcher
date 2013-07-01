@@ -175,7 +175,7 @@ def clean_website(website):
 	return website
 
 
-def map_fips(city, state, zip_code):
+def map_fips(city, state, alternate_city = "", zip_code):
 	"This function identifies FIPS values for towns where county data isn't available in the data set."
 
 	import time
@@ -193,12 +193,22 @@ def map_fips(city, state, zip_code):
 	place = urllib.urlopen(url)
 	json_place = json.load(place)
 
-	#There's a chance Google doesn't have the place. If so, this informs us.
+	#There's a chance Google doesn't have the place. If so, this tries an alternate statement of place and then informs us if that fails too.
 
 	if json_place['status'] != "OK":
-		print json_place
-		print "Egad! %s" % address
-		sys.exit()
+
+			address = alternate_city + " " + state + " "
+
+			url = base_url % urllib.quote(address)
+
+			place = urllib.urlopen(url)
+			json_place = json.load(place)
+
+			if json_place['status'] != "OK":
+
+				print json_place
+				print "Egad! %s" % address
+				sys.exit()
 
 	#At this point, we're looking for the full name of Administrative Area 2 (County). So we cycle through components of the JSON until we find it.
 
