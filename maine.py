@@ -164,9 +164,9 @@ for county in county_data:
 	try:
 
 		if street:
-			fips, county_name = dogcatcher.map_fips(town_name, "ME", city, zip_code)
+			fips, county_name = dogcatcher.map_fips(town_name, "ME", zip_code, city)
 		else:
-			fips, county_name = dogcatcher.map_fips(town_name, "ME", po_city, po_zip_code)
+			fips, county_name = dogcatcher.map_fips(town_name, "ME", po_zip_code, po_city)
 
 	except: #Several towns don't work correctly in the Google Maps API.
 
