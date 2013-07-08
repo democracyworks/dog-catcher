@@ -18,7 +18,7 @@ cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 voter_state = "CT"
 source = "State"
 
-result = [("authority_name", "first_name", "last_name", "town_name", "fips", "county_name"
+result = [("authority_name", "first_name", "last_name", "town_name", "fips", "county_name",
     "street", "city", "address_state", "zip_code",
     "po_street", "po_city", "po_state", "po_zip_code",
     "reg_authority_name", "reg_first", "reg_last",
