@@ -91,6 +91,7 @@ direct_re = re.compile(">([A-Za-z/., &-]+)<")
 paren_re = re.compile("\(.+?\)")
 
 clean_re = re.compile("[a-z]+=\".+?\"")
+
 t_re = re.compile("\t+")
 
 for county_id in county_ref_list:
@@ -100,13 +101,19 @@ for county_id in county_ref_list:
 	file_path = cdir + county_id + "-pa-clerks.html"
 
 
-	county = open(file_path).read().replace("&nbsp;"," ").replace("Post Office","P.O.")
+	county = open(file_path).read().replace("&nbsp;"," ").replace("&nbsp","").replace("Post Office","P.O.")
 	for item in clean_re.findall(county):
 		county = county.replace(item,"")
 	for item in t_re.findall(county):
 		county = county.replace(item," ")
 
 	county_name = county_names[county_ref_list.index(county_id)].title()
+
+	print "+++++++++++++++++++++++++++++++++++++++++++++++++++++"
+
+	if county_name == "Northampton":
+		print county
+		#sys.exit()
 
 	#PA has both absentee and registration offices, so we need to split it.
 	#They split in a neat place, so we're able to use partition instead of a regular expression.
@@ -120,36 +127,42 @@ for county_id in county_ref_list:
 	county_web = regweb[2]
 
 	
-	website = dogcatcher.website_find(website_re, county_web)
+	website = dogcatcher.find_website(website_re, county_web)
 	reg_website = website
 
 
 	email = dogcatcher.find_emails(email_re, absentee)
 	reg_email = dogcatcher.find_emails(email_re, registration)
 
-	phone = dogcatcher.phone_find(phone_re, absentee)
-	reg_phone = dogcatcher.phone_find(phone_re, registration)
+	phone = dogcatcher.find_phone(phone_re, absentee)
+	reg_phone = dogcatcher.find_phone(phone_re, registration)
 
 
 	# print absentee
 	# print registration
 
-	print "+++++++++++++++++++++++++++++++++++++++++++++++++++++"
-
 	absentee_official = name_re.findall(absentee)[0].replace("</div>","") #In one county, the regular expression used yields </div> as a response. The other easy fix creates more problems, so we just remove the </div>.
 	first_name, last_name, review = dogcatcher.split_name(absentee_official, review)
+
 	if absentee_official:
-		authority_name = direct_re.findall(absentee)[2]
+		authority_name = direct_re.findall(absentee)[2].replace(county_name + " County","").replace(county_name + " Co","").replace(county_name,"").replace(" . "," ").strip(", .")
 	else:
-		authority_name = direct_re.findall(absentee)[1]
+		authority_name = direct_re.findall(absentee)[1].replace(county_name + " County","").replace(county_name + " Co","").replace(county_name,"").replace(" . "," ").strip(", .")
 
 
 	reg_official = name_re.findall(registration)[0].replace("</div>","") #In one county, the regular expression used yields </div> as a response. The other easy fix creates more problems, so we just remove the </div>.
 	reg_first, reg_last, review = dogcatcher.split_name(reg_official, review)
-	if reg_official:
-		reg_authority_name = direct_re.findall(registration)[1]
+
+	print ["0", reg_official]
+	print ["1", absentee]
+	print ["2", regweb]
+
+	if reg_official and direct_re.findall(registration):
+		reg_authority_name = direct_re.findall(registration)[1].replace(county_name + " County","").replace(county_name + " Co","").replace(county_name,"").replace(" . "," ").strip(", .")
+	elif direct_re.findall(registration):
+		reg_authority_name = direct_re.findall(registration)[0].replace(county_name + " County","").replace(county_name + " Co","").replace(county_name,"").replace(" . "," ").strip(", .")
 	else:
-		reg_authority_name = direct_re.findall(registration)[0]
+		reg_authority_name = authority_name
 
 	#This section finds the full address. After finding the address, it identifies a city/state/zip (csz) combination and a PO Box number if that exists.
     #It removes both the CSZ and the PO Address (if it exists) from the full address, leaving behind a street address with some garbage.
@@ -179,7 +192,7 @@ for county_id in county_ref_list:
 	reg_address = address_re.findall(registration)[0]
 
 	reg_csz = csz_re.findall(reg_address)[0].strip()
-	print registration
+	#print registration
 
 	try:
 		reg_po_street = po_re.findall(reg_address)[0]
@@ -199,7 +212,7 @@ for county_id in county_ref_list:
 		reg_po_zip_code = zip_re.findall(reg_csz)[0].strip()
 
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
@@ -212,9 +225,4 @@ for county_id in county_ref_list:
 
 #This outputs the results to a separate text file.
 
-output = open(cdir + "pennsylvania.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)
