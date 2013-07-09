@@ -2,6 +2,7 @@ import urllib
 import re
 import sys
 import HTMLParser
+import os
 import dogcatcher
 
 voter_state = "AL"
@@ -152,7 +153,7 @@ for abse in county_abs:
 			other_address = other_content[0].partition("<BR>")
 			other_csz = other_address[2]
 			reg_street = other_address[0]
-			reg_city = city_re.findall(other_csz)[0].strip()
+			reg_city = city_re.findall(other_csz)[0].strip(", ")
 			reg_address_state = state_re.findall(other_csz)[0].strip()
 			reg_zip_code = zip_re.findall(other_csz)[0].strip()
 	else:
@@ -162,11 +163,18 @@ for abse in county_abs:
 		reg_zip_code = zip_re.findall(reg_csz)[0].strip()
 
 	
-	phone = dogcatcher.phone_find(phone_re, abse)
+	phone = dogcatcher.find_phone(phone_re, abse)
 
-	reg_phone = dogcatcher.phone_find(phone_re, reg)
+	reg_phone = dogcatcher.find_phone(phone_re, reg)
 
-	fips, county_name = dogcatcher.maps_fips(town_name, voter_state, zip_code)
+	#There are two items for different parts of Jefferson County. They contain dashes followed by the part of the county in the county name, so we need to cut out the dashed section so that the FIPs can effectively match them.
+
+	if "-" in county_name:
+		fips = dogcatcher.find_fips(county_name.partition(" -")[0], voter_state)
+	else:
+		fips = dogcatcher.find_fips(county_name, voter_state)
+
+	print "__________________________________"
 
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
@@ -180,9 +188,4 @@ for abse in county_abs:
 
 #This outputs the results to a separate text file.
 
-output = open("C:\Users\pkoms\Documents\TurboVote\Scraping\\alabama.txt", "w")
-for r in result:
-	r = h.unescape(r)
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

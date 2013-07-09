@@ -75,11 +75,11 @@ for county in county_data:
 
 	email = dogcatcher.find_emails(email_re, county)
 
-	website = dogcatcher.website_find(website_re, county)
+	website = dogcatcher.find_website(website_re, county)
 
-	phone = dogcatcher.phone_find(phone_re, county)
+	phone = dogcatcher.find_phone(phone_re, county)
 
-	fax = dogcatcher.phone_find(fax_re, county)
+	fax = dogcatcher.find_phone(fax_re, county)
 
 	#fixing an edge case in Baltimore City
 	if county_name == "Baltimore City":
@@ -87,7 +87,7 @@ for county in county_data:
 			reg_fax = fax
 			fax = "410-727-1775"
 		else:
-			print "Baltimore City edge case changed."
+			print "Something's changed in Baltimore City."
 			sys.exit()
 
 
@@ -115,6 +115,7 @@ for county in county_data:
 		street = street_address.replace(street_csz,"").replace("\r\n",", ").replace("<br />","").strip(", ")
 
 		if county_name == "Montgomery" and "4333" in county and "20849-0369" in county: #Montgomery County is a mess; they use three separate PO boxes. 
+			reg_authority_name = "Election Director"
 			reg_po_street = "P.O. Box 4333"
 			reg_po_city = "Rockville"
 			reg_po_state = "MD"
@@ -156,8 +157,7 @@ for county in county_data:
 	else:
 		hours = ""
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
-
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
@@ -170,9 +170,4 @@ for county in county_data:
 
 #This outputs the results to a separate text file.
 
-output = open(cdir + "maryland.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)
