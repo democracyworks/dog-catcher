@@ -77,6 +77,7 @@ data = data.replace("Calhoun \nAlma Davis \nP.O. Box 1175, Hampton, AR 71744 \n\
 data = data.replace("Phone: 870‐285‐2743  Fax: 870‐285‐3900 \npikeclerk@arkansasclerks.com ","")
 data = data.replace("Montgomery \nDebbie Baxter \n105 Hwy 270 East, Mount Ida, AR 71957 \n\nPike \nSandy Campbell \nP.O. Box 218, Murfreesboro, AR 71958 \n\nPhone: 870‐867‐3521  Fax: 870‐867‐2177 \nmontgomeryclerk@arkansasclerks.com ","Montgomery \nDebbie Baxter \n105 Hwy 270 East, Mount Ida, AR 71957 \n\nPhone: 870‐867‐3521  Fax: 870‐867‐2177 \nmontgomeryclerk@arkansasclerks.com \n\nPike \nSandy Campbell \nP.O. Box 218, Murfreesboro, AR 71958 \n\nPhone: 870‐285‐2743  Fax: 870‐285‐3900 \npikeclerk@arkansasclerks.com")
 data = data.replace("One","1")
+data = data.replace("5KRQGD +DOEURRN","")
 
 
 county_data = county_data_re.findall(data)
@@ -91,8 +92,9 @@ for county in county_data:
 
     try:
         #There can be are lots of things that look like a name in the data
-        official_name = name_re.findall(county)[len(name_re.findall(county))-1].partition(" ")
+        official_name = name_re.findall(county)[len(name_re.findall(county))-1]
         first_name, last_name, review = dogcatcher.split_name(official_name, review, "ignore")
+        
         if first_name == "County":
             first_name = ""
         if last_name == "Clerk":
@@ -102,8 +104,8 @@ for county in county_data:
         last_name = ""
 
     email = dogcatcher.find_emails(email_re, county)
-    phone = dogcatcher.phone_find(phone_re, county)
-    fax = dogcatcher.phone_find(fax_re, county)
+    phone = dogcatcher.find_phone(phone_re, county)
+    fax = dogcatcher.find_phone(fax_re, county)
 
     #This section finds the full address. After finding the address, it identifies a city/state/zip (csz) combination and a PO Box number if that exists.
     #It removes both the CSZ and the PO Address (if it exists) from the full address, leaving behind a street address with some garbage.
@@ -131,7 +133,7 @@ for county in county_data:
 
 
 
-    fips = dogcatcher.fips_find(county_name, voter_state)
+    fips = dogcatcher.find_fips(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, county_name, fips,
         street, city, address_state, zip_code,

@@ -256,28 +256,28 @@ def make_name(name_line, separator, review, order="", ignore = ""):
 
 def split_name(official_name, review, ignore = ""):
 	"This function takes a name, checks for a middle name or prefix (and removes it if necessary), and returns a first name and last name."
-
+	
 	import re
 
 	middle_name_re = re.compile(" [A-Z]\.* ")
 	nick_re = re.compile("[\(\"\'].+?[\)\"\'] ")
 	prefix_re = re.compile("[MD][rs]*\. ")
-
+	
 	for item in middle_name_re.findall(official_name):
 		official_name = official_name.replace(item," ")
 	for item in nick_re.findall(official_name):
 		official_name = official_name.replace(item," ")
 	for item in prefix_re.findall(official_name):
 		official_name = official_name.replace(item," ")
-
+	
 	if not ignore:
 		official_name = official_name.encode("ascii", "ignore").strip()
-
+	
 	name_split = official_name.partition(" ")
-
 	first_name = name_split[0].title().strip(", \r\n")
 	last_name = name_split[2].title().strip(", \r\n")
-
+	
+	
 	if "Hon." in first_name:
 		last_fixer = last_name.partition(" ")
 		first_name = first_name + " " + last_fixer[0]
