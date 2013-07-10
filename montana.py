@@ -179,13 +179,13 @@ for i in range(0, len(counties)):
     phone_pair = phone_pair.replace(" x","x").replace(" ","\n")
     phones = phone_pair.partition("\n")
     if (((i+1) % 5 == 0) or i in [20,21,22,53,55]) and i != 54 :
-        phone = dogcatcher.phone_clean(phones[0], "406")
-        fax = dogcatcher.phone_clean(phones[2], "406")
+        phone = dogcatcher.clean_phone(phones[0], "406")
+        fax = dogcatcher.clean_phone(phones[2], "406")
     else:
-        phone = dogcatcher.phone_clean(phones[2], "406")
-        fax = dogcatcher.phone_clean(phones[0], "406")
+        phone = dogcatcher.clean_phone(phones[2], "406")
+        fax = dogcatcher.clean_phone(phones[0], "406")
 
-    fips = dogcatcher.fips_find(county_name, voter_state)
+    fips = dogcatcher.find_fips(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, county_name, fips,
         street, city, address_state, zip_code,
