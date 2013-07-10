@@ -83,13 +83,13 @@ for county in county_re.findall(data):
 
     fax = fax_re.findall(county)[0]
     county = county.replace(fax,"")
-    fax = dogcatcher.phone_clean(fax)
+    fax = dogcatcher.clean_phone(fax)
 
     #Nothing distinctive starts the line with the phone number, but the elections office phone number, by some quirk of the data, is always the penultimate phone number of everything that looks like a phone number.
     #So we grab everything that looks like a phone number, and use the penultimate,
 
     phone_all = phone_re.findall(county)
-    phone = dogcatcher.phone_clean(phone_all[len(phone_all)-1])
+    phone = dogcatcher.clean_phone(phone_all[len(phone_all)-1])
 
     #This section finds the full address. After finding the address, it identifies a city/state/zip (csz) combination and a PO Box number if that exists.
     #It removes both the CSZ and the PO Address (if it exists) from the full address, leaving behind a street address with some garbage.
@@ -126,7 +126,7 @@ for county in county_re.findall(data):
             sys.exit()
         zip_code = zip_re.findall(csz)[0]
 
-    fips = dogcatcher.fips_find(county_name, voter_state)
+    fips = dogcatcher.find_fips(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, county_name, fips,
         street, city, address_state, zip_code,
