@@ -98,7 +98,7 @@ def clean_phone(phone, areacode = ""):
 	if "".join(deconstructed_phone[0:2]) == "18": #A 1-800 number screws up the digit counting, so we take out the 1, clean the phone number, and replace it.
 		deconstructed_phone.pop(0)
 
-		phone = phone_clean("".join(deconstructed_phone)).replace("(800) ","1-800-")
+		phone = clean_phone("".join(deconstructed_phone)).replace("(800) ","1-800-")
 
 		return phone
 
@@ -181,6 +181,7 @@ def maps_fips(city, state, zip_code):
 	import time
 	import urllib
 	import json
+	import sys
 
 	#To begin with, we define an address for the place and grab it from the Google Maps API. Since this leaves us with a pile of JSON, we load it into a JSON object.
 
