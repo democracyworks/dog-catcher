@@ -1,8 +1,11 @@
+# -*- coding: latin-1 -*-
+
 import urllib
 import re
 import sys
 import HTMLParser
 import dogcatcher
+import os
 
 voter_state = "AL"
 source = "State"
@@ -162,9 +165,9 @@ for abse in county_abs:
 		reg_zip_code = zip_re.findall(reg_csz)[0].strip()
 
 	
-	phone = dogcatcher.phone_find(phone_re, abse)
+	phone = dogcatcher.find_phone(phone_re, abse)
 
-	reg_phone = dogcatcher.phone_find(phone_re, reg)
+	reg_phone = dogcatcher.find_phone(phone_re, reg)
 
 	fips, county_name = dogcatcher.maps_fips(town_name, voter_state, zip_code)
 
@@ -180,9 +183,9 @@ for abse in county_abs:
 
 #This outputs the results to a separate text file.
 
-output = open("C:\Users\pkoms\Documents\TurboVote\Scraping\\alabama.txt", "w")
+output = open(cdir + "alabama.txt", "w")
 for r in result:
 	r = h.unescape(r)
-    output.write("\t".join(r))
-    output.write("\n")
+	output.write("\t".join(r))
+	output.write("\n")
 output.close()

@@ -62,68 +62,68 @@ county_data = county_data_re.findall(data)
 
 for county in county_data:
 
-	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
-	print "________________________________________________________"
-	print [county]
+    authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
+    print "________________________________________________________"
+    print [county]
 
-	authority_name = "County Recorder"
+    authority_name = "County Recorder"
 
-	county_name = county_name_re.findall(county)[0].title()
+    county_name = county_name_re.findall(county)[0].title()
 
-	#The addresses are formatted in the following way: "</b>[Street or PO Box]<br />...City, State Zip<br />"
-	#This finds the complete address; extracts the line with the city, state, and zip (csz), and then, based on whether there's a PO Box or a street, extracts the city, state, and zip code, and forms the street address or PO box by removing the csz and extra text from the full address.
+    #The addresses are formatted in the following way: "</b>[Street or PO Box]<br />...City, State Zip<br />"
+    #This finds the complete address; extracts the line with the city, state, and zip (csz), and then, based on whether there's a PO Box or a street, extracts the city, state, and zip code, and forms the street address or PO box by removing the csz and extra text from the full address.
 
-	address = address_re.findall(county)[0]
+    address = address_re.findall(county)[0]
 
-	csz = csz_re.findall(address)[0]
+    csz = csz_re.findall(address)[0]
 
-	if po_re.search(address):
-		po_city = city_re.findall(csz)[0]
-		po_state = state_re.findall(csz)[0]
-		po_zip_code = zip_re.findall(csz)[0]
-		po_street = address.replace(csz,"").replace("</b>","").replace("<br />","").strip(" \r\n")
-	else:
-		city = city_re.findall(csz)[0]
-		address_state = state_re.findall(csz)[0]
-		zip_code = zip_re.findall(csz)[0]
-		street = address.replace(csz,"").replace("</b>","").replace("<br />","").strip(" \r\n")
+    if po_re.search(address):
+        po_city = city_re.findall(csz)[0]
+        po_state = state_re.findall(csz)[0]
+        po_zip_code = zip_re.findall(csz)[0]
+        po_street = address.replace(csz,"").replace("</b>","").replace("<br />","").strip(" \r\n")
+    else:
+        city = city_re.findall(csz)[0]
+        address_state = state_re.findall(csz)[0]
+        zip_code = zip_re.findall(csz)[0]
+        street = address.replace(csz,"").replace("</b>","").replace("<br />","").strip(" \r\n")
 
-	official_name = name_re.findall(county)[0]
+    official_name = name_re.findall(county)[0]
 
-	first_name, last_name, review = dogcatcher.split_name(official_name, review)
+    first_name, last_name, review = dogcatcher.split_name(official_name, review)
 
-	phone = dogcatcher.phone_find(phone_re, county)
+    phone = dogcatcher.find_phone(phone_re, county)
 
-	#We were contaceted by a user who had this correction for us--apparently there was an error in the source data for one county.
-	if phone == "(928) 373-1014":
-		phone = "(928) 373-6034"
+    #We were contaceted by a user who had this correction for us--apparently there was an error in the source data for one county.
+    if phone == "(928) 373-1014":
+        phone = "(928) 373-6034"
 
-	fax = dogcatcher.phone_find(fax_re, county)
+    fax = dogcatcher.find_phone(fax_re, county)
 
-	email = dogcatcher.find_emails(email_re, county)
+    email = dogcatcher.find_emails(email_re, county)
 
-	if county_name == "Apache":
-		email = "lfulton@co.apache.az.us"
+    if county_name == "Apache":
+        email = "lfulton@co.apache.az.us"
 
-	website = dogcatcher.website_find(website_re, county)
+    website = dogcatcher.find_website(website_re, county)
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+    fips = dogcatcher.find_fips(county_name, voter_state)
 
-	result.append([authority_name, first_name, last_name, county_name, fips,
-	street, city, address_state, zip_code,
-	po_street, po_city, po_state, po_zip_code,
-	reg_authority_name, reg_first, reg_last,
-	reg_street, reg_city, reg_state, reg_zip_code,
-	reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code,
-	reg_phone, reg_fax, reg_email, reg_website, reg_hours,
-	phone, fax, email, website, hours, voter_state, source, review])
+    result.append([authority_name, first_name, last_name, county_name, fips,
+    street, city, address_state, zip_code,
+    po_street, po_city, po_state, po_zip_code,
+    reg_authority_name, reg_first, reg_last,
+    reg_street, reg_city, reg_state, reg_zip_code,
+    reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code,
+    reg_phone, reg_fax, reg_email, reg_website, reg_hours,
+    phone, fax, email, website, hours, voter_state, source, review])
 
-	
+    
 #This outputs the results to a separate text file.
 
-output = open(cidr + "arizona.txt", "w")
+output = open(cdir + "arizona.txt", "w")
 for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
+    r = h.unescape(r)
+    output.write("\t".join(r))
+    output.write("\n")
 output.close()

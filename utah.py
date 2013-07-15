@@ -89,7 +89,7 @@ for county in county_data:
     authority_name = "County Clerk"
 
 
-    phone = dogcatcher.phone_find(phone_re, phone_name)
+    phone = dogcatcher.find_phone(phone_re, phone_name)
 
 
     print "_________________________________________________"
@@ -128,7 +128,7 @@ for county in county_data:
 
     print po_street
 
-    fips = dogcatcher.fips_find(county_name, voter_state)
+    fips = dogcatcher.find_fips(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, county_name, fips,
         street, city, address_state, zip_code,

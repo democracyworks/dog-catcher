@@ -1,0 +1,30 @@
+authority_name	first_name	last_name	county_name	fips	street	city	address_state	zip_code	po_street	po_city	po_state	po_zip_code	reg_authority_name	reg_first	reg_last	reg_street	reg_city	reg_state	reg_zip_code	reg_po_street	reg_po_city	reg_po_state	reg_po_zip_code	reg_phone	reg_fax	reg_email	reg_website	reg_hours	phone	fax	email	website	hours	voter_state	source	review
+County Clerk	Paul	Barton	Beaver	001	105 East Center	Beaver	UT	84713	PO Box 392	Beaver	UT	84713						UT				UT							(435) 438-6465					UT	State	
+County Clerk	Marla	Young	Box Elder	003	01 South Main St	Brigham City	UT	84302			UT							UT				UT							(435) 734-3393					UT	State	
+County Clerk	Jill	Zollinger	Cache	005	179 North Main St., Ste 102	Logan	UT	84321			UT							UT				UT							(435) 755-1460					UT	State	
+County Clerk	Seth	Oveson	Carbon	007	120 East Main St.	Price	UT	84501			UT							UT				UT							(435) 636-3224					UT	State	
+County Clerk	Vicky	Mckee	Daggett	009	95 North 1st West	Manila	UT	84046	PO Box 219	Manila	UT	84046						UT				UT							(435) 784-3154					UT	State	
+County Clerk	Steve	Rawlings	Davis	011	28 East State St.	Farmington	UT	84025	PO Box 618	Farmington	UT	84025						UT				UT							(801) 451-3589					UT	State	
+County Clerk	Diane	Freston	Duchesne	013	734 North Center Street, First Name	Duchesne	UT	84021	PO Box 270	Duchesne	UT	84021						UT				UT							(435) 738-1123					UT	State	
+County Clerk	Brenda	Tuttle	Emery	015	75 East Main	Castle Dale	UT	84513	PO Box 907	Castle Dale	UT	84513						UT				UT							(435) 381-5106					UT	State	
+County Clerk	Camille	Moore	Garfield	017	55 South Main	Panguitch	UT	84759	PO Box 77	Panguitch	UT	84759						UT				UT							(435) 676-1100					UT	State	
+County Clerk	Diana	Carroll	Grand	019	125 East Center	Moab	UT	84532			UT							UT				UT							(435) 259-1321					UT	State	
+County Clerk	David	Yardley	Iron	021	68 South 100 East	Parowan	UT	84761	PO Box 429	Parowan	UT	84761						UT				UT							(435) 477-8340					UT	State	
+County Clerk	Patricia	Ingram	Juab	023	160 North Main St.	Nephi	UT	84648			UT							UT				UT							(435) 623-3410					UT	State	
+County Clerk	Karla	Johnson	Kane	025	76 North Main	Kanab	UT	84741			UT							UT				UT							(435) 644-2458					UT	State	
+County Clerk	Norma	Brunson	Millard	027	765 South Hwy 99, Ste. 6	Fillmore	UT	84631			UT							UT				UT							(435) 743-6223					UT	State	
+County Clerk	Stacy	Lafitte	Morgan	029	48 West Young St.	Morgan	UT	84050	PO Box 886	Morgan	UT	84050						UT				UT							(801) 845-4011					UT	State	
+County Clerk	Valeen	Brown	Piute	031	550 North Main	Junction	UT	84740	PO Box 99	Junction	UT	84740						UT				UT							(435) 577-2840					UT	State	
+County Clerk	Rebecca	Peart	Rich	033	20 South Main	Randolph	UT	84064	PO Box 218	Randolph	UT	84064						UT				UT							(435) 793-2415					UT	State	
+County Clerk	Sherrie	Swensen	Salt Lake	035	Elections Division, 2001 S. State St. #S1100	Salt Lake City	UT	84190			UT							UT				UT							(385) 468-7400					UT	State	
+County Clerk	Norman	Johnson	San Juan	037	117 South Main	Monticello	UT	84535	PO Box 338	Monticello	UT	84535						UT				UT							(435) 587-3223					UT	State	
+County Clerk	Sandy	Neill	Sanpete	039	160 North Main	Manti	UT	84642	PO Box 100	Manti	UT	84642						UT				UT							(435) 835-2133					UT	State	
+County Clerk	Steven	Wall	Sevier	041	250 North Main	Richfield	UT	84701	PO Box 607	Richfield	UT	84701						UT				UT							(435) 893-0401					UT	State	
+County Clerk	Kent	Jones	Summit	043	60 North Main	Coalville	UT	84017	PO Box 128	Coalville	UT	84017						UT				UT							(435) 336-3203					UT	State	
+County Clerk	Marilyn	Gillette	Tooele	045	47 South Main	Tooele	UT	84074			UT							UT				UT							(435) 843-3148					UT	State	
+County Clerk	Michael	Wilkins	Uintah	047	147 East Main	Vernal	UT	84078			UT							UT				UT							(435) 781-5360					UT	State	
+County Clerk	Bryan	Thompson	Utah	049	100 E. Center Rm. 3100	Provo	UT	84606			UT							UT				UT							(801) 851-8128					UT	State	
+County Clerk	Brent	Titcomb	Wasatch	051	25 North Main	Heber City	UT	84032			UT							UT				UT							(435) 654-3211					UT	State	
+County Clerk	Kim	Hafen	Washington	053	197 East Tabernacle St.	St. George	UT	84770			UT							UT				UT							(435) 634-5712					UT	State	
+County Clerk	Ryan	Torgerson	Wayne	055	18 South Main	Loa	UT	84747	PO Box 189	Loa	UT	84747						UT				UT							(435) 836-1300					UT	State	
+County Clerk	Ricky	Hatch	Weber	057	2380 Washington Blvd., Suite 320	Ogden	UT	84401			UT							UT				UT							(801) 399-8034					UT	State	

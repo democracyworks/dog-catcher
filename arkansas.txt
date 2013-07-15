@@ -1,0 +1,76 @@
+authority_name	first_name	last_name	county_name	fips	street	city	address_state	zip_code	po_street	po_city	po_state	po_zip_code	reg_authority_name	reg_first	reg_last	reg_street	reg_city	reg_state	reg_zip_code	reg_po_street	reg_po_city	reg_po_state	reg_po_zip_code	reg_phone	reg_fax	reg_email	reg_website	reg_hours	phone	fax	email	website	hours	voter_state	source	review
+County Clerk	Melissa	Wood	Arkansas	001	101 Court Square	Dewitt	AR	72042			AR							AR				AR							(870) 946-4349	(870) 946-4399	arcoclerkmelissa@centurytel.net			AR	State	
+County Clerk	Regina	Kersten	Ashley	003	205 East Jefferson	Hamburg	AR	71646			AR							AR				AR							(870) 853-2020	(870) 853-2082	ashleycoclerk@sbcglobal.net			AR	State	
+County Clerk	Canda	Reese	Baxter	005	#1 East 7th St., Suite 103	Mountain Home	AR	72653			AR							AR				AR							(870) 425-3475	(870) 424-5105	baxterclerk@centurytel.net			AR	State	
+County Clerk	Tena	O'Brien	Benton	007	215 East Central	Bentonville	AR	72712			AR							AR				AR							(479) 271-1013	(479) 271-1019	tobrien@co.benton.ar.us			AR	State	
+County Clerk	Crystal	Graddy	Boone	009	100 North Main, Suite 201	Harrison	AR	72601			AR							AR				AR							(870) 741-8428	(870) 741-9724	teresabooneclerk@windstream.net			AR	State	
+County Clerk	Karen	Belin	Bradley	011	101 East Cedar St.	Warren	AR	71671			AR							AR				AR							(870) 226-3464	(870) 226-8404	bradleyclerk@arkansasclerks.com			AR	State	
+County Clerk	Alma	Davis	Calhoun	013			AR		P.O. Box 1175	Hampton	AR	71744						AR				AR							(870) 798-2517	(870) 798-2428	hogskinholidays@hotmail.com			AR	State	
+County Clerk	Jamie	Correia	Carroll	015	210 West Church St.	Berryville	AR	72616			AR							AR				AR							(870) 423-2022	(870) 423-7400	carrollclerk@arkansasclerks.com			AR	State	
+County Clerk	Pam	Donaldson	Chicot	017	108 Main St.	Lake Village	AR	71653			AR							AR				AR							(870) 265-8000	(870) 265-8006	chicotclerk@arkansasclerks.com			AR	State	
+County Clerk	Rhonda	Cole	Clark	019	401 Clay St.	Arkadelphia	AR	71923			AR							AR				AR							(870) 246-4491	(870) 246-6505	rhonda@clarkcountyarkansas.com			AR	State	
+County Clerk	Patricia	Poole	Clay	021	151 South Second Ave.	Piggott	AR	72454			AR							AR				AR							(870) 598-2813	(870) 598-2813	clay123@centurytel.net			AR	State	
+County Clerk	Dana	Guffey	Cleburne	023	301 West Main St	Heber Springs	AR	72543			AR							AR				AR							(501) 362-4620	(501) 362-4622	dguffey@suddenlinkmail.com			AR	State	
+County Clerk	Sharon	Gray	Cleveland	025			AR		P.O. Box 368	Rison	AR	71665						AR				AR							(870) 325-6521	(870) 325-6144	skgray5@yahoo.com			AR	State	
+County Clerk	Sherry	Bell	Columbia	027	1 Court Square, Suite 1	Magnolia	AR	71753			AR							AR				AR							(870) 235-3774	(870) 235-3773	columbiaclerk@arkansasclerks.com			AR	State	
+County Clerk	Debbie	Hartman	Conway	029	117 South Moose St.	Morrilton	AR	72110			AR							AR				AR							(501) 354-9621	(501) 354-9610	dhartman@conwaycounty.org			AR	State	
+County Clerk	Kade	Holliday	Craighead	031	511 South Main, Room 202	Jonesboro	AR	72401			AR							AR				AR							(870) 933-4520	(870) 933-4514	craigheadclerk@arkansasclerks.com			AR	State	
+County Clerk	Teresa	Armer	Crawford	033	300 Main St., Room 7	Van Buren	AR	72956			AR							AR				AR							(479) 474-1312	(479) 471-3236	tarmer@crawford‐county.org			AR	State	
+County Clerk	Paula	Brown	Crittenden	035	100 Court Square	Marion	AR	72364			AR							AR				AR							(870) 739-4434	(870) 739-3072	crittendenclerk@arkansasclerks.com			AR	State	
+County Clerk	Melanie	Winkler	Cross	037	705 East Union St	Wynne	AR	72396			AR							AR				AR							(870) 238-5735	(870) 238-5739	winklercountyclerk@sbcglobal.net			AR	State	
+County Clerk	Susie	Williams	Dallas	039	206 West 3rd	Fordyce	AR	71742			AR							AR				AR							(870) 352-2307	(870) 352-7179	dallascounty@windstream.net			AR	State	
+County Clerk	Valerie	Donaldson	Desha	041			AR		P.O. Box 218	Arkansas City	AR	71630						AR				AR							(870) 877-2323	(870) 877-3413	countyclerk@deshacounty.org			AR	State	
+County Clerk	Lyna	Gulledge	Drew	043	210 South Main St.	Monticello	AR	71655			AR							AR				AR							(870) 460-6260	(870) 460-6246	drewclerk@arkansasclerks.com			AR	State	
+County Clerk	Melinda	Reynolds	Faulkner	045	801 Locust St.	Conway	AR	72034			AR							AR				AR							(501) 450-4909	(501) 450-4938	melinda.reynolds@faulknercounty.org			AR	State	
+County Clerk	Deanna	Schmalz	Franklin	047	211 West Commercial	Ozark	AR	72949			AR							AR				AR							(479) 667-3607	(479) 667-3611	franklincoclerk@fra.countyservice.net			AR	State	
+County Clerk	Vickie	Bishop	Fulton	049			AR		P.O. Box 219	Salem	AR	72576						AR				AR							(870) 895-3310	(870) 895-3383	vickiefcclerk@centurytel.net			AR	State	
+County Clerk	Sarah	Smith	Garland	051	501 Ouachita, Room 103	Hot Springs	AR	71901			AR							AR				AR							(501) 622-3610	(501) 624-0665	garlandclerk@arkansasclerks.com			AR	State	
+County Clerk	Carol	Ewing	Grant	053	101 West Center, Room 106	Sheridan	AR	72150			AR							AR				AR							(870) 942-2631	(870) 942-3564	linda_kelley54@yahoo.com			AR	State	
+County Clerk	Linda	Heritage	Greene	055	320 West Court Street, Room 102	Paragould	AR	72450			AR							AR				AR							(870) 239-6345	(870) 239-6320	greeneclerk@arkansasclerks.com			AR	State	
+County Clerk	Sandra	Rodgers	Hempstead	057			AR		P.O. Box 1420	Hope	AR	71802						AR				AR							(870) 777-2241	(870) 777-7829	bitojava@yahoo.com			AR	State	
+County Clerk	Sandy	Boyette	Hot Spring	059	210 Locust St.	Malvern	AR	72104			AR							AR				AR							(501) 332-2291	(501) 332-2221	sboyette@hotspringcounty.org			AR	State	
+County Clerk	Brenda	Fritts	Howard	061	421 North Main St., Room 10	Nashville	AR	71852			AR							AR				AR							(870) 845-7502	(870) 845-7505	howardclerk@arkansasclerks.com			AR	State	
+County Clerk	Tracey	Nast Wyatt	Independence	063	192 East Main	Batesville	AR	72501			AR							AR				AR							(870) 793-8828	(870) 793-8831	independenceclerk@arkansasclerks.com			AR	State	a
+County Clerk			Izard	065			AR		P.O. Box 95	Melbourne	AR	72556						AR				AR							(870) 368-4316	(870) 368-4748	izardelections@gmail.com			AR	State	
+County Clerk	Melanie	Clark	Jackson	067	208 Main St	Newport	AR	72112			AR							AR				AR							(870) 523-7420	(870) 523-7406	jacksoncountyclerk@gmail.com			AR	State	
+County Clerk	Patricia	Johnson	Jefferson	069			AR		P.O. Box 6317	Pine Bluff	AR	71601						AR				AR							(870) 541-5322	(870) 541-5324	pjohnson.jcclerk@sbcglobal.net			AR	State	
+County Clerk	Michelle	Frost	Johnson	071			AR		P.O. Box 57	Clarksville	AR	72830						AR				AR							(479) 754-3967	(479) 754-2286	johnsonclerk@arkansasclerks.com			AR	State	
+County Clerk	Regenia	Morton	Lafayette	073	3rd and Spruce St.	Lewisville	AR	71845			AR							AR				AR							(870) 921-4633	(870) 921-4505	lafayetteclerk@arkansasclerks.com			AR	State	
+County Clerk	Tina	Stowers	Lawrence	075			AR		P.O. Box 526	Walnut Ridge	AR	72476						AR				AR							(870) 886-1111	(870) 886-1122	lawrenceclerk@arkansasclerks.com			AR	State	
+County Clerk	Pat	Wilson	Lee	077	15 East Chestnut Street, Room 4	Marianna	AR	72360			AR							AR				AR							(870) 295-7715	(870) 295-7783	patriciawilson1@att.net			AR	State	
+County Clerk	Katherine	Lawson	Lincoln	079	300 South Drew St.	Star City	AR	71667			AR							AR				AR							(870) 628-5114	(870) 628-5794	lincolnclerk@arkansasclerks.com			AR	State	
+County Clerk	Deanna	Sivley	Little River	081	351 North 2nd St.	Ashdown	AR	71822			AR							AR				AR							(870) 898-7208	(870) 898-2860	littleriverclerk@arkansasclerks.com			AR	State	
+County Clerk	Peggy	Fitzjurls	Logan	083	#25 West Walnut St.	Paris	AR	72855			AR							AR				AR							(479) 963-2618	(479) 963-9017	countyclerksofc@centurytel.net			AR	State	
+County Clerk	Larry	Clarke	Lonoke	085	301 North Center St	Lonoke	AR	72086	P.O. Box 188	Lonoke	AR	72086						AR				AR							(501) 676-2368	(501) 676-2423	lclarke@lonokecountyclerk.org			AR	State	
+County Clerk	Faron	Ledbetter	Madison	087	201 West Main St., Suite 202	Huntsville	AR	72740	P.O. Box 37	Huntsville	AR	72740						AR				AR							(479) 738-2747	(479) 738-2735	madisonclerk@arkansasclerks.com			AR	State	
+County Clerk	Dee	Carleton	Marion	089			AR		P.O. Box 385	Yellville	AR	72687						AR				AR							(870) 449-6226	(870) 449-4979	clerkmarioncounty@yahoo.com			AR	State	
+County Clerk	Ann	Nicholas	Miller	091	400 Laurel St., Room 105	Texarkana	AR	71854			AR							AR				AR							(870) 774-1501	(870) 773-4090	millerclerk@arkansasclerks.com			AR	State	
+County Clerk	Janice	Currie	Mississippi	093	200 West Walnut St	Blytheville	AR	72315			AR							AR				AR							(870) 762-2411	(870) 838-7784	mississippiclerk@arkansasclerks.com			AR	State	
+County Clerk	Tina	Wofford	Monroe	095	123 Madison Street	Clarendon	AR	72029			AR							AR				AR							(870) 747-3632	(870) 747-5961	monroeclerk@arkansasclerks.com			AR	State	
+County Clerk	Debbie	Baxter	Montgomery	097	105 Hwy 270 East	Mount Ida	AR	71957			AR							AR				AR							(870) 867-3521	(870) 867-2177	montgomeryclerk@arkansasclerks.com			AR	State	
+County Clerk	Julie	Oliver	Nevada	099	215 East 2nd St.	Prescott	AR	71857			AR							AR				AR							(870) 887-2710	(870) 887-5795	nevadaclerk@arkansasclerks.com			AR	State	
+County Clerk	Donnie	Davis	Newton	101	100 East Court St	Jasper	AR	72641	P.O. Box 410	Jasper	AR	72641						AR				AR							(870) 446-5125	(870) 446-5755	newtonclerk@arkansasclerks.com			AR	State	
+County Clerk	Britt	Williford	Ouachita	103			AR		P.O. Box 1041	Camden	AR	71711						AR				AR							(870) 837-2220	(870) 837-2217	ouachitaclerk@arkansasclerks.com			AR	State	
+County Clerk	Persundra	Hood	Perry	105	310 West Main St.	Perryville	AR	72126			AR							AR				AR							(501) 889-5126	(501) 889-5759	phood@arbbs.net			AR	State	
+County Clerk	Linda	White	Phillips	107	620 Cherry St., Suite 202	Helena	AR	72342			AR							AR				AR							(870) 338-5505	(870) 338-5509	phillipsclerk@arkansasclerks.com			AR	State	
+County Clerk	Sandy	Campbell	Pike	109			AR		P.O. Box 218	Murfreesboro	AR	71958						AR				AR							(870) 285-2743	(870) 285-3900	pikeclerk@arkansasclerks.com			AR	State	
+County Clerk	Fonda	Condra	Poinsett	111	401 Market St.	Harrisburg	AR	72432			AR							AR				AR							(870) 578-4412	(870) 578-2441	arseat63@pcsii.com			AR	State	
+County Clerk	Terri	Harrison	Polk	113	507 Church Ave	Mena	AR	71953			AR							AR				AR							(479) 394-8123	(479) 394-8115	polkcountyclerk@yahoo.com			AR	State	
+County Clerk	Laura	Mcguire	Pope	115	102 West Main St., Suite 6	Russellville	AR	72801			AR							AR				AR							(479) 968-6064	(479) 967-2291	popeclerk@arkansasclerks.com			AR	State	
+County Clerk	Des	Arc	Prairie	117	200 Courthouse Square, Suite 104	Des Arc	AR	72040			AR							AR				AR							(870) 256-4434	(870) 256-4434	prairieclerk@arkansasclerks.com			AR	State	
+County Clerk	Larry	Crane	Pulaski	119			AR		P.O. Box 2659	Little Rock	AR	72203						AR				AR							(501) 340-8500	(501) 340-8340	skardiak@pulaskiclerk.com			AR	State	
+County Clerk	Bobbie	Lane	Randolph	121	101 East Broadway, Suite A	Pocahontas	AR	72455			AR							AR				AR							(870) 892-5822	(870) 892-5829	randolphclerk@arkansasclerks.com			AR	State	
+County Clerk	Doug	Curtis	Saline	125	215 North Main, Suite 9	Benton	AR	72015			AR							AR				AR							(501) 303-5630	(501) 776-2412	salineclerk@arkansasclerks.com			AR	State	
+County Clerk	Sandra	Staggs	Scott	127	190 West 1st St., Box 10	Waldron	AR	72958	P.O. Box 2165	Waldron	AR	72958						AR				AR							(479) 637-2642	(479) 637-0124	scottcountyclerk@yahoo.com			AR	State	
+County Clerk	Debbie	Loggins	Searcy	129			AR		P.O. Box 998	Marshall	AR	72650						AR				AR							(870) 448-3807	(870) 448-5005	searcycountyclerk@windstream.net			AR	State	
+County Clerk	Fort	Smith	Sebastian	131	35 South 6th St., Room 102	Fort Smith	AR	72901			AR							AR				AR							(479) 782-5065	(479) 784-1567	sebastianclerk@arkansasclerks.com			AR	State	
+County Clerk	De	Queen	Sevier	133	115 North 3rd St., Room 102	De Queen	AR	71832			AR							AR				AR							(870) 642-2852	(870) 642-3896	sevierclerk@arkansasclerks.com			AR	State	
+County Clerk	Tommy	Estes	Sharp	135			AR		P.O. Box 307	Ash Flat	AR	72513						AR				AR							(870) 994-7361	(870) 994-7712	sharpclerk@centurytel.net			AR	State	
+County Clerk	Emily	Holley	St. Francis	123			AR		P.O. Box 1653	Forrest City	AR	72336						AR				AR							(870) 261-1725	(870) 630-1210	roseemily52@hotmail.com			AR	State	
+County Clerk	Donna	Wilson	Stone	137	107 W Main St., Ste D	Mountain View	AR	72560			AR							AR				AR							(870) 269-5550	(870) 269-9058	stoneclerk@arkansasclerks.com			AR	State	
+County Clerk	El	Dorado	Union	139	101 North Washington, Suite 102	El Dorado	AR	71730			AR							AR				AR							(870) 864-1910	(870) 864-1927	unionclerk@arkansasclerks.com			AR	State	
+County Clerk	Ester	Bass	Van Buren	141	1414 Hwy 65 S, Suite 131	Clinton	AR	72031			AR							AR				AR							(501) 745-4140	(501) 745-7400	vanburenclerk@arkansasclerks.com			AR	State	
+County Clerk	Becky	Lewallen	Washington	143	280 North College, Suite 300	Fayetteville	AR	72701			AR							AR				AR							(479) 444-1711	(479) 444-1894	washingtonclerk@arkansasclerks.com			AR	State	
+County Clerk	Cheryl	Evans	White	145	315 North Spruce St	Searcy	AR	72143			AR							AR				AR							(501) 279-6204	(501) 279-6260	whiteclerk@arkansasclerks.com			AR	State	
+County Clerk	Kelly	Peebles	Woodruff	147	500 North Third St.	Augusta	AR	72006			AR							AR				AR							(870) 347-2871	(870) 347-2608	woodruffclerk@arkansasclerks.com			AR	State	
+County Clerk	Sharon	Barnett	Yell	149			AR		P.O. Box 219	Danville	AR	72833						AR				AR							(479) 495-4850	(479) 495-4875	yellclerk@arkansasclerks.com			AR	State	

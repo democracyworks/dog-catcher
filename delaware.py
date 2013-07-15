@@ -76,9 +76,9 @@ for county in county_data:
     county_name = county_name_re.findall(county)[0].strip()
     
 
-    phone = dogcatcher.phone_clean(phone_re.findall(county)[0])
-    fax = dogcatcher.phone_clean(phone_re.findall(county)[1])
-    website = dogcatcher.website_find(website_re, county)
+    phone = dogcatcher.clean_phone(phone_re.findall(county)[0])
+    fax = dogcatcher.clean_phone(phone_re.findall(county)[1])
+    website = dogcatcher.find_website(website_re, county)
 
     #This section finds the full address. After finding the address, it identifies a city/state/zip (csz) combination and a PO Box number if that exists.
     #It removes both the CSZ and the PO Address (if it exists) from the full address, leaving behind a street address with some garbage.
@@ -104,7 +104,7 @@ for county in county_data:
         address_state = state_re.findall(csz)[0]
         zip_code = zip_re.findall(csz)[0]
 
-    fips = dogcatcher.fips_find(county_name, voter_state)
+    fips = dogcatcher.find_fips(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, county_name, fips,
         street, city, address_state, zip_code,
