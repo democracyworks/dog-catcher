@@ -4,7 +4,9 @@ import re
 import sys
 import xlrd
 import dogcatcher
+import HTMLParser
 
+h = HTMLParser.HTMLParser()
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 voter_state = "FL"
@@ -68,14 +70,14 @@ for row in range(1, data.nrows):
 		po_zip_code = " ".join(data.cell(row,12).value.split())
 
 
-	phone = dogcatcher.phone_clean(" ".join(data.cell(row,5).value.split()))
-	fax = dogcatcher.phone_clean(" ".join(data.cell(row,6).value.split()))
+	phone = dogcatcher.clean_phone(" ".join(data.cell(row,5).value.split()))
+	fax = dogcatcher.clean_phone(" ".join(data.cell(row,6).value.split()))
 
 	email = " ".join(data.cell(row,7).value.lower().split())
 
-	website = dogcatcher.website_clean(data.cell(row,14).value.rstrip().replace("//","+++++"))
+	website = dogcatcher.clean_website(data.cell(row,14).value.rstrip().replace("//","+++++"))
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 	
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
@@ -88,7 +90,7 @@ for row in range(1, data.nrows):
 
 #This outputs the results to a separate text file.
 
-output = open(cidr + "florida.txt", "w")
+output = open(cdir + "florida.txt", "w")
 for r in result:
 	r = h.unescape(r)
 	output.write("\t".join(r))
