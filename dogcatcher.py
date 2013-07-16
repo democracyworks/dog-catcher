@@ -305,7 +305,7 @@ def output(results, state, edir, type = "counties", results_city = ""):
 	#If results_city is present, there are two sets of results: one for counties, one for cities.
 	#The presence of results_city causes the file to output both.
 
-	output = open(edir + "/" + type + "/" + state.lower() + ".txt", "w")
+	output = open(edir + type + "/" + state.lower() + ".txt", "w")
 
 	for r in results:
 		output.write("\t".join(r))

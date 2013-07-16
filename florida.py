@@ -90,9 +90,4 @@ for row in range(1, data.nrows):
 
 #This outputs the results to a separate text file.
 
-output = open(cdir + "florida.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

@@ -1,0 +1,57 @@
+authority_name	first_name	last_name	county_name	fips	street	city	address_state	zip_code	po_street	po_city	po_state	po_zip_code	reg_authority_name	reg_first	reg_last	reg_street	reg_city	reg_state	reg_zip_code	reg_po_street	reg_po_city	reg_po_state	reg_po_zip_code	reg_phone	reg_fax	reg_email	reg_website	reg_hours	phone	fax	email	website	hours	voter_state	source	review
+	County	Name	Beaverhead	001	2 S Pacific St No 3	Dillon 	MT	59725			MT							MT				MT							(406) 665-9796	(406) 683-3720	dscott@beaverheadcounty.org			MT	State	
+	Debbie	Scott	Big Horn	003			MT		PO Box 908	Hardin 	MT	59034						MT				MT							(406) 266-9215	(406) 357-3240	dbeardontwalk@co.bighorn.mt.us			MT	State	
+	Dulcie	Bear Don'T Walk	Blaine	005			MT		PO Box 278	Chinook 	MT	59523						MT				MT							(406) 775-8749	(406) 446-1220	sboardman@co.blaine.mt.gov			MT	State	a
+	Sandra	Boardman	Broadwater	007	515 Broadway St	Townsend 	MT	59644			MT							MT				MT							(406) 622-5151	(406) 454-6803	dellis@co.broadwater.mt.us			MT	State	
+	Doug	Ellis	Carbon	009			MT		PO Box 887	Red Lodge 	MT	59068						MT				MT							(406) 874-3343	(406) 487-5561	elections@co.carbon.mt.us			MT	State	
+	Sally	Rodibaugh	Carter	011			MT		Box 315	Ekalaka 	MT	59324						MT				MT							(406) 563-4060	(406) 377-3058	cccnrc@midrivers.com			MT	State	
+	Pamela	Castleberry	Cascade	013			MT		Box 2305	Great Falls 	MT	59403						MT				MT							(406) 535-5242	(406) 778-7106	elections@co.cascade.mt.us			MT	State	
+	Rina	Moore	Chouteau	015			MT		Box 459	Fort Benton 	MT	59442						MT				MT							(406) 582-3060	(406) 758-2453	claassen@itstriangle.com			MT	State	
+	Lana	Claassen	Custer	017	1010 Main	Miles City 	MT	59301			MT							MT				MT							(406) 873-3609	(406) 557-2760	l.corbett@co.custer.mt.us			MT	State	
+	Linda	Corbett	Daniels	019			MT		Box 247	Scobey 	MT	59263						MT				MT							(406) 568-2231	(406) 859-3771	clerkrec@danielsco.mt.gov			MT	State	
+	Kristy	Jones	Dawson	021	207 West Bell	Glendive 	MT	59330			MT							MT				MT							(406) 225-4020	(265) 548-1221	clappj@dawsoncountymail.com			MT	State	
+	Jeanne	Clapp	Deer Lodge	023	800 Main	Anaconda 	MT	59711			MT							MT				MT							(406) 883-7268	(566) 227-7109	jblodnick@anacondadeerlodge.mt.gov			MT	State	
+	Joey	Blodnick	Fallon	025			MT		Box 846	Baker 	MT	59313						MT				MT							(406) 759-5365	(406) 447-8338	falloncc@midrivers.com			MT	State	
+	Brenda	Wood	Fergus	027	712 W Main	Lewistown 	MT	59457			MT							MT				MT							(406) 843-4270	(406) 283-2300	clerkrecorder@co.fergus.mt.us			MT	State	
+	Rana	Wichman	Flathead	029	800 S Main	Kalispell 	MT	59901			MT							MT				MT							(406) 485-3505	(406) 547-3612	electionweb@flathead.mt.gov			MT	State	
+	Paula	Robinson	Gallatin	031	311 W Main Rm 210	Bozeman 	MT	59715			MT							MT				MT							(406) 258-4751	(406) 822-3520	charlotte.mills@gallatin.mt.gov			MT	State	
+	Charlotte	Mills	Garfield	033			MT		Box 7	Jordan 	MT	59337						MT				MT							(406) 222-4110	(406) 323-1104	gccr@midrivers.com			MT	State	
+	Janet	Sherer	Glacier	035	512 E Main	Cut Bank 	MT	59427			MT							MT				MT							(406) 654-2423	(406) 429-5311	gmhall@glaciercountymt.org			MT	State	
+	Glenda	Hall	Golden Valley	037			MT		PO Box 10	Ryegate 	MT	59074						MT				MT							(406) 436-2361	(406) 271-4000	berryml@midrivers.com			MT	State	
+	Mary	Lu Berry	Granite	039			MT		Box 925	Philipsburg 	MT	59858						MT				MT							(406) 846-9786	(406) 635-5575	graclerk@co.granite.mt.us			MT	State	a
+	Blanche	Mclure	Hill	041	315 4th St	Havre 	MT	59501			MT							MT				MT							(406) 375-6550	(406) 433-1708	dahld@co.hill.mt.us			MT	State	
+	Darla	Dahl	Jefferson	043			MT		Box H	Boulder 	MT	59632						MT				MT							(406) 653-6250	(406) 346-7318	bramey@jeffco.mt.gov			MT	State	
+	Bonnie	Ramey	Judith Basin	045			MT		Box 427	Stanford 	MT	59479						MT				MT							(406) 827-6922	(406) 765-3403	akelly@co.judith-basin.mt.us			MT	State	
+	Amanda	Kelly	Lake	047	106 4th Ave E	Polson 	MT	59860			MT							MT				MT							(406) 322-8000	(406) 497-6342	knewgard@lakemt.gov			MT	State	
+	Kathie	Newgard	Lewis and Clark	049	316 N Park Ave Rm 168	Helena 	MT	59623			MT							MT				MT							(406) 932-5152	(406) 466-2693	pdehart@co.lewis-clark.mt.us			MT	State	
+	Paulette	Dehart	Liberty	051			MT		Box 459	Chester 	MT	59522						MT				MT							(406) 342-5547	(406) 424-8300	clerk@co.liberty.mt.gov			MT	State	
+	Rhonda	Pimley	Lincoln	053	512 California	Libby 	MT	59923			MT							MT				MT							(406) 632-4891	(406) 228-6226	lcclerk@libby.org			MT	State	
+	Tammy	Lauer	Madison	057			MT		Box 366	Virginia City 	MT	59755						MT				MT							(406) 256-2740	(406) 796-2481	pkaatz@madison.mt.gov			MT	State	
+	Peggy	Kaatz	McCone	055			MT		Box 199	Circle 	MT	59215						MT				MT							(406) 665-9824	(406) 683-3781	clerk@midrivers.com			MT	State	
+	Maridel	Kassner	Meagher	059			MT		Box 309	White Sulphur Sprgs 	MT	59645						MT				MT							(406) 357-2199	(406) 266-3674	dogle@meaghercounty.mt.gov			MT	State	
+	Dayna	Ogle	Mineral	061			MT		Box 550	Superior 	MT	59872						MT				MT							(406) 775-8750	(406) 446-2640	shayes@co.mineral.mt.us			MT	State	
+	Staci	Hayes	Missoula	063	200 W Broadway	Missoula 	MT	59802			MT							MT				MT							(406) 622-3012	(406) 454-6725	vzeier@co.missoula.mt.us			MT	State	
+	Vickie	Zeier	Musselshell	065	506 Main	Roundup 	MT	59072			MT							MT				MT							(406) 487-5583	(406) 874-3452	jmang@co.musselshell.mt.us			MT	State	
+	Jane	Mang	Park	067	414 E Callender St	Liv ingston 	MT	59047			MT							MT				MT							(406) 563-4001	(406) 377-1717	clerkrecorder@parkcounty.org			MT	State	
+	Denise	Nelson	Petroleum	069			MT		Box 226	Winnett 	MT	59087						MT				MT							(406) 778-2048	(406) 535-9023	leslies@midrivers.com			MT	State	
+	Leslie	Mitchell	Phillips	071			MT		Box 360	Malta 	MT	59538						MT				MT							(406) 582-3068	(406) 758-5877	mereaux@phillipscounty.mt.gov			MT	State	
+	Marian	Ereaux	Pondera	073	20 4th Ave SW	Conrad 	MT	59425			MT							MT				MT							(406) 873-3613	(406) 557-2765	clerkrec@3rivers.net			MT	State	
+	Kody	Farkell	Powder River	075			MT		Box 200	Broadus 	MT	59317						MT				MT							(406) 859-3817	(406) 568-2428	kamende@prco.mt.gov			MT	State	
+	Karen	Amende	Powell	077	409 Missouri	Deer Lodge 	MT	59722			MT							MT				MT							(406) 225-4149	(406) 265-2445	cr@co.powell.mt.us			MT	State	
+	Diane	Grey	Prairie	079			MT		Box 125	Terry 	MT	59349						MT				MT							(406) 566-2211	(406) 883-7230	clerkrecorder@prairie.mt.gov			MT	State	
+	Toni	Kalfell	Ravalli	081	215 S 4th St Ste C	Hamilton 	MT	59840			MT							MT				MT							(406) 759-5395	(406) 457-8598	rplettenberg@rc.mt.gov			MT	State	
+	Regina	Plettenberg	Richland	083	201 W Main	Sidney 	MT	59270			MT							MT				MT							(406) 843-5264	(406) 293-8577	sverhasselt@richland.org			MT	State	
+	Stephanie	Verhasselt	Roosevelt	085	400 2nd Ave S	Wolf Point 	MT	59201			MT							MT				MT							(406) 547-3388	(406) 485-2689	chansen@rooseveltcounty.org			MT	State	
+	Cheryl	Hansen	Rosebud	087			MT		Box 47	Forsyth 	MT	59327						MT				MT							(406) 258-3913	(406) 822-3579	gcuster@rosebudcountymt.com			MT	State	
+	Geraldine	Custer	Sanders	089			MT		Box 519	Thompson Falls 	MT	59873						MT				MT							(406) 323-3303	(406) 222-4193	clerk&recorder@sanderscounty.mt.gov			MT	State	
+	Jennine	Robbins	Sheridan	091	100 W Laurel Ave	Plentywood	MT	59254			MT							MT				MT							(406) 654-2429	(406) 429-6328	mlynch@co.sheridan.mt.us			MT	State	
+	Mary	Lynch	Silver Bow	093	155 W Granite Rm 208	Butte 	MT	59701			MT							MT				MT							(406) 436-2151	(406) 271-4070	shollis@bsb.mt.gov			MT	State	
+	Sally	Hollis	Stillwater	095			MT		Box 149	Columbus 	MT	59019						MT				MT							(406) 635-5576	(406) 846-3891	pmishler@stillwater.mt.gov			MT	State	
+	Pauline	Mishler	Sweet Grass	097			MT		Box 888	Big Timber 	MT	59011						MT				MT							(406) 433-3731	(406) 375-6554	sgclerk1@itstriangle.com			MT	State	
+	Sherry	Bjorndal	Teton	099			MT		Box 610	Choteau 	MT	59422						MT				MT							(406) 653-6289	(406) 346-7551	paula@3rivers.net			MT	State	
+	Paula	Jaconetty	Toole	101	226 1st St S	Shelby 	MT	59474			MT							MT				MT							(406) 765-2609	(406) 827-6970	tnelson@toolecountymt.gov			MT	State	
+	Treva	Nelson	Treasure	103			MT		Box 392	Hysham 	MT	59038						MT				MT							(406) 322-8069	(406) 497-6328	clerkrecorder@rangeweb.net			MT	State	
+	Ruth	Baker	Valley	037			MT		501 Court Sq Box 2	Glasgow 	MT	59230						MT				MT							(406) 466-3244	(406) 932-3026	lnyquist@valleycountymt.net			MT	State	
+	Lynne	Nyquist	Wheatland	107			MT		Box 1903	Harlowton 	MT	59036						MT				MT							(406) 424-8301	(406) 342-5547	wccr@mtintouch.net			MT	State	
+	Mary	Miller	Wibaux	109			MT		PO Box 199	Wibaux 	MT	59353						MT				MT							(406) 632-4880	(406) 228-9027	wibauxco@midrivers.com			MT	State	
+	Patricia	Zinda	Yellowstone	111			MT		Box 35002	Billings 	MT	59107						MT				MT							(406) 796-2625	(406) 254-7940	brutherford@co.yellowstone.mt.gov			MT	State	

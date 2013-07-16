@@ -198,9 +198,4 @@ for i in range(0, len(counties)):
 
 #This outputs the results to a separate text file.
 
-output = open(cdir + "montana.txt", "w")
-for r in result:
-    r = h.unescape(r)
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)
