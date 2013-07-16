@@ -110,8 +110,8 @@ for county in county_data:
     city = "Martinez"
     address_state = "CA"
 
-  phone_data = dogcatcher.phone_find(phone_re, county)
-  fax = dogcatcher.phone_find(fax_re, county)
+  phone_data = dogcatcher.find_phone(phone_re, county)
+  fax = dogcatcher.find_phone(fax_re, county)
 
   # phone_re.findall(county)
   # phone = phone_data[0][0]
@@ -124,7 +124,7 @@ for county in county_data:
   print po_street
 
 
-  website = dogcatcher.website_find(website_re, county)
+  website = dogcatcher.find_website(website_re, county)
 
   #Any given county may or may not have included Hours.
   	
@@ -133,7 +133,7 @@ for county in county_data:
   else:
     hours = ""
 
-  fips = dogcatcher.fips_find(county_name, voter_state)
+  fips = dogcatcher.find_fips(county_name, voter_state)
 
   print street
 
@@ -150,8 +150,4 @@ for county in county_data:
 
 #This outputs the results to a separate text file.
 
-output = open(cdir + "california.txt", "w")
-for r in result:
-  output.write("\t".join(r))
-  output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)
