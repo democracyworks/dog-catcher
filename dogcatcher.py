@@ -175,7 +175,7 @@ def clean_website(website):
 	return website
 
 
-def maps_fips(city, state, zip_code):
+def map_fips(city, state, zip_code, alternate_city = ""):
 	"This function identifies FIPS values for towns where county data isn't available in the data set."
 
 	import time
@@ -194,12 +194,22 @@ def maps_fips(city, state, zip_code):
 	place = urllib.urlopen(url)
 	json_place = json.load(place)
 
-	#There's a chance Google doesn't have the place. If so, this informs us.
+	#There's a chance Google doesn't have the place. If so, this tries an alternate statement of place and then informs us if that fails too.
 
 	if json_place['status'] != "OK":
-		print json_place
-		print "Egad! %s" % address
-		sys.exit()
+
+			address = alternate_city + " " + state + " "
+
+			url = base_url % urllib.quote(address)
+
+			place = urllib.urlopen(url)
+			json_place = json.load(place)
+
+			if json_place['status'] != "OK":
+
+				print json_place
+				print "Egad! %s" % address
+				sys.exit()
 
 	#At this point, we're looking for the full name of Administrative Area 2 (County). So we cycle through components of the JSON until we find it.
 
@@ -288,10 +298,24 @@ def split_name(official_name, review, ignore = ""):
 
 	return first_name, last_name, review
 
-def output(result, state, edir):
+def output(results, state, edir, type = "counties", results_city = ""):
 	"Outputs results to a file named using the state's lowercased abbreviation."
-	output = open(edir + state.lower() + ".txt", "w")
-	for r in result:
+
+	#Type is a switch that determines whether we output the data to a cities or a counties file.
+	#If results_city is present, there are two sets of results: one for counties, one for cities.
+	#The presence of results_city causes the file to output both.
+
+	output = open(edir + "/" + type + "/" + state.lower() + ".txt", "w")
+
+	for r in results:
+		output.write("\t".join(r))
+		output.write("\n")
+	output.close()
+
+	if results_city:
+		output = open(edir + "/cities/" + state.lower() + ".txt", "w")
+
+	for r in results_city:
 		output.write("\t".join(r))
 		output.write("\n")
 	output.close()

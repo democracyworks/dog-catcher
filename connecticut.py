@@ -15,16 +15,10 @@ h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?CT.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
-
 voter_state = "CT"
 source = "State"
 
-result = [("authority_name", "first_name", "last_name", "town_name", "fips",
+result = [("authority_name", "first_name", "last_name", "town_name", "fips", "county_name",
     "street", "city", "address_state", "zip_code",
     "po_street", "po_city", "po_state", "po_zip_code",
     "reg_authority_name", "reg_first", "reg_last",
@@ -38,34 +32,34 @@ result = [("authority_name", "first_name", "last_name", "town_name", "fips",
 
 file_path_1 = cdir + "connecticut-clerks-1.pdf"
 file_path_2 = cdir + "connecticut-clerks-2.pdf"
-# url_1 = "http://www.ct.gov/sots/LIB/sots/ElectionServices/lists/TownClerkList.pdf"
-# url_2 = "http://www.sots.ct.gov/sots/lib/sots/electionservices/lists/rovofficeaddresses.pdf"
-# user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
-# headers = {'User-Agent' : user_agent}
+url_1 = "http://www.ct.gov/sots/LIB/sots/ElectionServices/lists/TownClerkList.pdf"
+url_2 = "http://www.sots.ct.gov/sots/lib/sots/electionservices/lists/rovofficeaddresses.pdf"
+user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+headers = {'User-Agent' : user_agent}
 
-# req_1 = urllib2.Request(url_1, headers=headers)
-# pdf_1 = urllib2.urlopen(req_1).read()
+req_1 = urllib2.Request(url_1, headers=headers)
+pdf_1 = urllib2.urlopen(req_1).read()
 
-# data_1 = dogcatcher.pdf_to_text(pdf_1)
-# output = open(file_path_1, "w")
-# output.write(data_1)
-# output.close()
+data_1 = dogcatcher.pdf_to_text(pdf_1)
+output = open(file_path_1, "w")
+output.write(data_1)
+output.close()
 
-# req_2 = urllib2.Request(url_2, headers=headers)
-# pdf_2 = urllib2.urlopen(req_2).read()
+req_2 = urllib2.Request(url_2, headers=headers)
+pdf_2 = urllib2.urlopen(req_2).read()
 
-# data_2 = dogcatcher.pdf_to_text(pdf_2)
-# output = open(file_path_2, "w")
-# output.write(data_2)
-# output.close()
+data_2 = dogcatcher.pdf_to_text(pdf_2)
+output = open(file_path_2, "w")
+output.write(data_2)
+output.close()
 
 absdata = open(file_path_1).read()
 regdata = open(file_path_2).read()
 
 
 #Check to make sure that W I doesn't appear in the source documents before running.
-absdata = absdata.replace("W I","WI").replace("","").replace("One First","1 First")
-regdata = regdata.replace("W I","WI").replace("","")
+absdata = dogcatcher.po_standardize(absdata.replace("W I","WI").replace("","").replace("ONE FIRST","1 FIRST"))
+regdata = dogcatcher.po_standardize(regdata.replace("W I","WI").replace("","").replace("ONE FIRST","1 FIRST"))
 absdata = absdata.replace("\nN. ","\nNorth ")
 regdata = regdata.replace("N. S","North S")
 
@@ -138,8 +132,9 @@ for item in abse:
     if regtown_name == abstown_name:
         town_name = abstown_name
     else:
-        print "The lists don't match. Breaking the code."
-        print [abstown_name]        print [regtown_name]
+        print "The lists don't match. Stopping the code."
+        print [abstown_name]
+        print [regtown_name]
         sys.exit()
 
     #This section finds the full address for the registrar of voters. After finding the address, it identifies a city/state/zip (csz) combination and a PO Box number if that exists.
@@ -174,14 +169,14 @@ for item in abse:
 
 
 
-    phone = dogcatcher.phone_find(phone_re, town, areacode = "203")
+    phone = dogcatcher.find_phone(phone_re, town, areacode = "203")
 
     if ("(203) 203-") in phone:
-        phone = dogcatcher.phone_clean(phone.partition(" ")[2])
+        phone = dogcatcher.clean_phone(phone.partition(" ")[2])
         print phone
 
     email = dogcatcher.find_emails(email_re, town)
-    fax = dogcatcher.phone_find(fax_re, town)
+    fax = dogcatcher.find_phone(fax_re, town)
 
     official_name = name_re.findall(town)[0].title()
     first_name, last_name, review = dogcatcher.split_name(official_name, review)
@@ -192,6 +187,7 @@ for item in abse:
 
 
     address = abs_address_re.findall(town)[0]
+
     csz = csz_re.findall(address)[0]
 
     if not address.replace(csz,""):
@@ -213,12 +209,12 @@ for item in abse:
     if street:
         city = city_re.findall(csz)[0].strip().title()
         address_state = state_re.findall(csz)[0].strip()
-        zip_code = zip_re.findall(csz)[0].strip().title()
+        zip_code = zip_re.findall(csz)[0].strip().title()    
 
     if street:
-        fips, county_name = dogcatcher.maps_fips(city, address_state, zip_code)
+        fips, county_name = dogcatcher.map_fips(city, address_state, town_name, zip_code)
     else:
-        fips, county_name = dogcatcher.maps_fips(po_city, po_state, po_zip_code)
+        fips, county_name = dogcatcher.map_fips(po_city, po_state, town_name, po_zip_code)
 
     result.append([authority_name, first_name, last_name, town_name, fips, county_name,
     street, city, address_state, zip_code,
@@ -231,9 +227,4 @@ for item in abse:
 
 #This outputs the results to a separate text file.
 
-output = open(cdir + "connecticut.txt", "w")
-for r in result:
-    r = h.unescape(r)
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir, "cities")

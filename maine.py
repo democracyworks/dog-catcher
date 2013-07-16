@@ -52,12 +52,16 @@ town_name_re = re.compile("(.+?)</h2>")
 
 data = open(file_path).read()
 data = data.replace("<p style=\"clear:both;\">Last Updated:","</div><div style=\"clear:left;\">")
+data = dogcatcher.po_standardize(data)
 
 county_data = county_re.findall(data)
 
 for county in county_data:
 
 	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
+
+	authority_name = "Municipal Clerk"
+	print authority_name
 
 	#There are many edits to town names needed to make the data come off of the Google Maps API well.
 	town_name = town_name_re.findall(county)[0].replace("Plt","Plantation").strip(".")
@@ -76,9 +80,9 @@ for county in county_data:
 	official_name = name_re.findall(absentee)[0].strip()
 	first_name, last_name, review = dogcatcher.split_name(official_name, review)
 
-	phone = dogcatcher.phone_find(phone_re, absentee)
+	phone = dogcatcher.find_phone(phone_re, absentee)
 
-	fax = dogcatcher.phone_find(fax_re, absentee)
+	fax = dogcatcher.find_phone(fax_re, absentee)
 
 	#This section finds athe address. After finding the address, it identifies a city/state/zip (csz) combination and a PO Box number if that exists.
     #It removes both the CSZ and the PO Address (if it exists) from the full address, leaving behind a street address with some garbage.
@@ -93,7 +97,7 @@ for county in county_data:
 	except:
 		po_street = ""
 
-	street = ", ".join(address.replace(csz,"").replace(po_street,"").replace("<p>","").split("</p>")).strip("\r\n, ")
+	street = ", ".join(address.replace(csz,"").replace(po_street,"").replace("<p>","").split("</p>")).replace("\r\n","").strip(", ")
 
 	if street:
 		csz = csz_re.findall(address)[0].strip()
@@ -107,12 +111,15 @@ for county in county_data:
 
 
 	#The Google API doesn't take the word "Twp" well in several towns. (And in townships, it's common for the clerk's address to be outside of the Twp.) This cleans it out.
-	if city:
+	#However, it fails if "No 21 Twp" is give as No 21, instead of No 21 Twp, so for that one we don't replace it.
+	if city and "No 21" not in town_name:
 		if town_name != city:
-			town_name = town_name.replace("Twp","")
-	elif po_city:
+			town_name = town_name.replace(" Twp","").replace("Strip","")
+	elif po_city and "No 21" not in town_name:
 		if town_name != po_city:
-			town_name = town_name.replace("Twp","")
+			town_name = town_name.replace(" Twp","")
+
+	print "__________________________________________________________"
 
 
 	#There are many towns where the reg person is the same as the absentee person; this is denoted by the words "Same as." We check for that.
@@ -123,11 +130,11 @@ for county in county_data:
 		official_name = name_re.findall(registrar)[0].strip()
 		reg_first, reg_last, review = dogcatcher.split_name(official_name, review)
 
-		reg_phone = dogcatcher.phone_find(phone_re, registrar)
+		reg_phone = dogcatcher.find_phone(phone_re, registrar)
 
-		reg_fax = dogcatcher.phone_find(fax_re, registrar)
+		reg_fax = dogcatcher.find_phone(fax_re, registrar)
 
-		# This section finds athe address. After finding the address, it identifies a city/state/zip (csz) combination and a PO Box number if that exists.
+		# This section finds the registration official's address. After finding the address, it identifies a city/state/zip (csz) combination and a PO Box number if that exists.
 		#It removes both the CSZ and the PO Address (if it exists) from the full address, leaving behind a street address with some garbage.
 		#It then cleans up the street address and pulls the city, state, and zip out of the csz, and assigns them as appropriate to the street address and mailing address.
 
@@ -150,19 +157,16 @@ for county in county_data:
 			reg_po_state = state_re.findall(reg_csz)[0].strip()
 			reg_po_zip_code = zip_re.findall(reg_csz)[0].strip()
 
-		print [reg_address], [reg_street], [reg_po_street], [reg_city]
-
-
 		reg_authority_name = "Municipal Registrar"
 
-	# print town_name
-
+	print town_name
 
 	try:
+
 		if street:
-			fips, county_name = dogcatcher.maps_fips(town_name, "ME", zip_code)
+			fips, county_name = dogcatcher.map_fips(town_name, "ME", zip_code, city)
 		else:
-			fips, county_name = dogcatcher.maps_fips(town_name, "ME", po_zip_code)
+			fips, county_name = dogcatcher.map_fips(town_name, "ME", po_zip_code, po_city)
 
 	except: #Several towns don't work correctly in the Google Maps API.
 
@@ -173,11 +177,14 @@ for county in county_data:
 			county_name = "Aroostook"
 
 		else:
-			print "There's a new broken town."
-			print town_name
+			print "There's a new broken town: " + town_name
+			if street:
+				print town_name + " ME " + zip_code
+			else:
+				print town_name + " ME " + po_zip_code
 			sys.exit()
 
-		fips = dogcatcher.fips_find(county_name, voter_state)
+		fips = dogcatcher.find_fips(county_name, voter_state)
 
 
 	result.append([authority_name, first_name, last_name, town_name, county_name, fips,
@@ -190,9 +197,6 @@ for county in county_data:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 
-#This outputs the results to a separate text file.
-output = open(cdir + "maine-cities.txt", "w")
-for r in result:
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
+#This outputs the results to a separate text file. Since Maine uses cities, it outputs to a file in the cities folder.
+
+dogcatcher.output(result, voter_state, cdir, "cities")
