@@ -38,7 +38,7 @@ county_name_re = re.compile(">([^\n<>]+?)<")
 clerk_re = re.compile("(County Clerk.+?</div>)", re.DOTALL)
 registrar_re = re.compile("County Clerk.+?</div>(.+?</div>)", re.DOTALL)
 
-name_re = re.compile("</strong><br /> *\n\s*(.+?)<", re.DOTALL)
+name_re = re.compile("</strong><br /> *\n\s*([^\d]+?)<", re.DOTALL)
 name_2_re = re.compile("(.+?),")
 
 phone_re = re.compile("<strong>(\d{3}-\d{3}-\d{4}.*?) *</strong>")
@@ -133,8 +133,12 @@ for county in county_data:
 	#This isolates the registrar data from the complete county.
 	registrar = registrar_re.findall(county)[0]
 
-	registrar_name = name_re.findall(registrar)[0]
-	reg_first, reg_last, review = dogcatcher.split_name(registrar_name, review)
+	if name_re.findall(registrar):
+		registrar_name = name_re.findall(registrar)[0]
+		reg_first, reg_last, review = dogcatcher.split_name(registrar_name, review)
+	else:
+		reg_first = ""
+		reg_last = ""
 
 	reg_phone = dogcatcher.find_phone(phone_re, registrar)
 
@@ -171,15 +175,10 @@ for county in county_data:
 
 	reg_street = " ".join(address.replace(csz,"").replace(reg_po_street,"").rstrip(", ").replace("\t","").split(" ")).strip(", .\n\t")
 
-	if is_street_re.findall(address):
-		reg_street = address.strip(", \n")
-		while street_break_re.findall(reg_street):
-			for lbreak in street_break_re.findall(reg_street):
-				reg_street = reg_street.replace(lbreak,", ")
-		while multi_space_re.findall(reg_street):
-			for multi in multi_space_re.findall(reg_street):
-				reg_street = reg_street.replace(multi," ")
-		reg_street = reg_street.replace(", , ",", ").replace(",,",",")
+	print [address]
+	print [csz]
+	print [reg_street]
+
 	if reg_street:
 
 		while street_break_re.findall(reg_street):
@@ -203,7 +202,7 @@ for county in county_data:
 		reg_po_state = state_re.findall(csz)[0]
 		reg_po_zip_code = zip_re.findall(csz)[0]
 
-	print [reg_street]
+	print reg_street
 
 	authority_name = "County Clerk"
 
