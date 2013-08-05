@@ -98,7 +98,7 @@ def clean_phone(phone, areacode = ""):
 	if "".join(deconstructed_phone[0:2]) == "18": #A 1-800 number screws up the digit counting, so we take out the 1, clean the phone number, and replace it.
 		deconstructed_phone.pop(0)
 
-		phone = phone_clean("".join(deconstructed_phone)).replace("(800) ","1-800-")
+		phone = clean_phone("".join(deconstructed_phone)).replace("(800) ","1-800-")
 
 		return phone
 
@@ -205,7 +205,7 @@ def map_fips(city, state, zip_code, alternate_city = ""):
 			json_place = json.load(place)
 
 			if json_place['status'] != "OK":
-
+				import sys
 				print json_place
 				print "Egad! %s" % address
 				sys.exit()
