@@ -79,8 +79,8 @@ city_3_re = re.compile(", ([^,\d]+?) \d{5}[-\d]*")  #Here, we take the last comm
 city_4_re = re.compile(" ([^,\d]+?) \d{5}[-\d]*") #Here, we just take the last several words without commas or digits. This is not a promising regex.
 
 po_re = re.compile("PO ")
-po_letter_re = re.compile("(PO [BD].+?[xr]  *[A-Z])") #For the handful of places with "PO Box [A-Z]" in their address.
-po_street_re = re.compile("PO [BD].+?[xr] *\d+")
+po_letter_re = re.compile("([PO ]*[BD][oawer]+?[xr]  *[A-Z])") #For the handful of places with "PO Box [A-Z]" in their address.
+po_street_re = re.compile("[PO ]*[BD][oawer]+?[xr] *\d+")
 street_address_re = re.compile(">(.+?) P\.O\.")
 street_re = re.compile("(.+),*")
 
@@ -140,8 +140,6 @@ for county in county_data:
 	address_components = comp.next()
 	end = len(address_components) - 1
 
-	print [address_components]	
-
 	if suite_re.findall(address_components[end]):
 		suite = suite_re.findall(address_components[end])[0]
 		address_components[end] = address_components[end].replace(suite,"").strip()
@@ -153,7 +151,7 @@ for county in county_data:
 			if po_street_re.findall(address):
 				po_street = po_street_re.findall(address)[0]
 			else:
-				po_street = po_letter_re.findall(street)[0]
+				po_street = po_letter_re.findall(address)[0]
 
 			address = address.replace(po_street, "")
 
@@ -181,7 +179,7 @@ for county in county_data:
 
 			street = street.replace(po_street,"")
 
-			po_cityzip_components = address_components[1].split(" ")
+			po_cityzip_components = address_components[1].split()
 			po_zip_code = po_cityzip_components.pop()
 			po_city = " ".join(po_cityzip_components)
 
@@ -189,7 +187,7 @@ for county in county_data:
 
 		if street:
 			cityzip = address_components[1]
-			cityzip = cityzip.split(" ")
+			cityzip = cityzip.split()
 			zip_code = cityzip.pop()
 			city = " ".join(cityzip)
 		
@@ -206,7 +204,7 @@ for county in county_data:
 
 			street = street.replace(po_street,"")
 
-			po_cityzip_components = address_components[end].split(" ")
+			po_cityzip_components = address_components[end].split()
 			po_zip_code = po_cityzip_components.pop()
 			po_city = " ".join(po_cityzip_components)
 
@@ -214,121 +212,190 @@ for county in county_data:
 
 		if street:
 			cityzip = address_components[end]
-			cityzip = cityzip.split(" ")
+			cityzip = cityzip.split()
 			zip_code = cityzip.pop()
 			city = " ".join(cityzip)
 
-	print street + " / " + po_street
-	print city + " / " + po_city
-	print zip_code + " / " + po_zip_code
-
-#////////////////////////////////////////////////
 
 	#This section finds the address for the registration official.
-	#To do so, we first grab the address, which is one of the items in the original breakdown of the official's data.
-	#We then try to capture both a PO Box and a PO box/street address combination out of the data. Only zero or one of these things should exist.
-	#Here's where things get fun. The addresses are terribly formatted, and the street is on the same line as the city and the zip code, so we can't necessarily tell the end of the street apart from the start of the city.
-	#So we try three different regexes to identify cities, based on hand-review of the data. The regexes run in descending order of confidence in the results.
-	#(There were originally four, but one was found to be suboptimal and replaced.)
-	#Once we have a city, we remove it and the easily-identified zip code from the address, leaving us with whichever of the PO Box and Street Address exist.
-	#We run this procedure in three cases: once if there's no PO Box; once if we think there's both a PO Box and a street address; and once if there's only a PO Box.
-	#Within the second case, we may have made an error, so we check to confirm the presence of a street address.
-	#We also make a mark in "review" to note that there might be a problem with the city if either of the two weak city regexes are used.
+	
 
 #////////////////////////////////////////////////
 
-	# address = reg_county_data_item[2].strip().replace("\r\n", " ")
-	# if county_name == "Lampasas":
-	# 	address = "407 S. Pecan P.O. Box 571, Lampasas 76550"
-	# if "278 Roby 76543" in address:
-	# 	address = address.replace("76543", "79543")
-	# if county_name == "Hamilton":
-	# 	address = "Hamilton 76531"
-	# 	reg_street = "102 N Rice St #112"
-	# if county_name == "Scurry":
-	# 	address = "Snyder 79549"
-	# 	reg_street = "1806 25th St #300"
-
-	# # print [address]
-
-	# if po_street_re.findall(address):
-	# 	reg_po_street = po_street_re.findall(address)[0]
-	# elif po_letter_re.findall(address):
-	# 	reg_po_street = po_letter_re.findall(address)[0]
-	
-
-	# address = address.replace(reg_po_street,"")
-
-	# # print [address]
-
-	# base_url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=%s"
-	
-	# url = base_url % urllib.quote(address)
-
-	# place = urllib.urlopen(url)
-	# json_place = json.load(place)
+	reg_address = " ".join(reg_county_data_item[2].strip().replace("\r\n", " ").split()).replace(", Texas, ",", ")
+	print reg_address
 
 
+	if re.search("\d,* [A-Z][a-zA-Z]+ \d{5}[\d-]*", reg_address):
 
-	# if json_place['status'] != "OK":
-	# 	# print json_place
-	# 	# print "Egad! %s" % address
-	# 	sys.exit()
+		#print reg_address
 
-	# #At this point, we're looking for the full name of Administrative Area 2 (County). So we cycle through components of the JSON until we find it.
+		if po_re.findall(reg_address):
+			if po_street_re.findall(reg_address):
+				reg_po_street = po_street_re.findall(reg_address)[0]
+			else:
+				reg_po_street = po_letter_re.findall(reg_address)[0]
 
-	# subpremise = ""
-	# street_number = ""
-	# route = ""
+			reg_address = reg_address.replace(reg_po_street, "")
+			
+			reg_po_zip_code = zip_re.findall(reg_address)[0]
 
-	# json_address = json_place['results'][0]['address_components']
-	# # print address
-	# # print json_address
+			reg_address = reg_address.replace(reg_po_zip_code, "").strip(", ")
 
-	# for item in json_address:
-	# 	if unicode("subpremise") in item['types']:
-	# 		subpremise = item['long_name'].encode('ascii')
-	# 	if unicode("street_number") in item['types']:
-	# 		street_number = item['long_name'].encode('ascii')
-	# 	if unicode("route") in item['types']:
-	# 		route = item['long_name'].encode('ascii')
-	# 	if unicode("locality") in item['types']:
-	# 		reg_city = item['long_name'].encode('ascii')
-	# 	if unicode("postal_code") in item['types']:
-	# 		reg_zip_code = item['long_name'].encode('ascii')
+			if re.search("\d[, ]* [A-Z][a-zA-Z]+$", reg_address):
 
-	# if route:
-	# 	if subpremise:
-	# 		reg_street = street_number + " " + route + " #" + subpremise
-	# 	else:
-	# 		reg_street = street_number + " " + route
+				reg_address_components = re.split("(\d)[, ]* ([A-Z][a-zA-Z]+)$", reg_address)
+				end = len(reg_address_components)
 
-	# if reg_po_street:
-	# 	reg_po_city = reg_city
-	# 	reg_zip_code = reg_po_zip_code
-	# 	if not reg_street:
-	# 		reg_city = ""
-	# 		reg_zip_code = ""
+				for digit in range(0, end):
+					reg_city = " ".join(reg_address_components[end - digit : end])
+					if re.search("\d", reg_address_components[end - digit - 1]):
+						break
+
+				reg_po_city = reg_city.strip(", ")
+				reg_street = "".join(reg_address_components[0 : end - digit])
+				reg_zip_code = reg_po_zip_code
+				
+			elif re.search("\d", reg_address):
+				print "You have an address with both a PO box and a street address, and a multi-word city name (maybe)."
+				print "This wasn't set up to handle that. Bet you wished you'd written that edge case now, huh?"
+				print "The address is: " + reg_address
+				sys.exit()
+			else:
+				reg_po_city = reg_address.strip(", ")
+
+		else:
+
+			cityzip_re_1 = re.compile("\d,* ([A-Z][a-zA-Z]+ \d{5}[\d-]*$)")
+
+			cityzip = cityzip_re_1.findall(reg_address)[0]
+
+			reg_zip_code = zip_re.findall(cityzip)[0]
+			
+			reg_city = cityzip.replace(reg_zip_code,"").strip(", ")
+
+			reg_street = reg_address.replace(cityzip,"").strip(", ")
+
+	elif re.search(", [A-Z][a-z]+ \d{5}[\d-]*", reg_address):
+		
+		print reg_address
+
+		if po_re.findall(reg_address):
+			if po_street_re.findall(reg_address):
+				reg_po_street = po_street_re.findall(reg_address)[0]
+			else:
+				reg_po_street = po_letter_re.findall(reg_address)[0]
+
+			reg_address_truncated = reg_address.replace(reg_po_street, "").strip("/, .")
+
+			reg_address_truncated_components = re.split("([A-Z][a-z]+ \d{5}[\d-]*$)", reg_address_truncated)
+
+			end = len(reg_address_truncated_components) - 2
+
+			reg_po_cityzip = reg_address_truncated_components[end]
+			reg_po_cityzip_components = reg_po_cityzip.partition(" ")
+
+			reg_po_city = reg_po_cityzip_components[0]
+			reg_po_zip_code = reg_po_cityzip_components[2]
+
+			if reg_address_truncated_components[end - 1]:
+				reg_street = " ".join(reg_address_truncated_components[0:end]).strip(", ")
+				reg_city = reg_po_city
+				reg_zip_code = reg_po_zip_code
+
+		else:
+
+			reg_address_components = re.split("([A-Z][a-z]+ \d{5}[\d-]*$)", reg_address)
+
+			end = len(reg_address_components) - 2
+
+			reg_cityzip = reg_address_components[end]
+			reg_cityzip_components = reg_cityzip.partition(" ")
+
+			reg_street = " ".join(reg_address_components[0:end]).strip(", ")
+			reg_city = reg_cityzip_components[0]
+			reg_zip_code = reg_cityzip_components[2]
+
+	else:
+		reg_comp = csv.reader([reg_address], skipinitialspace=True)
+		reg_address_components = reg_comp.next()
+		
+		
+		if po_re.findall(reg_address):
+			if po_street_re.findall(reg_address):
+				reg_po_street = po_street_re.findall(reg_address)[0]
+			else:
+				reg_po_street = po_letter_re.findall(reg_address)[0]
+
+		reg_address = " ".join(reg_address.replace(reg_po_street,"").split()).strip(", ")
+
+		if not re.search("\d[A-Za-z,]* [A-Za-z \.,#]+? \d{5}[\d-]*", reg_address):
+
+			#print reg_po_street + " " + reg_address
+
+			reg_po_zip_code = zip_re.findall(reg_address)[0]
+			reg_po_city = reg_address.replace(reg_po_zip_code,"")
+
+			# print "Street: " + reg_po_street
+			# print "City: " + reg_po_city
+			# print "Zip: " + reg_po_zip_code
+		else:
+			county_test = ""
+
+			# print reg_address
+
+			for words in range(2,reg_address.count(" ")):
+				#print reg_address_components
+
+				reg_address_components = reg_address.split()
+				end = len(reg_address_components)
+				reg_city_try = " ".join(reg_address_components[end - words: end])
+				
+				base_url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=%s"
+				url = base_url % urllib.quote(reg_city_try)
+
+				place = urllib.urlopen(url)
+				json_place = json.load(place)
+
+				if json_place['status'] != "OK":
+					continue
+
+				json_address = json_place['results'][0]['address_components']
 
 
-	# time.sleep(1.5)
+				for item in json_address:
+					if unicode("administrative_area_level_2") in item['types']:
+						county_test = item['long_name'].encode('ascii')
+					if unicode("locality") in item['types']:
+						reg_city = item['long_name'].encode('ascii')
+						reg_city = reg_city.replace("Mount ","Mt. ").replace("Saint ","St. ")
+
+				time.sleep(1.5)
+
+				if county_test == county_name:
+					break
+				elif words == end:
+					print "Google can't match this to the right place at all. Fix this edge case. Do not pass go."
+					sys.exit()
 
 
+			reg_address_components = reg_address.partition(reg_city) #in case the city name is also in the street name
+			if reg_city in reg_address_components[2]:
+				reg_final_components = reg_address_components[2].partition(reg_city)
+				reg_street = (" ".join(reg_address_components[0:1]) + reg_final_components[0]).strip(" ")
+				reg_zip_code = reg_final_components[2].strip(" ")
+			else:
+				reg_streetzip = reg_address.replace(reg_city,"").partition("  ")
+				reg_street = reg_streetzip[0].strip(", ")
+				reg_zip_code = reg_streetzip[2]
 
-	# print "++++++++++++++++++++++++++++" + county_name
-	# # print [reg_street]
-	# # print [reg_po_street]
-	# # print [reg_city]
-	# # print [reg_zip_code]
+			if reg_po_street:
+				reg_po_city = reg_city
+				reg_po_zip_code = reg_zip_code
 
-	# #Fixing a known error in Winkler County.
-	# if reg_po_street == "PO Drawer Kermit":
-	# 	reg_po_street = "PO BOX 1065"
-	# 	reg_po_city = "KERMIT"
-	# 	reg_po_zip = "79745"
-
-#////////////////////////////////////////////////	
-
+	print reg_street + " / " + reg_po_street
+	print reg_city + " / " + reg_po_city
+	print reg_zip_code + " / " + reg_po_zip_code
 	
 	
 	fips = dogcatcher.find_fips(county_name, voter_state)
