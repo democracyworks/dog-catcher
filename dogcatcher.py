@@ -206,7 +206,7 @@ def map_fips(city, state, zip_code, alternate_city = ""):
 			json_place = json.load(place)
 
 			if json_place['status'] != "OK":
-
+				import sys
 				print json_place
 				print "Egad! %s" % address
 				sys.exit()
