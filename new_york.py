@@ -36,7 +36,7 @@ county_name_re = re.compile("Learn more about ([a-zA-Z]+)")
 
 phone_re = re.compile("Phone: (.+?)<..>")
 fax_re = re.compile("Fax: (.*?)&nbsp;&nbsp;</TH>")
-official_name_re = re.compile("OFFICERS<BR><BR>(.+?),")
+official_name_re = re.compile("OFFICERS<BR><BR>(.+?)[<,]")
 official_name_2_re = re.compile("<BR>(.+?),")
 
 address_re = re.compile("Board of Elections<BR>(.+?\d{5}[-\d]*?)<br>")
@@ -88,7 +88,7 @@ for item in county_names:
 
 	#Once we have the data, we start parsing.
 
-	phone = dogcatcher.phone_find(phone_re, county)
+	phone = dogcatcher.find_phone(phone_re, county)
 
 	#The Authority name is uniform across counties.
 
@@ -96,9 +96,13 @@ for item in county_names:
 		fax = "914-995-3190, 914-995-7753"
 		review = review + "b"
 	else:
-		fax = dogcatcher.phone_find(fax_re, county)
+		fax = dogcatcher.find_phone(fax_re, county)
 
 	official_name = official_name_re.findall(county)[0]
+	if "<br>" in official_name.lower():
+		print county
+		print official_name
+		sys.exit()
 
 	first_name, last_name, review = dogcatcher.split_name(official_name, review)
 
@@ -115,7 +119,7 @@ for item in county_names:
 	if po_re.findall(address):
 		po_street = " ".join(po_re.findall(address)[0].replace("<br>","").strip(", ").split())
 
-	street = address.replace(po_street,"").replace(csz,"").replace("<br>",", ")
+	street = address.replace(po_street,"").replace(csz,"").replace("<br>",", ").replace("<BR>",", ").replace("<Br>",", ")
 
 	#Replacing all of the <brs> can leave more commas than we want behind; this cleans that up.
 
@@ -143,7 +147,7 @@ for item in county_names:
 	if county_name == "Genesee":
 		po_street = "P.O. Box 284"
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
@@ -157,10 +161,4 @@ for item in county_names:
 
 #This outputs the results to a separate text file.
 
-output = open(cdir + "new_york.txt", "w")
-
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

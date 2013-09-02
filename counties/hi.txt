@@ -1,5 +1,0 @@
-authority_name	first_name	last_name	county_name	fips	street	city	address_state	zip_code	po_street	po_city	po_state	po_zip_code	reg_authority_name	reg_first	reg_last	reg_street	reg_city	reg_state	reg_zip_code	reg_po_street	reg_po_city	reg_po_state	reg_po_zip_code	reg_phone	reg_fax	reg_email	reg_website	reg_hours	phone	fax	email	website	hours	voter_state	source	review
-County Clerk	Stewart	Maeda	Hawaii	001	25 Aupuni Street, Room 1502	Hilo	HI	96720-4245			HI							HI				HI							(808) 961-8277	(808) 961-8673				HI	State	
-County Clerk	Rick	Watanabe	Kauai	007	4386 Rice Street, Suite 101	Lihue	HI	96766-1819			HI							HI				HI							(808) 241-4800	(808) 241-6207				HI	State	
-County Clerk	Jeffrey	Kuwada	Maui	009	200 South High Street, Room 708	Wailuku	HI	96793-2155			HI							HI				HI							(808) 270-7749	(808) 270-7171				HI	State	
-City Clerk	Bernice	Mau	Honolulu	003	530 South King Street, Room 100	Honolulu	HI	96813-3077			HI							HI				HI							(808) 768-3800	(808) 768-3835				HI	State	
