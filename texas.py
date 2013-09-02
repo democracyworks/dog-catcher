@@ -30,17 +30,17 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
 file_path = cdir + "texas-clerks.html"
 reg_file_path = cdir + "texas-reg-clerks.html"
 
-# url = "http://www.sos.state.tx.us/elections/voter/county.shtml"
-# data = urllib.urlopen(url).read()
-# output = open(file_path,"w")
-# output.write(data)
-# output.close()
+url = "http://www.sos.state.tx.us/elections/voter/county.shtml"
+data = urllib.urlopen(url).read()
+output = open(file_path,"w")
+output.write(data)
+output.close()
 
-# reg_url = "http://www.sos.state.tx.us/elections/voter/votregduties.shtml"
-# reg_data = urllib.urlopen(reg_url).read()
-# output = open(reg_file_path,"w")
-# output.write(reg_data)
-# output.close()
+reg_url = "http://www.sos.state.tx.us/elections/voter/votregduties.shtml"
+reg_data = urllib.urlopen(reg_url).read()
+output = open(reg_file_path,"w")
+output.write(reg_data)
+output.close()
 
 data = open(file_path).read()
 reg_data = open(reg_file_path).read()
@@ -78,7 +78,7 @@ city_2_re = re.compile(" ([A-Za-z]) [^,\d]+? \d{5}[-\d]*")
 city_3_re = re.compile(", ([^,\d]+?) \d{5}[-\d]*")  #Here, we take the last comma (if there's one with no digits after it) and get everything after it.
 city_4_re = re.compile(" ([^,\d]+?) \d{5}[-\d]*") #Here, we just take the last several words without commas or digits. This is not a promising regex.
 
-po_re = re.compile("PO ")
+po_re = re.compile("PO |^Box")
 po_letter_re = re.compile("([PO ]*[BD][oawer]+?[xr]  *[A-Z])") #For the handful of places with "PO Box [A-Z]" in their address.
 po_street_re = re.compile("[PO ]*[BD][oawer]+?[xr] *\d+")
 street_address_re = re.compile(">(.+?) P\.O\.")
@@ -132,6 +132,7 @@ for county in county_data:
 
 	#This section finds the address for the absentee official.
 	#These are all comma separated, so don't need to rely on the maps API.
+	#Todo: document.
 
 
 	address = county_data_item[2].replace("\r\n", " ").strip()
@@ -218,12 +219,9 @@ for county in county_data:
 
 
 	#This section finds the address for the registration official.
+	#Todo: document.
 	
-
-#////////////////////////////////////////////////
-
 	reg_address = " ".join(reg_county_data_item[2].strip().replace("\r\n", " ").split()).replace(", Texas, ",", ")
-	print reg_address
 
 
 	if re.search("\d,* [A-Z][a-zA-Z]+ \d{5}[\d-]*", reg_address):
@@ -278,7 +276,6 @@ for county in county_data:
 
 	elif re.search(", [A-Z][a-z]+ \d{5}[\d-]*", reg_address):
 		
-		print reg_address
 
 		if po_re.findall(reg_address):
 			if po_street_re.findall(reg_address):
@@ -331,21 +328,13 @@ for county in county_data:
 
 		if not re.search("\d[A-Za-z,]* [A-Za-z \.,#]+? \d{5}[\d-]*", reg_address):
 
-			#print reg_po_street + " " + reg_address
-
 			reg_po_zip_code = zip_re.findall(reg_address)[0]
 			reg_po_city = reg_address.replace(reg_po_zip_code,"")
 
-			# print "Street: " + reg_po_street
-			# print "City: " + reg_po_city
-			# print "Zip: " + reg_po_zip_code
 		else:
 			county_test = ""
 
-			# print reg_address
-
 			for words in range(2,reg_address.count(" ")):
-				#print reg_address_components
 
 				reg_address_components = reg_address.split()
 				end = len(reg_address_components)
@@ -392,10 +381,6 @@ for county in county_data:
 			if reg_po_street:
 				reg_po_city = reg_city
 				reg_po_zip_code = reg_zip_code
-
-	print reg_street + " / " + reg_po_street
-	print reg_city + " / " + reg_po_city
-	print reg_zip_code + " / " + reg_po_zip_code
 	
 	
 	fips = dogcatcher.find_fips(county_name, voter_state)
