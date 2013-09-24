@@ -21,10 +21,10 @@ cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 file_path = cdir + "va-counties.html"
 url = "https://www.voterinfo.sbe.virginia.gov/PublicSite/Public/FT2/PublicContactLookup.aspx"
 
-# data = urllib.urlopen(url).read()
-# output = open(file_path,"w")
-# output.write(data)
-# output.close()
+data = urllib.urlopen(url).read()
+output = open(file_path,"w")
+output.write(data)
+output.close()
 
 data = open(file_path).read().replace("&amp;","and")
 
@@ -44,29 +44,29 @@ break_re = re.compile("<[/tablerd]+>[<>/tablerd\s]+<[/tablerd]+>")
 final_data = ""
 file_path = cdir + "va-clerks.html"
 
-# for county in county_list:
+for county in county_list:
 
-# 	print county
+	print county
 	
-# 	br = mechanize.Browser() #Creates a mechanize browser object.
-# 	br.set_handle_robots(False) # ignore robots
-# 	br.open(url) #Opens the page.
-# 	br.select_form(name = "aspnetForm") #The drop-down menu is titled form1.
-# 	br["ctl00$ContentPlaceHolder1$usrCounty$cboCounty"] = [county,] #It takes an input called ctl00$ContentPlaceHolder1$usrCounty$cboCounty.
-# 	res = br.submit() #res is the resulting page when we submit the inputs from earlier
-# 	content = res.read() #this creates a string of the page.
-# 	trimmed_content = trim_re.findall(content)[0] #this trims the page down to only what we need.
-# 	for item in break_re.findall(trimmed_content):
-# 		trimmed_content = trimmed_content.replace(item,"")
-# 	for item in space_re.findall(trimmed_content):
-# 		trimmed_content = trimmed_content.replace(item,"\t\n")
-# 	trimmed_content = trimmed_content.replace("\r","").replace("ctl00_ContentPlaceHolder1_usrLocalityRegContact","")
-# 	final_data = final_data + trimmed_content
+	br = mechanize.Browser() #Creates a mechanize browser object.
+	br.set_handle_robots(False) # ignore robots
+	br.open(url) #Opens the page.
+	br.select_form(name = "aspnetForm") #The drop-down menu is titled form1.
+	br["ctl00$ContentPlaceHolder1$usrCounty$cboCounty"] = [county,] #It takes an input called ctl00$ContentPlaceHolder1$usrCounty$cboCounty.
+	res = br.submit() #res is the resulting page when we submit the inputs from earlier
+	content = res.read() #this creates a string of the page.
+	trimmed_content = trim_re.findall(content)[0] #this trims the page down to only what we need.
+	for item in break_re.findall(trimmed_content):
+		trimmed_content = trimmed_content.replace(item,"")
+	for item in space_re.findall(trimmed_content):
+		trimmed_content = trimmed_content.replace(item,"\t\n")
+	trimmed_content = trimmed_content.replace("\r","").replace("ctl00_ContentPlaceHolder1_usrLocalityRegContact","")
+	final_data = final_data + trimmed_content
 
 
-# output = open(file_path,"w")
-# output.write(final_data)
-# output.close()
+output = open(file_path,"w")
+output.write(final_data)
+output.close()
 
 county_result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "street", "city", "address_state", "zip_code",
@@ -196,9 +196,8 @@ for county in county_list:
 	print po_street + ", " + po_city + ", " + po_state + " " + po_zip_code
 
 
-
-	phone = dogcatcher.phone_find(phone_re, county)
-	fax = dogcatcher.phone_find(fax_re,county)
+	phone = dogcatcher.find_phone(phone_re, county)
+	fax = dogcatcher.find_phone(fax_re,county)
 	email = dogcatcher.find_emails(email_re, county)
 
 	try:
@@ -209,7 +208,7 @@ for county in county_list:
 	except:
 		website = ""
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 	
 	if "City" not in county_name:
 		county_result.append([authority_name, first_name, last_name, county_name, fips,
@@ -231,18 +230,7 @@ for county in county_list:
 		reg_phone, reg_fax, reg_email, reg_website, reg_hours,
 		phone, fax, email, website, hours, voter_state, source, review])
 
-#This outputs the results to two separate text files: one for counties in MO, and one for cities.
+#These output the results to two separate text files: one for counties in VA, and one for cities.
 
-output = open(cdir + "virginia-counties.txt", "w")
-for r in county_result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
-
-output = open(cdir + "virginia-cities.txt", "w")
-for r in city_result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(county_result, voter_state, cdir)
+dogcatcher.output(city_result, voter_state, cdir, "cities", "yes")
