@@ -35,8 +35,8 @@ data = open(file_path).read()
 
 data = data.replace("&quot;","'")
 
-county_data_re = re.compile("Elections and where to vote\.\.\.(.+?)<td width=\"10%\" valign=\"top\" class=\"Normal\">&nbsp;</td>", re.DOTALL)
-county_name_re = re.compile("target=\".+?\">(.+?)\s+?County")
+county_data_re = re.compile("Register to vote\.\.\.(.+?)EARLY BALLOT", re.DOTALL)#<td width=\"10%\" valign=\"top\" class=\"Normal\">&nbsp;</td>", re.DOTALL)
+county_name_re = re.compile("target=\".+?\">(.+?)\s+?Recorder website", re.DOTALL)
 
 name_re = re.compile("[\s<pbng^/]+?>([^<>\d]+? [^<>\d\s]+?)\s*<[/brstong ]*>")
 name_2_re = re.compile("[^<>]+")
@@ -53,7 +53,9 @@ csz_re = re.compile("\s*(.+?, [A-Z][A-Z] \d{5}[-\d]*?)")
 city_re = re.compile("(.+?),")
 state_re = re.compile(" ([A-Z][A-Z]) ")
 zip_re = re.compile("(\d{5}[-\d]*?)")
-address_re = re.compile("\s+(.+\r\n +.+?, [A-Z][A-Z] \d{5}[-\d]*?)")#, re.DOTALL)
+
+#address_re = re.compile("\s+(.+\r\n +.+?, [A-Z][A-Z] \d{5}[-\d]*?)")#, re.DOTALL)
+address_re = re.compile("<b>.+?,.+?</b>(.+?, [A-Z][A-Z] \d{5}[-\d]*?)", re.DOTALL)
 po_re = re.compile("(P\.*\s*O\.*)")
 digit_re = re.compile("\d")
 letter_re = re.compile("[a-zA-Z]")
@@ -68,7 +70,9 @@ for county in county_data:
 
     authority_name = "County Recorder"
 
-    county_name = county_name_re.findall(county)[0].title()
+    county_name = county_name_re.findall(county)[0].title().replace("County","").strip(" \r\n")
+
+    print "COUNTY NAME: " + county_name
 
     #The addresses are formatted in the following way: "</b>[Street or PO Box]<br />...City, State Zip<br />"
     #This finds the complete address; extracts the line with the city, state, and zip (csz), and then, based on whether there's a PO Box or a street, extracts the city, state, and zip code, and forms the street address or PO box by removing the csz and extra text from the full address.
@@ -94,16 +98,14 @@ for county in county_data:
 
     phone = dogcatcher.find_phone(phone_re, county)
 
-    #We were contaceted by a user who had this correction for us--apparently there was an error in the source data for one county.
-    if phone == "(928) 373-1014":
-        phone = "(928) 373-6034"
-
     fax = dogcatcher.find_phone(fax_re, county)
 
     email = dogcatcher.find_emails(email_re, county)
 
     if county_name == "Apache":
         email = "lfulton@co.apache.az.us"
+
+    #print [street]
 
     website = dogcatcher.find_website(website_re, county)
 
@@ -121,9 +123,4 @@ for county in county_data:
     
 #This outputs the results to a separate text file.
 
-output = open(cdir + "arizona.txt", "w")
-for r in result:
-    r = h.unescape(r)
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)
