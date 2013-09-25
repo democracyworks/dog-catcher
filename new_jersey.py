@@ -43,7 +43,7 @@ name_2_re = re.compile("(.+?),")
 
 phone_re = re.compile("<strong>(\d{3}-\d{3}-\d{4}.*?) *</strong>")
 fax_re = re.compile("\(*FAX\)* (\d{3}-\d{3}-\d{4}.*?)<br")
-hours_re = re.compile("Office Hours: *(.+?pm)<[br]*[/div]*",re.DOTALL)
+hours_re = re.compile("Office Hours: *(.+?pm)[<br\s]+",re.DOTALL)
 website_re = re.compile("<a href=\"(.+?)\">")
 
 address_re = re.compile("</strong><br />(.+?)<strong>", re.DOTALL)
@@ -148,6 +148,8 @@ for county in county_data:
 
 	website = dogcatcher.find_website(website_re, registrar)
 
+	print registrar
+
 	reg_hours = " ".join(hours_re.findall(registrar)[0].replace("<br>\n"," ").split())
 
 	#It's hard to get the address without also getting the registrar's name.
@@ -174,10 +176,6 @@ for county in county_data:
 		print county_name
 
 	reg_street = " ".join(address.replace(csz,"").replace(reg_po_street,"").rstrip(", ").replace("\t","").split(" ")).strip(", .\n\t")
-
-	print [address]
-	print [csz]
-	print [reg_street]
 
 	if reg_street:
 
