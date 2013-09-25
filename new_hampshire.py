@@ -4,6 +4,7 @@ import sys
 import json
 import time
 import dogcatcher
+import os
 
 voter_state = "NH"
 source = "State"
@@ -68,7 +69,7 @@ for town in town_data:
 
 	official_name = town_item[1].title()
 
-	first_name, last_name, review = dogcatcher.name(official_name, middle_name_re, review)
+	first_name, last_name, review = dogcatcher.split_name(official_name, middle_name_re, review)
 
 
 	phone = "(603)" + town_item[3]
@@ -85,7 +86,7 @@ for town in town_data:
 	if website == "none available" or website == " ":
 		website = ""
 	else:
-		website = dogcatcher.website_clean(town_item[6])
+		website = dogcatcher.clean_website(town_item[6])
 
 	#The full address is its own item, and there's either a PO Box or nothing. This block of code:
 	#1. Checks for a PO Box. If so, extracts it. It then checks for a city and zip code the same way. If there's no zip code, it grabs it form the polling place indicated in later column.
@@ -140,19 +141,19 @@ for town in town_data:
 
 
 	if street:
-		fips, county_name = dogcatcher.maps_fips(city, address_state, zip_code)
+		fips, county_name = dogcatcher.map_fips(city, address_state, zip_code)
 	else:
-		fips, county_name = dogcatcher.maps_fips(po_city, po_state, po_zip_code)
+		fips, county_name = dogcatcher.map_fips(po_city, po_state, po_zip_code)
 
 	#Both of these towns aren't found well in Google's data.
 
 	if town_name == "Pinkham's Grant":
 		county_name = "Coos"
-		fips = dogcatcher.fips_find(county_name, voter_state)
+		fips = dogcatcher.find_fips(county_name, voter_state)
 
 	if town_name == "Sargent's Purchase":
 		county_name = "Coos"
-		fips = dogcatcher.fips_find(county_name, voter_state)
+		fips = dogcatcher.find_fips(county_name, voter_state)
 
 	#The authority name is consistent from county to county and not included in the data.
 

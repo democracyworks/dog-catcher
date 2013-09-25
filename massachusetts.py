@@ -85,14 +85,14 @@ for town in town_data:
 
   #The MA data is highly variable in what it includes per state. So the code makes an attempt at grabbing all of the possible secondary pieces of info available, but recognizes that it may not be able to get everything.
 
-  fax = dogcatcher.phone_find(fax_re, town)
-  phone = dogcatcher.phone_find(phone_re, town)
+  fax = dogcatcher.find_website(fax_re, town)
+  phone = dogcatcher.find_phone(phone_re, town)
   try:
     email = email_re.findall(town)[0].lower()
   except:
   	email = ""
   try: 
-    website = dogcatcher.website_find(website_re, town)
+    website = dogcatcher.find_website(website_re, town)
   except:
   	website = ""
 
@@ -170,9 +170,9 @@ for town in town_data:
   base_url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=%s"
 
   if street:
-    fips, county_name = dogcatcher.maps_fips(city, address_state, zip_code)
+    fips, county_name = dogcatcher.map_fips(city, address_state, zip_code)
   else:
-    fips, county_name = dogcatcher.maps_fips(po_city, po_state, po_zip_code)
+    fips, county_name = dogcatcher.map_fips(po_city, po_state, po_zip_code)
 
 
   result.append([authority_name, first_name, last_name, town_name, fips,

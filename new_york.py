@@ -3,7 +3,6 @@ import urllib
 import re
 import sys
 import dogcatcher
-import os
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 

@@ -123,9 +123,9 @@ for county in county_data:
 
 
     email = h.unescape(dogcatcher.find_emails(email_re, county))
-    website = dogcatcher.website_find(website_re, county)
-    phone = dogcatcher.phone_find(phone_re, county)
-    fax = dogcatcher.phone_find(fax_re, county, area_re.findall(phone)[0]) #The fax #s don't come with area codes.
+    website = dogcatcher.find_website(website_re, county)
+    phone = dogcatcher.find_phone(phone_re, county)
+    fax = dogcatcher.find_phone(fax_re, county, area_re.findall(phone)[0]) #The fax #s don't come with area codes.
 
 
     #We know that there are either one or two address-shaped things in any given county.
@@ -188,7 +188,7 @@ for county in county_data:
         print "There are neither 1 nor 2 addresses. Something is wrong with this county--figure out what it is. Good luck, soldier."
         sys.exit()
 
-    fips = dogcatcher.fips_find(county_name, voter_state)
+    fips = dogcatcher.find_fips(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, county_name, fips,
         street, city, address_state, zip_code,

@@ -87,13 +87,13 @@ for county in county_data:
 
 	#print [county]
 	
-	phone = dogcatcher.phone_find(phone_re, county)
+	phone = dogcatcher.find_phone(phone_re, county)
 
-	fax = dogcatcher.phone_find(fax_re, county)
+	fax = dogcatcher.find_phone(fax_re, county)
 
 	email = dogcatcher.find_emails(email_re, county)
 
-	website = dogcatcher.website_find(website_re, county)
+	website = dogcatcher.find_website(website_re, county)
 
 	#There is only one address in any town, which is either a PO box or physical address.
 	#It can be easily split into two lines, one with the street component and the other with the city, state, and zip.
@@ -112,7 +112,7 @@ for county in county_data:
 		state = state_re.findall(address_item[1])[0]
 		zip_code = zip_re.findall(address_item[1])[0]
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,

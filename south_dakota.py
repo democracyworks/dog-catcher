@@ -58,7 +58,7 @@ for county in county_data:
 	#The data is arranged in a well-ordered table, so we can split each row into a list of items and use each of those items in a consistent way from row to row.
 	county_item = county_item_re.findall(county)
 
-	fax = dogcatcher.phone_clean(county_item[7])
+	fax = dogcatcher.clean_phone(county_item[7])
 
 	email = dogcatcher.find_emails(email_re, county)
 
@@ -90,7 +90,7 @@ for county in county_data:
 		zip_code = county_item[5]
 		address_state = "SD"
 
-	phone = dogcatcher.phone_clean(county_item[6])
+	phone = dogcatcher.clean_phone(county_item[6])
 
 	print "____________________________________"
 
@@ -100,7 +100,7 @@ for county in county_data:
 
 	print email
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,

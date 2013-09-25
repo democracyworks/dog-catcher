@@ -63,8 +63,8 @@ for county in county_data:
 
 	email = county_item[2].strip().lower()
 	hours = county_item[3].strip()
-	phone = dogcatcher.phone_clean(county_item[4])
-	fax = dogcatcher.phone_clean(county_item[5])
+	phone = dogcatcher.clean_phone(county_item[4])
+	fax = dogcatcher.clean_phone(county_item[5])
 
 
 	#Line 1 of the street address, Line 2 (if it exists), the city, state, and zip, are all distinct items in the array.
@@ -102,7 +102,7 @@ for county in county_data:
 	print city + " / " + po_city
 	print address_state + " / " + po_state
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 		street, city, address_state, zip_code,

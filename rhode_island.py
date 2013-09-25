@@ -86,8 +86,8 @@ for town in town_data:
 	
 	email = dogcatcher.find_emails(email_re, town)
 	
-	phone = dogcatcher.phone_find(phone_re, town)
-	fax = dogcatcher.phone_find(fax_re, town)
+	phone = dogcatcher.find_phone(phone_re, town)
+	fax = dogcatcher.find_phone(fax_re, town)
 
     #This section finds athe address. After finding the address, it identifies a city/state/zip (csz) combination and a PO Box number if that exists.
     #It removes both the CSZ and the PO Address (if it exists) from the full address, leaving behind a street address with some garbage.
@@ -119,7 +119,7 @@ for town in town_data:
 		zip_code = zip_re.findall(csz)[0].strip()
 
 
-	fips, county_name = dogcatcher.maps_fips(town_name, voter_state, zip_code)
+	fips, county_name = dogcatcher.map_fips(town_name, voter_state, zip_code)
 
 	result.append([authority_name, first_name, last_name, town_name, county_name, fips,
 	street, city, address_state, zip_code,
@@ -132,7 +132,7 @@ for town in town_data:
 
 #This outputs the results to a separate text file.
 
-output = open(cidr + "rhode_island.txt", "w")
+output = open(cdir + "rhode_island.txt", "w")
 for r in result:
 	r = h.unescape(r)
 	output.write("\t".join(r))

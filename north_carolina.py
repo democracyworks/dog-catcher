@@ -97,8 +97,8 @@ for county in county_data:
 		street = address[0].strip()
 
 
-	phone = dogcatcher.phone_find(phone_re, county)
-	fax = dogcatcher.phone_find(fax_re, county)
+	phone = dogcatcher.find_phone(phone_re, county)
+	fax = dogcatcher.find_phone(fax_re, county)
 
 	email = dogcatcher.find_emails(email_re, county)
 	hours = hours_re.findall(county)[0].strip(" \r\n")
@@ -107,7 +107,7 @@ for county in county_data:
 	if "PO Box" not in po_street:
 		review = review + "c"
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	if fips == "":
 		print county_name + " has no findable FIPS. It may be a spellling difference."

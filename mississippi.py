@@ -9,8 +9,6 @@ h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
-fips = dogcatcher.fips_find(county_name, voter_state)
-
 voter_state = "MS"
 source = "State"
 
@@ -82,11 +80,11 @@ for county in county_data:
 
 	phone_fax = phone_fax_re.findall(county)[0]
 
-	phone = dogcatcher.phone_clean(number_re.findall(phone_fax)[0])
-	fax = dogcatcher.phone_clean(number_re.findall(phone_fax)[1])
+	phone = dogcatcher.clean_phone(number_re.findall(phone_fax)[0])
+	fax = dogcatcher.clean_phone(number_re.findall(phone_fax)[1])
 
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,

@@ -93,17 +93,17 @@ for town in town_data:
     if county_name == "Fond Du Lac":
         county_name = "Fond du Lac"
 
-    phone = dogcatcher.phone_find(phone_re, town)
+    phone = dogcatcher.find_phone(phone_re, town)
 
     email = dogcatcher.find_emails(email_re, town)
     for item in email_re.findall(town):
         town = town.replace(item,"",1)
 
-    website = dogcatcher.website_find(website_re, town)
+    website = dogcatcher.find_website(website_re, town)
     for item in website_re.findall(town):
         town = town.replace(item,"",1)
 
-    fax = dogcatcher.phone_find(fax_re, town)
+    fax = dogcatcher.find_phone(fax_re, town)
     
     if county_name == "Wood":
         print "___________________________________________"
@@ -148,7 +148,7 @@ for town in town_data:
 
     #counts = counts + count_re.findall(town)[0]
 
-    fips = dogcatcher.fips_find(county_name, voter_state)
+    fips = dogcatcher.find_fips(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, town_name, county_name, fips,
     street, city, address_state, zip_code,

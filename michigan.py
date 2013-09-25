@@ -128,8 +128,8 @@ for county in county_data:
 	first_name, last_name, official_name, review = dogcatcher.make_name(official, ",", review)
 
 	email = dogcatcher.find_emails(email_re, county)
-	phone = dogcatcher.phone_find(phone_re, county)
-	fax = dogcatcher.phone_find(fax_re, county)
+	phone = dogcatcher.find_phone(phone_re, county)
+	fax = dogcatcher.find_phone(fax_re, county)
 
 	#This section finds the address. After finding the address, it identifies a city/state/zip (csz) combination and a PO Box number if that exists.
     #It removes both the CSZ and the PO Address (if it exists) from the full address, leaving behind a street address with some garbage.
@@ -159,7 +159,7 @@ for county in county_data:
 	if county_name == "Wayne" and street == "2 Woodward Ave":
 		street = street + " Suite 502"
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
@@ -271,8 +271,8 @@ for town_id in municipality_list:
 	first_name, last_name, review = dogcatcher.split_name(official_name, review)
 
 	email = dogcatcher.find_emails(email_re, county)
-	phone = dogcatcher.phone_find(phone_re, county)
-	fax = dogcatcher.phone_find(fax_re, county)
+	phone = dogcatcher.find_phone(phone_re, county)
+	fax = dogcatcher.find_phone(fax_re, county)
 
 	#There are many known errors in both phone numbers or fax numbers. This fixes them.
 	#They're currently commented out because they don't work well with phone_find as written.
@@ -358,7 +358,7 @@ for town_id in municipality_list:
 
 	print [address]
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 	
 	result.append([authority_name, first_name, last_name, town_name, county_name, fips,
 	street, city, address_state, zip_code,

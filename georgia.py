@@ -3,6 +3,7 @@ import re
 import sys
 import urllib
 import dogcatcher
+import os
 
 voter_state = "GA"
 source = "State"
@@ -90,14 +91,14 @@ for county_name in county_list:
 
 	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
 
-	phone = dogcatcher.phone_find(phone_re, county)
+	phone = dogcatcher.find_phone(phone_re, county)
 	
-	fax = dogcatcher.phone_find(fax_re,county)
+	fax = dogcatcher.find_phone(fax_re,county)
 
-	email = dogcatcher.find_email(email_re, county)
+	email = dogcatcher.find_emails(email_re, county)
 
 	try:
-		website = dogcatcher.website_find(website_re, county)
+		website = dogcatcher.find_website(website_re, county)
 	except:
 		website = ""
 
@@ -161,7 +162,7 @@ for county_name in county_list:
 			zip_code = paren[0].strip("()")
 		street = street.replace(paren[0],"").strip(", \n/")
 		
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 	
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,

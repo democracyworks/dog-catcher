@@ -156,12 +156,12 @@ for link in county_links:
 
 	
 
-	phone = dogcatcher.phone_find(phone_re, county)
+	phone = dogcatcher.find_phone(phone_re, county)
 	for item in phone_re.findall(county):
 		county = county.replace(item, "")
 	#Many of the fax numbers don't have area codes. So we grab the first area code we find in the block of phone numbers and give it to the fax number.
 	area_code = area_code_re.findall(phone)[0]
-	fax = dogcatcher.phone_find(fax_re, county, area_code)
+	fax = dogcatcher.find_phone(fax_re, county, area_code)
 	for item in fax_re.findall(county):
 		county = county.replace(item, "")
 	county = county.replace("Fax", "")
@@ -199,7 +199,7 @@ for link in county_links:
 		for item in email_re.findall(county):
 			county = county.replace(item, "")		
 
-	website = dogcatcher.website_find(website_re, county)
+	website = dogcatcher.find_website(website_re, county)
 
 	if "absentee" in website:
 		websites = website.split(", ")
@@ -315,7 +315,7 @@ for link in county_links:
 		po_zip_code = zip_mod_re.findall(po_street)[0].strip("()")
 		po_street = po_street.replace(zip_code,"").strip(" ()")
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,

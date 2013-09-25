@@ -77,16 +77,16 @@ for row in range(1, data.nrows):
 	if zip_code == "0542":
 		zip_code = "05342"
 
-	phone = dogcatcher.phone_clean(data.cell(row,13).value,"802")
+	phone = dogcatcher.clean_phone(data.cell(row,13).value,"802")
 
-	fax = dogcatcher.phone_clean(" ".join(data.cell(row,14).value.split()))
+	fax = dogcatcher.clean_phone(" ".join(data.cell(row,14).value.split()))
 	if fax == "N/A":
 		fax = ""
 
 	email = " ".join(data.cell(row,15).value.lower().split())
 	hours = data.cell(row,16).value.rstrip().replace("//","+++++")
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 	
 	result.append([authority_name, first_name, last_name, town_name, county_name, fips,
 	street, city, address_state, zip_code,

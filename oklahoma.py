@@ -155,8 +155,8 @@ for i in range(0,77):
     county_name = county_names[i].replace("LeFlore","Le Flore")
     address_block = address_blocks[i]
 
-    phone = dogcatcher.phone_clean(phone_name.partition(" ")[0])
-    fax = dogcatcher.phone_clean(phone_name.partition(" ")[2].partition(" ")[0])
+    phone = dogcatcher.clean_phone(phone_name.partition(" ")[0])
+    fax = dogcatcher.clean_phone(phone_name.partition(" ")[2].partition(" ")[0])
 
 
     official_name = phone_name.partition(" ")[2].partition(" ")[2]
@@ -199,7 +199,7 @@ for i in range(0,77):
     reg_email = "info@elections.ok.gov"
 
     
-    fips = dogcatcher.fips_find(county_name, voter_state)
+    fips = dogcatcher.find_fips(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, county_name, fips,
     street, city, address_state, zip_code,

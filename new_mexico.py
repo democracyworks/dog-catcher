@@ -118,11 +118,11 @@ for county in county_data:
 
 	email = dogcatcher.find_emails(email_re, county)
 
-	phone = dogcatcher.phone_find(phone_re, county)
+	phone = dogcatcher.find_phone(phone_re, county)
 
-	fax = dogcatcher.phone_find(fax_re, county)
+	fax = dogcatcher.find_phone(fax_re, county)
 
-	fips = dogcatcher.fips_find(county_name, fips_names, fips_numbers)
+	fips = dogcatcher.find_fips(county_name, fips_names, fips_numbers)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,

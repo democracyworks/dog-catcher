@@ -78,13 +78,13 @@ for county in county_data:
 
 	email = dogcatcher.find_emails(email_re, county)
 
-	website = dogcatcher.website_find(website_re, county)
+	website = dogcatcher.find_website(website_re, county)
 
 	hours = hours_re.findall(county)[0]
 
-	phone = dogcatcher.phone_find(phone_re, county)
+	phone = dogcatcher.find_phone(phone_re, county)
 
-	fax = dogcatcher.phone_find(fax_re, county)
+	fax = dogcatcher.find_phone(fax_re, county)
 
 	#The street and mailing addresses are stored in two different places. They may be the same.
 	#This grabs both; trims both, and removes the street address from the mailing address.
@@ -118,7 +118,7 @@ for county in county_data:
 	if po_street.find("PO Box") !=0 and po_street:
 		review = review + "j"
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
@@ -133,7 +133,7 @@ for county in county_data:
 
 output = open(cdir + "iowa.txt", "w")
 for r in result:
-	r = h.unescape(r)
+    r = h.unescape(r)
     output.write("\t".join(r))
     output.write("\n")
 output.close()

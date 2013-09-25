@@ -87,11 +87,11 @@ for county_id in county_names:
 	county = county_data_re.findall(data)[0]
 
 
-	website = dogcatcher.website_find(website_re, county)
+	website = dogcatcher.find_website(website_re, county)
 	email = dogcatcher.find_emails(email_re, county)
 
-	phone = dogcatcher.phone_find(phone_re, county)
-	fax = dogcatcher.phone_find(fax_re, county)
+	phone = dogcatcher.find_phone(phone_re, county)
+	fax = dogcatcher.find_phone(fax_re, county)
 
 
 	hours = hours_re.findall(county)[0].strip()
@@ -124,7 +124,7 @@ for county_id in county_names:
 		po_zip_code = zip_re.findall(mailing_address)[0]
 
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
