@@ -137,11 +137,6 @@ for town in town_data:
     street = address.replace(csz,"").replace(po_street,"").replace(zip_code,"")
   street = street.strip(", ")
 
-  #This was the part that was adding the authority name.
-  #if not is_street_re.findall(street):
-   # street = ""
-    #po_street = town_data_item[0] + ", " + po_street
-
   if csz:
     if street:
       city = city_re.findall(csz)[0].strip()
