@@ -85,7 +85,7 @@ for town in town_data:
 
   #The MA data is highly variable in what it includes per state. So the code makes an attempt at grabbing all of the possible secondary pieces of info available, but recognizes that it may not be able to get everything.
 
-  fax = dogcatcher.find_website(fax_re, town)
+  fax = dogcatcher.find_phone(fax_re, town)
   phone = dogcatcher.find_phone(phone_re, town)
   try:
     email = email_re.findall(town)[0].lower()
@@ -169,7 +169,7 @@ for town in town_data:
     fips, county_name = dogcatcher.map_fips(city, address_state, zip_code)
   else:
     fips, county_name = dogcatcher.map_fips(po_city, po_state, po_zip_code)
-
+    
   result.append([authority_name, first_name, last_name, town_name, fips,
   street, city, address_state, zip_code,
   po_street, po_city, po_state, po_zip_code,
@@ -178,5 +178,7 @@ for town in town_data:
   reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code,
   reg_phone, reg_fax, reg_email, reg_website, reg_hours,
   phone, fax, email, website, hours, voter_state, source, review])
+  
+#This outputs the results to a separate text file.
 
 dogcatcher.output(result, voter_state, cdir, "cities")
