@@ -52,22 +52,22 @@ trim_re = re.compile("<div id=\"ContactInfo99273.+?<div(.+?)</form>", re.DOTALL)
 
 #This uses the mechanize package to submit every item in county_list--the list of county names as used in the menu--and grab and save webpage based on each one.
 
-# for county in county_ref_list:
-# 	print county
+for county in county_ref_list:
+	print county
 	
-# 	br = mechanize.Browser() #Creates a mechanize browser object.
-# 	br.set_handle_robots(False) # ignore robots.txt
-# 	br.open(url) #Opens the page.
-# 	br.select_form(name = "form1_99273") #The drop-down menu is titled form1_99273.
-# 	br["ddlCounty"] = [county,] #It takes an input called ddlCounty.
-# 	res = br.submit() #res is the resulting page when we submit the inputs from earlier
-# 	content = res.read() #this creates a string of the page.
-# 	trimmed_content = trim_re.findall(content)[0] #this trims the page down to only what we need.
-# 	#This writes the page to a file.
-# 	file_path = cdir + county + "-pa-clerks.html"
-# 	output = open(file_path,"w")
-# 	output.write(trimmed_content)
-# 	output.close()
+	br = mechanize.Browser() #Creates a mechanize browser object.
+	br.set_handle_robots(False) # ignore robots.txt
+	br.open(url) #Opens the page.
+	br.select_form(name = "form1_99273") #The drop-down menu is titled form1_99273.
+	br["ddlCounty"] = [county,] #It takes an input called ddlCounty.
+	res = br.submit() #res is the resulting page when we submit the inputs from earlier
+	content = res.read() #this creates a string of the page.
+	trimmed_content = trim_re.findall(content)[0] #this trims the page down to only what we need.
+	#This writes the page to a file.
+	file_path = cdir + county + "-pa-clerks.html"
+	output = open(file_path,"w")
+	output.write(trimmed_content)
+	output.close()
 
 
 county_data_item_re = re.compile("(.+?)<br>")
@@ -140,7 +140,7 @@ for county_id in county_ref_list:
 
 	# print absentee
 	# print registration
-
+	print name_re.findall(absentee)
 	absentee_official = name_re.findall(absentee)[0].replace("</div>","") #In one county, the regular expression used yields </div> as a response. The other easy fix creates more problems, so we just remove the </div>.
 	first_name, last_name, review = dogcatcher.split_name(absentee_official, review)
 

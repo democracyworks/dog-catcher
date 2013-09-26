@@ -113,7 +113,7 @@ for town in town_data:
   address = address_re.findall(town)[0].replace(authority_name.upper(),"").strip(" ,")
 
   try:
-    po_street = po_re.findall(address)[0]
+    po_street = po_re.findall(address)[0].replace(authority_name.upper(),"").strip(" ,")
   except:
     po_street = ""
 
@@ -137,9 +137,10 @@ for town in town_data:
     street = address.replace(csz,"").replace(po_street,"").replace(zip_code,"")
   street = street.strip(", ")
 
-  if not is_street_re.findall(street):
-    street = ""
-    po_street = town_data_item[0] + ", " + po_street
+  #This was the part that was adding the authority name.
+  #if not is_street_re.findall(street):
+   # street = ""
+    #po_street = town_data_item[0] + ", " + po_street
 
   if csz:
     if street:
@@ -174,7 +175,6 @@ for town in town_data:
   else:
     fips, county_name = dogcatcher.map_fips(po_city, po_state, po_zip_code)
 
-
   result.append([authority_name, first_name, last_name, town_name, fips,
   street, city, address_state, zip_code,
   po_street, po_city, po_state, po_zip_code,
@@ -184,9 +184,4 @@ for town in town_data:
   reg_phone, reg_fax, reg_email, reg_website, reg_hours,
   phone, fax, email, website, hours, voter_state, source, review])
 
-output = open(cdir + "massachusetts.txt", "w")
-for r in result:
-    r = h.unescape(r)
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir, "cities")
