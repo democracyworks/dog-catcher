@@ -1,0 +1,3 @@
+mechanize
+xlrd
+pdfminer==20110515
