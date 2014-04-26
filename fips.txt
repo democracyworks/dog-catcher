@@ -1707,7 +1707,7 @@ Lancaster	NE	109
 Lincoln	NE	111
 Logan	NE	113
 Loup	NE	115
-McPhersn	NE	117
+McPherson	NE	117
 Madison	NE	119
 Merrick	NE	121
 Morrill	NE	123
