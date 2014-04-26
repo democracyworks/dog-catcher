@@ -299,11 +299,15 @@ def split_name(official_name, review, ignore = ""):
 	return first_name, last_name, review
 
 def output(results, state, edir, type = "counties", results_city = ""):
+	import os
 	"Outputs results to a file named using the state's lowercased abbreviation."
 
 	#Type is a switch that determines whether we output the data to a cities or a counties file.
 	#If results_city is present, there are two sets of results: one for counties, one for cities.
 	#The presence of results_city causes the file to output both.
+
+	if not os.path.isdir(edir + type):
+		os.mkdir(edir + type)
 
 	output = open(edir + type + "/" + state.lower() + ".txt", "w")
 
