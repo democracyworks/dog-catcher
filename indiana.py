@@ -22,6 +22,34 @@ def pdf_to_text(data):
     fp.close() 
     return t
 
+def optional_download(file, url):
+	from os.path import isfile
+
+	if isfile(file):
+		return False
+
+	user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+	headers = {'User-Agent' : user_agent}
+
+	req = urllib2.Request(url, "", headers)
+	pdf = urllib2.urlopen(req_abs).read()
+
+	output = open(file, "w")
+	output.write(pdf)
+	output.close
+	return True
+
+def optional_pdf_extract(in_file, out_file):
+	if os.path.isfile(out_file):
+		return False
+
+	pdf = open(in_file).read()
+	data = pdf_to_text(pdf)
+	output = open(out_file, "w")
+	output.write(data)
+	output.close()
+	return False
+
 #result.append([first_name, last_name, county_name, 
 #	street, city, address_state, zip_code,
 #	po_street, po_city,	po_state, po_zip_code,
@@ -35,8 +63,11 @@ import sys
 import xlrd
 import pdfminer
 import urllib2
+import os
 
-fips_all = open("C:\Users\pkoms\Documents\TurboVote\Scraping\\fips.txt").read()
+cdir = os.path.dirname(os.path.abspath(__file__))
+
+fips_all = open(os.path.join(cdir, "fips.txt")).read()
 
 fips_data_re = re.compile(".+?IN.+?\n")
 fips_number_re = re.compile("\d+")
@@ -64,34 +95,20 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
-file_path_abs = "C:\Users\pkoms\Documents\TurboVote\Scraping\\indiana_absentee.pdf"
-file_path_abs_rev = "C:\Users\pkoms\Documents\TurboVote\Scraping\\indiana_absentee_rev.pdf"
+file_path_abs = os.path.join(cdir, "indiana_absentee.pdf")
+file_path_abs_rev = os.path.join(cdir, "indiana_absentee_rev.pdf")
+# Technically the third / is incorrect (but harmless) on systems other than Win32
 url_abs = "file:///" + file_path_abs
-file_path_reg = "C:\Users\pkoms\Documents\TurboVote\Scraping\\indiana_reg.pdf"
-file_path_reg_rev = "C:\Users\pkoms\Documents\TurboVote\Scraping\\indiana_reg_rev.pdf"
+
+file_path_reg = os.path.join(cdir, "indiana_reg.pdf")
+file_path_reg_rev = os.path.join(cdir, "indiana_reg_rev.pdf")
+# Technically the third / is incorrect (but harmless) on systems other than Win32
 url_reg = "file:///" + file_path_reg
 
-user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
-headers = {'User-Agent' : user_agent}
-
-# req_abs = urllib2.Request(url_abs, "", headers)
-# pdf_abs = urllib2.urlopen(req_abs).read()
-
-# abs_data = pdf_to_text(pdf_abs)
-
-
-# req_reg = urllib2.Request(url_reg, "", headers)
-# pdf_reg = urllib2.urlopen(req_reg).read()
-
-# reg_data = pdf_to_text(pdf_reg)
-
-
-# output = open(file_path_abs_rev, "w")
-# output.write(abs_data)
-# output.close()
-# output = open(file_path_reg_rev, "w")
-# output.write(reg_data)
-# output.close()
+# optional_download(file_path_abs, url_abs)
+# optional_download(file_path_reg, url_reg)
+# optional_pdf_extract(file_path_abs, file_path_abs_rev)
+# optional_pdf_extract(file_path_reg, file_path_reg_rev)
 
 abs_data = open(file_path_abs_rev).read()
 reg_data = open(file_path_reg_rev).read()
