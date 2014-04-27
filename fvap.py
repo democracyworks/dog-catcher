@@ -10,7 +10,7 @@ h = HTMLParser.HTMLParser()
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 
-file_path = "C:\Users\pkoms\Documents\TurboVote\Scraping\state_list.csv"
+file_path = os.path.join(cdir, "state_list.csv")
 
 jurisdiction_re = re.compile("(<tr><td colspan=\"1\" rowspan=\"1\" class=\"name\">.+?)</table></td></tr>", re.DOTALL)
 jurisdiction_data_item_re = re.compile("<td colspan=\"1\" rowspan=\"1\" class=\"(.+?)\"></td>")
