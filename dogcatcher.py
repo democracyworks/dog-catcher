@@ -182,6 +182,7 @@ def map_fips(city, state, zip_code, alternate_city = ""):
 	import urllib
 	import json
 	import sys
+	import re
 
 	#To begin with, we define an address for the place and grab it from the Google Maps API. Since this leaves us with a pile of JSON, we load it into a JSON object.
 
@@ -220,6 +221,8 @@ def map_fips(city, state, zip_code, alternate_city = ""):
 		if unicode("administrative_area_level_2") in json_address[i]['types']:
 			county_name = json_place['results'][0]['address_components'][i]['long_name'].encode('ascii')
 			break
+
+	county_name = re.sub(r'\s*County$', '', county_name, 0, re.IGNORECASE)
 	print [county_name]
 	print "++++++++++++++++++"
 
@@ -299,11 +302,15 @@ def split_name(official_name, review, ignore = ""):
 	return first_name, last_name, review
 
 def output(results, state, edir, type = "counties", results_city = ""):
+	import os
 	"Outputs results to a file named using the state's lowercased abbreviation."
 
 	#Type is a switch that determines whether we output the data to a cities or a counties file.
 	#If results_city is present, there are two sets of results: one for counties, one for cities.
 	#The presence of results_city causes the file to output both.
+
+	if not os.path.isdir(edir + type):
+		os.mkdir(edir + type)
 
 	output = open(edir + type + "/" + state.lower() + ".txt", "w")
 

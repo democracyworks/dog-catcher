@@ -38,7 +38,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
 
 county_list_re = re.compile("<option value=\"(.+?)\">.+? County</option>")
 county_name_re = re.compile("<option value=\".+?\">(.+?) County</option>")
-output_path = "C:\Users\pkoms\Documents\TurboVote\Scraping\michigan-counties.html"
+output_path = os.path.join(cdir, "michigan-counties.html")
 
 url = "https://webapps.sos.state.mi.us/mivote/ClerkSearch.aspx"
 data = urllib.urlopen(url).read()
@@ -53,23 +53,22 @@ county_names = county_name_re.findall(data)
 
 trim_re = re.compile("(<td valign=\"top\">.+)\s+</tr>\s+</table>\s+</div>\s+</td>", re.DOTALL)
 
-# for county in county_list:
-# 	print county
+for county in county_list:
+	print county
 
-	
-# 	br = mechanize.Browser() #Creates a mechanize browser object.
-# 	br.set_handle_robots(False) # ignore robots.txt
-# 	br.open(url) #Opens the page.
-# 	br.select_form(name = "aspnetForm") #The drop-down menu is titled aspnetForm.
-# 	br["ctl00$ContentPlaceHolder1$csCnty"] = [county,] #It takes an input called ctl00$ContentPlaceHolder1$csCnty.
-# 	res = br.submit() #res is the resulting page when we submit the inputs from earlier
-# 	content = res.read() #this creates a string of the page.
-# 	trimmed_content = trim_re.findall(content)[0] #this trims the page down to only what we need.
-# 	#This writes the page to a file.
-# 	file_path = cdir + county + "-MI-clerks.html"
-# 	output = open(file_path,"w")
-# 	output.write(trimmed_content)
-# 	output.close()
+	br = mechanize.Browser() #Creates a mechanize browser object.
+	br.set_handle_robots(False) # ignore robots.txt
+	br.open(url) #Opens the page.
+	br.select_form(name = "aspnetForm") #The drop-down menu is titled aspnetForm.
+	br["ctl00$ContentPlaceHolder1$csCnty"] = [county,] #It takes an input called ctl00$ContentPlaceHolder1$csCnty.
+	res = br.submit() #res is the resulting page when we submit the inputs from earlier
+	content = res.read() #this creates a string of the page.
+	trimmed_content = trim_re.findall(content)[0] #this trims the page down to only what we need.
+	#This writes the page to a file.
+	file_path = cdir + county + "-MI-clerks.html"
+	output = open(file_path,"w")
+	output.write(trimmed_content)
+	output.close()
 
 #output_path points to a file in which we'll insert a trimmed version of the data in each michigan county.
 #Once we have that file, we'll break it down into each county and extract data out of each of those.

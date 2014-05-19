@@ -13,7 +13,7 @@ cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 #Currently I grab the CSV file by hand. At some point, I will need to grab it using mechanize.
 
-file_path = "C:\Users\pkoms\Documents\TurboVote\Scraping\\new_hampshire-clerks.csv"
+file_path = os.path.join(cdir, "new_hampshire-clerks.csv")
 
 result = [("authority_name", "first_name", "last_name", "town_name", "county_name", "fips",
 	"street", "city", "address_state", "zip_code",
