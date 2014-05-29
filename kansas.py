@@ -8,10 +8,11 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-file_path = cdir + "kansas-clerks.html"
+file_path = tmpdir + "kansas-clerks.html"
 url = "http://www.kssos.org/elections/elections_registration_ceo_display.aspx"
 
 data = urllib.urlopen(url).read()
@@ -114,10 +115,4 @@ for county in county_data:
 		phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "kansas.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

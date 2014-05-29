@@ -8,11 +8,12 @@ voter_state = "CA"
 source = "State"
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time in testing.)
 
 url = "http://www.sos.ca.gov/elections/elections_d.htm"
-file_path = cdir + "california-clerks.html"
+file_path = tmpdir + "california-clerks.html"
 
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -86,7 +87,7 @@ for county in county_data:
     mailing_csz = csz_re.findall(mailing_address)[0]
     po_street = mailing_address.replace(mailing_csz,"")
     po_street = po_street.replace("<li>","").replace("</li>","").replace("\n",", ").replace("\r","").replace(" ,",",").strip(" ,")
-  
+
   street = address.replace(csz,"")
   street = street.replace("<li>","").replace("</li>","").replace("\n",", ").replace("\r","").replace(" ,",",").strip(" ,")
 
@@ -127,7 +128,7 @@ for county in county_data:
   website = dogcatcher.find_website(website_re, county)
 
   #Any given county may or may not have included Hours.
-  	
+
   if "Hours:" in county_data_item[5]:
     hours = county_data_item[5].split("s: ")[1]
   else:

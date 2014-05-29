@@ -11,6 +11,7 @@ import urllib2
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "AR"
 source = "State"
@@ -27,7 +28,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-file_path = cdir + "arkansas-clerks.pdf"
+file_path = tmpdir + "arkansas-clerks.pdf"
 url = "http://www.sos.arkansas.gov/elections/Documents/county_clerks_for_website.pdf"
 user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
 headers = {'User-Agent' : user_agent}
@@ -94,7 +95,7 @@ for county in county_data:
         #There can be are lots of things that look like a name in the data
         official_name = name_re.findall(county)[len(name_re.findall(county))-1]
         first_name, last_name, review = dogcatcher.split_name(official_name, review, "ignore")
-        
+
         if first_name == "County":
             first_name = ""
         if last_name == "Clerk":

@@ -9,6 +9,7 @@ import urllib2
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
@@ -25,7 +26,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
-file_path = cdir + "hawaii-clerks.pdf"
+file_path = tmpdir + "hawaii-clerks.pdf"
 url = "http://hawaii.gov/elections/factsheets/fsvs514.pdf"
 user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
 headers = {'User-Agent' : user_agent}

@@ -8,11 +8,12 @@ import HTMLParser
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time in testing.)
 
 url = "http://www.sos.state.oh.us/sos/elections/electionsofficials/boeDirectory.aspx"
-file_path = cdir + "ohio-clerks.html"
+file_path = tmpdir + "ohio-clerks.html"
 
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -52,12 +53,12 @@ county_data = county_data_re.findall(data)
 
 for county in county_data:
 
-	
+
 
 	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
 
 	county_name = county_name_re.findall(county)[0].title()
-	
+
 	website = dogcatcher.find_website(website_re, county)
 	email = dogcatcher.find_emails(email_re, county)
 

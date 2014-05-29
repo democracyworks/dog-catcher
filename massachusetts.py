@@ -13,7 +13,8 @@ voter_state = "MA"
 source = "State"
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
-file_path = cdir + "massachusetts-clerks.html"
+tmpdir = cdir + "tmp/"
+file_path = tmpdir + "massachusetts-clerks.html"
 
 url = "http://www.sec.state.ma.us/ele/eleclk/clkidx.htm"
 data = urllib.urlopen(url).read()
@@ -91,7 +92,7 @@ for town in town_data:
     email = email_re.findall(town)[0].lower()
   except:
   	email = ""
-  try: 
+  try:
     website = dogcatcher.find_website(website_re, town)
   except:
   	website = ""
@@ -101,7 +102,7 @@ for town in town_data:
     town_data_item.insert(0, "TOWN CLERK")
 
   authority_name = town_data_item[0].title().replace("'S","'s").replace(town_name.upper(),"").strip(", ")
-  
+
   #This section generates the address.
   #MA addresses are formatted "Street\nAdditional namep--i.e., Town Clerk (maybe)\nMailing(If it exists)\nCity, State (If city isn't the town name)\nZip"
   #It first sees whether there is a mailing adddress, and if so, stores that address.
@@ -109,7 +110,7 @@ for town in town_data:
   #It then sees whether there is a city/state combination.
   #It then follows the normal procedure: generating the street address by removing everything else, identifying the city and state, and so forth.
 
- 
+
   address = address_re.findall(town)[0].replace(authority_name.upper(),"").strip(" ,")
 
   try:
@@ -130,7 +131,7 @@ for town in town_data:
   address = " ".join(address.split())
 
   zip_code = zip_re.findall(address)[0]
-  
+
   if po_street:
     street = address.replace(csz,"").replace(po_street,"").replace(town_data_item[0],"").replace(zip_code,"")
   else:
@@ -157,7 +158,7 @@ for town in town_data:
 
   if town_name == "Rowe" and street == "34 BROADWAY":
     street = "321 Zoar Road"
-  
+
   hours = hours_re.findall(town)[0]
 
   #This matches the towns to counties to acquire accurate FIPS.
@@ -169,7 +170,7 @@ for town in town_data:
     fips, county_name = dogcatcher.map_fips(city, address_state, zip_code)
   else:
     fips, county_name = dogcatcher.map_fips(po_city, po_state, po_zip_code)
-    
+
   result.append([authority_name, first_name, last_name, town_name, fips,
   street, city, address_state, zip_code,
   po_street, po_city, po_state, po_zip_code,
@@ -178,7 +179,6 @@ for town in town_data:
   reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code,
   reg_phone, reg_fax, reg_email, reg_website, reg_hours,
   phone, fax, email, website, hours, voter_state, source, review])
-  
-#This outputs the results to a separate text file.
 
+#This outputs the results to a separate text file.
 dogcatcher.output(result, voter_state, cdir, "cities")

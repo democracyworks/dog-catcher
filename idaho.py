@@ -8,15 +8,14 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
-
-
+tmpdir = cdir + "tmp/"
 
 voter_state = "ID"
 source = "State"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-file_path = cdir + "idaho-counties.html"
+file_path = tmpdir + "idaho-counties.html"
 url = "http://www.idahovotes.gov/clerk.htm"
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -66,7 +65,7 @@ for county in county_data:
 	print "_______________________________"
 	print county
 	print "+++++++++++++++++++++++++++++++"
-	
+
 	county_name = county_name_re.findall(county)[0].strip()
 	print county_name
 
@@ -119,10 +118,4 @@ for county in county_data:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "idaho.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

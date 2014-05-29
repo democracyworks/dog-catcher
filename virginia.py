@@ -13,12 +13,12 @@ source = "State"
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
-
+tmpdir = cdir + "tmp/"
 #Every county is a different item in a dropdown menu, so we have to cycle through them all.
 #To do so, we grab the dropdown menu, extract a list of counties, then grab a series of web pages based on that list.
 #This grabs a page containing a list of GA counties and writes it to a file. Writing it isn't strictly necessary, but saves some run time in the long run.
 
-file_path = cdir + "va-counties.html"
+file_path = tmpdir + "va-counties.html"
 url = "https://www.voterinfo.sbe.virginia.gov/PublicSite/Public/FT2/PublicContactLookup.aspx"
 
 data = urllib.urlopen(url).read()
@@ -42,12 +42,12 @@ break_re = re.compile("<[/tablerd]+>[<>/tablerd\s]+<[/tablerd]+>")
 #This uses the mechanize package to submit every item in county_list--the list of county names as used in the menu--and grab a webpage based on each one.
 
 final_data = ""
-file_path = cdir + "va-clerks.html"
+file_path = tmpdir + "va-clerks.html"
 
 for county in county_list:
 
 	print county
-	
+
 	br = mechanize.Browser() #Creates a mechanize browser object.
 	br.set_handle_robots(False) # ignore robots
 	br.open(url) #Opens the page.
@@ -151,7 +151,7 @@ for county in county_list:
 	 		po_city = city
 	 		po_state = address_state
 	 		po_zip_code = zip_code
-	else: 
+	else:
 	 	po_city = city_re.findall(mailing_address)[0].strip()
 		po_state = state_re.findall(mailing_address)[0].strip()
 	 	po_zip_code = zip_re.findall(mailing_address)[0].strip()
@@ -209,7 +209,7 @@ for county in county_list:
 		website = ""
 
 	fips = dogcatcher.find_fips(county_name, voter_state)
-	
+
 	if "City" not in county_name:
 		county_result.append([authority_name, first_name, last_name, county_name, fips,
 		street, city, address_state, zip_code,
@@ -233,4 +233,4 @@ for county in county_list:
 #These output the results to two separate text files: one for counties in VA, and one for cities.
 
 dogcatcher.output(county_result, voter_state, cdir)
-dogcatcher.output(city_result, voter_state, cdir, "cities", "yes")
+dogcatcher.output(city_result, voter_state, cdir, "cities")
