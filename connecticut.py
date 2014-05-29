@@ -14,6 +14,7 @@ import HTMLParser
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "CT"
 source = "State"
@@ -30,8 +31,8 @@ result = [("authority_name", "first_name", "last_name", "town_name", "fips", "co
 #There are two election offices in CT; each one is in a different PDF. The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
 
-file_path_1 = cdir + "connecticut-clerks-1.pdf"
-file_path_2 = cdir + "connecticut-clerks-2.pdf"
+file_path_1 = tmpdir + "connecticut-clerks-1.pdf"
+file_path_2 = tmpdir + "connecticut-clerks-2.pdf"
 url_1 = "http://www.ct.gov/sots/LIB/sots/ElectionServices/lists/TownClerkList.pdf"
 url_2 = "http://www.sots.ct.gov/sots/lib/sots/electionservices/lists/rovofficeaddresses.pdf"
 user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
@@ -69,7 +70,7 @@ for item in header_re.findall(absdata):
     absdata = absdata.replace(item,"")
 
 abstown_re = re.compile("([A-Z][A-Z].+?TOWN CLERK.+?)\n\n", re.DOTALL)
-regtown_re = re.compile("REGISTRAR[S]* OF .+?CT  \d{5}[-\d]*\n\n", re.DOTALL)
+regtown_re = re.compile("REGISTRAR[S]* OF .+?CT\s*\d{5}[-\d]*\n\n", re.DOTALL)
 regtown_name_re = re.compile("REGIS.+?, (.+)")
 abstown_name_re = re.compile("(.+) TOWN CLERK")
 party_re = re.compile(" [\[\(].+?[\)\]]")
@@ -141,10 +142,10 @@ for item in abse:
     #It removes both the CSZ and the PO Address (if it exists) from the full address, leaving behind a street address with some garbage.
     #It then cleans up the street address and pulls the city, state, and zip out of the csz, and assigns them as appropriate to the street address and state.
 
-    
+
     reg_address = address_re.findall(regtown)[0]
 
-    
+
     reg_csz = csz_re.findall(reg_address)[0]
     if not reg_address.replace(reg_csz,""):
         reg_address = po_re.findall(regtown)[0]#The address grab will fail if address is only a PO Box [A-Z]. If there's no real address, we try this instead.
@@ -209,7 +210,7 @@ for item in abse:
     if street:
         city = city_re.findall(csz)[0].strip().title()
         address_state = state_re.findall(csz)[0].strip()
-        zip_code = zip_re.findall(csz)[0].strip().title()    
+        zip_code = zip_re.findall(csz)[0].strip().title()
 
     if street:
         fips, county_name = dogcatcher.map_fips(city, address_state, town_name, zip_code)
@@ -226,5 +227,4 @@ for item in abse:
     phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
 dogcatcher.output(result, voter_state, cdir, "cities")
