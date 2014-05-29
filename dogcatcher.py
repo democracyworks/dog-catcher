@@ -319,14 +319,6 @@ def output(results, state, edir, type = "counties", results_city = ""):
 		output.write("\n")
 	output.close()
 
-	if results_city:
-		output = open(edir + "/cities/" + state.lower() + ".txt", "w")
-
-	for r in results_city:
-		output.write("\t".join(r))
-		output.write("\n")
-	output.close()
-
 
 def pdf_to_text(data): 
 	"Converts a PDF to text, as neatly as can reasonably be hoped. Found from Herb Lainchbury in http://www.herblainchbury.com/2010_05_01_archive.html"
