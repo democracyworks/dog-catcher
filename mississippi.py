@@ -32,7 +32,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
-county_data_re = re.compile("<tr>[^<]+?<td>.+?\d.+?</td>[^<]+?</tr>", re.DOTALL)
+county_data_re = re.compile("<tr>[^<]+?<td>[^<].+?\d.+?</td>[^<]+?</tr>", re.DOTALL)
 county_name_re = re.compile("<td> *([A-Z \n\r]+) *</td>")
 
 phone_fax_re = re.compile("\d{3}-\d{3}-.+?<.+?\d{4}", re.DOTALL)
@@ -44,7 +44,6 @@ city_re = re.compile("([^\d]+?) \d{5}")
 zip_re = re.compile(" (\d{5}[\d-]*)")
 
 county_data = county_data_re.findall(data)
-
 
 for county in county_data:
 	print "__________________________________________________"
