@@ -11,12 +11,7 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
-
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?MO.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
+tmpdir = cdir + "tmp/"
 
 voter_state = "MO"
 source = "State"
@@ -45,7 +40,7 @@ county_list_re = re.compile("option value=\"(.+?)\">.+?<")
 #To do so, we grab the dropdown menu, extract a list of counties, then grab a series of web pages based on that list.
 #This grabs a page containing a list of GA counties and writes it to a file. Writing it isn't strictly necessary, but saves some run time in the long run.
 
-file_path = "C:\Users\pkoms\Documents\TurboVote\Scraping\missouri-counties.html"
+file_path = tmpdir + "missouri-counties.html"
 
 url = "http://www.sos.mo.gov/elections/goVoteMissouri/localelectionauthority.aspx"
 data = urllib.urlopen(url).read()
@@ -60,17 +55,17 @@ county_list = county_list_re.findall(data)
 trim_re = re.compile("resultset\">(.+?)</div>", re.DOTALL)
 
 for county in county_list:
-
+	print url
 	br = mechanize.Browser() #Creates a mechanize browser object.
 	br.set_handle_robots(False) # ignore robots
 	br.open(url) #Opens the page.
-	br.select_form(name = "form1") #The drop-down menu is titled form1.
+	br.select_form(name = "form1") #The drop-down menu is titled form1. - mechanise dies here
 	br["electioncounty"] = [county,] #It takes an input called CountyName.
 	res = br.submit() #res is the resulting page when we submit the inputs from earlier
 	content = res.read() #this creates a string of the page.
 	trimmed_content = trim_re.findall(content)[0] #this trims the page down to only what we need.
 	#This writes the page to a file.
-	file_path = cdir + county + "-mo-clerks.html"
+	file_path = tmpdir + county + "-mo-clerks.html"
 	output = open(file_path,"w")
 	output.write(trimmed_content)
 	output.close()
@@ -98,7 +93,7 @@ for county_title in county_list:
 
 	county_name = county_title
 
-	file_path = cdir + county_name + "-mo-clerks.html"
+	file_path = tmpdir + county_name + "-mo-clerks.html"
 	county = open(file_path).read().replace("&nbsp;"," ").replace("Post Office","P.O.").replace("Ste Genevieve","Ste. Genevieve")
 	county = county.replace("\n","").replace("\r","")
 	for item in space_re.findall(county_name):
@@ -184,17 +179,5 @@ for county_title in county_list:
 		phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to two separate text files: one for counties in MO, and one for cities.
-
-output = open("C:\Users\pkoms\Documents\TurboVote\Scraping\missouri-counties.txt", "w")
-for r in county_result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
-
-output = open("C:\Users\pkoms\Documents\TurboVote\Scraping\missouri-cities.txt", "w")
-for r in city_result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(county_result, voter_state, cdir)
+dogcatcher.output(city_result, voter_state, cdir, "cities")

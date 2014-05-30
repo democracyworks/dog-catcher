@@ -1,25 +1,25 @@
 # -*- coding: latin-1 -*-
 
-def pdf_to_text(data): 
-    from pdfminer.pdfinterp import PDFResourceManager, process_pdf 
-    from pdfminer.pdfdevice import PDFDevice 
-    from pdfminer.converter import TextConverter 
-    from pdfminer.layout import LAParams 
+def pdf_to_text(data):
+    from pdfminer.pdfinterp import PDFResourceManager, process_pdf
+    from pdfminer.pdfdevice import PDFDevice
+    from pdfminer.converter import TextConverter
+    from pdfminer.layout import LAParams
 
-    import StringIO 
-    fp = StringIO.StringIO() 
-    fp.write(data) 
-    fp.seek(0) 
-    outfp = StringIO.StringIO() 
-    
-    rsrcmgr = PDFResourceManager() 
-    device = TextConverter(rsrcmgr, outfp, laparams=LAParams()) 
-    process_pdf(rsrcmgr, device, fp) 
-    device.close() 
-    
-    t = outfp.getvalue() 
-    outfp.close() 
-    fp.close() 
+    import StringIO
+    fp = StringIO.StringIO()
+    fp.write(data)
+    fp.seek(0)
+    outfp = StringIO.StringIO()
+
+    rsrcmgr = PDFResourceManager()
+    device = TextConverter(rsrcmgr, outfp, laparams=LAParams())
+    process_pdf(rsrcmgr, device, fp)
+    device.close()
+
+    t = outfp.getvalue()
+    outfp.close()
+    fp.close()
     return t
 
 def optional_download(file, url):
@@ -50,7 +50,7 @@ def optional_pdf_extract(in_file, out_file):
 	output.close()
 	return False
 
-#result.append([first_name, last_name, county_name, 
+#result.append([first_name, last_name, county_name,
 #	street, city, address_state, zip_code,
 #	po_street, po_city,	po_state, po_zip_code,
 #	reg_street, reg_city, reg_state, reg_zip_code,
@@ -65,23 +65,8 @@ import pdfminer
 import urllib2
 import os
 
-cdir = os.path.dirname(os.path.abspath(__file__))
-
-fips_all = open(os.path.join(cdir, "fips.txt")).read()
-
-fips_data_re = re.compile(".+?IN.+?\n")
-fips_number_re = re.compile("\d+")
-fips_names_re = re.compile("(.+?)\t")
-
-fips_data = fips_data_re.findall(fips_all)
-
-fips_numbers = []
-fips_names = []
-
-for fip in fips_data:
-    fips_numbers.append(fips_number_re.findall(fip)[0])
-    fips_names.append(fips_names_re.findall(fip)[0])
-
+cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "IN"
 source = "State"
@@ -95,20 +80,13 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
-file_path_abs = os.path.join(cdir, "indiana_absentee.pdf")
-file_path_abs_rev = os.path.join(cdir, "indiana_absentee_rev.pdf")
-# Technically the third / is incorrect (but harmless) on systems other than Win32
-url_abs = "file:///" + file_path_abs
+# Might be data available here: https://indianavoters.in.gov/PublicSite/Public/FT1/PublicContactLookup.aspx
 
-file_path_reg = os.path.join(cdir, "indiana_reg.pdf")
-file_path_reg_rev = os.path.join(cdir, "indiana_reg_rev.pdf")
-# Technically the third / is incorrect (but harmless) on systems other than Win32
-url_reg = "file:///" + file_path_reg
+file_path_abs = tmpdir + "indiana_absentee.pdf"
+file_path_abs_rev = tmpdir + "indiana_absentee_rev.pdf"
 
-# optional_download(file_path_abs, url_abs)
-# optional_download(file_path_reg, url_reg)
-# optional_pdf_extract(file_path_abs, file_path_abs_rev)
-# optional_pdf_extract(file_path_reg, file_path_reg_rev)
+file_path_reg =  tmpdir + "indiana_reg.pdf"
+file_path_reg_rev = tmpdir + "indiana_reg_rev.pdf"
 
 abs_data = open(file_path_abs_rev).read()
 reg_data = open(file_path_reg_rev).read()
@@ -182,7 +160,7 @@ for county in abs_counties:
             reg_county = item
             reg_county_name = reg_county_name_check
             break
-        
+
     # print "+++++++++++++++++++++++++++++"
     # print [county]
     # print "-----------------------------"
@@ -269,7 +247,7 @@ for county in abs_counties:
     email = ""
     fax = ""
     hours = ""
-    
+
     reg_first = ""
     reg_last = ""
     reg_fax = ""
@@ -299,10 +277,5 @@ for county in abs_counties:
     reg_phone, reg_fax, reg_email, reg_website, reg_hours,
     phone, fax, email, website, hours, voter_state, source, review])
 
-output = open("C:\Users\pkoms\Documents\TurboVote\Scraping\indiana.txt", "w")
-for r in result:
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
-
-print len(result)
+#This outputs the results to a separate text file.
+dogcatcher.output(result, voter_state, cdir)

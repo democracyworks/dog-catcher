@@ -11,6 +11,7 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "SD"
 source = "State"
@@ -26,9 +27,9 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
-
-file_path = cdir + "south_dakota-clerks.html"
-url = "http://sdsos.gov/content/viewcontent.aspx?cat=elections&pg=/elections/auditorcontactinformation.shtm"
+# new url: https://sdsos.gov/contact-us/county-auditors.aspx
+file_path = tmpdir + "south_dakota-clerks.html"
+url = "https://sdsos.gov/contact-us/county-auditors.aspx"
 
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -46,8 +47,6 @@ email_re = re.compile("[^<>]+?@[^<>]+")
 
 digit_re = re.compile("\d")
 html_re = re.compile("<.+?>")
-
-#print data
 
 county_data = county_data_re.findall(data)
 
@@ -112,10 +111,4 @@ for county in county_data:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "south_dakota.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

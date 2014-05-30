@@ -11,6 +11,7 @@ import urllib2
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "MT"
 source = "State"
@@ -26,15 +27,14 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
 
-file_path = cdir + "montana-clerks.pdf"
+file_path = tmpdir + "montana-clerks.pdf"
 
 #We grab two datasets. They overlap; we only use one of them for election official names and street addresses, which are much harder to pull out of the other.
 #The following section grabs the pdfs and writes them to files. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-file_path_1 = cdir + "montana-clerks-1.pdf"
-file_path_2 = cdir + "montana-clerks-2.pdf"
+file_path_1 = tmpdir + "montana-clerks-1.pdf"
+file_path_2 = tmpdir + "montana-clerks-2.pdf"
 url_1 = "http://sos.mt.gov/elections/forms/elections/electionadministrators.pdf"
-url_2 = "http://sos.mt.gov/elections/Officials/Forms/Voter_Registration_Forms/Voter_Registration_Application.pdf"
 user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
 headers = {'User-Agent' : user_agent}
 
@@ -46,17 +46,7 @@ output = open(file_path_1, "w")
 output.write(data_1)
 output.close()
 
-req_2 = urllib2.Request(url_2, headers=headers)
-pdf_2 = urllib2.urlopen(req_2).read()
-
-data_2 = dogcatcher.pdf_to_text(pdf_2)
-output = open(file_path_2, "w")
-output.write(data_2)
-output.close()
-
 data_1 = open(file_path_1).read()
-data_2 = open(file_path_2).read()
-
 
 streets = []
 counties = []
@@ -91,31 +81,6 @@ phone_pair_all = phone_pair_re.findall(data_1)
 for pair in phone_pair_all:
     data_1 = data_1.replace(pair, "")
 
-#data cleaning in dataset 2
-for item in head_re.findall(data_2):
-    data_2 = data_2.replace(item,"")
-for item in csz_re.findall(data_2):
-    data_2 = data_2.replace(item, "")
-
-data_2 = data_2 + "\n"
-
-for item in onechar_line_re.findall(data_2):
-    data_2 = data_2.replace(item, "")
-
-for item in manyline_re.findall(data_2):
-    data_2 = data_2.replace(item, "\n")
-
-data_2 = data_2.replace("County \n","")
-data_2 = data_2.replace("(cid:191) ","fi")
-data_2 = data_2.replace("Election Administrator Address \n","")
-
-#Here we grab street addresses and county names from data_2.
-
-for line in line_re.findall(data_2):
-    if digit_re.findall(line) or "Box" in line:
-        streets.append(line)
-    else:
-        counties.append(line)
 
 data_1 = " ".join(data_1.split())
 
