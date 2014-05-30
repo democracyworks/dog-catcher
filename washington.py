@@ -1,6 +1,5 @@
 import urllib
 import re
-import sys
 import dogcatcher
 import HTMLParser
 import os
@@ -8,10 +7,11 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-file_path = cdir + "washington-clerks.html"
+file_path = tmpdir + "washington-clerks.html"
 url = "http://www.sos.wa.gov/elections/viewauditors.aspx"
 
 voter_state = "WA"
@@ -35,8 +35,8 @@ data = open(file_path).read()
 
 data = data.replace("<br>","<br>\n").replace("<br/>","<br/>\n")
 
-county_re = re.compile(">County: <.+?</a>.+?</a>", re.DOTALL)
-county_name_re = re.compile(">County: <.+?>(.+?)<")
+county_re = re.compile("<div class=\"panel-body\">(.+?)</div>", re.DOTALL)
+county_name_re = re.compile("<h2 class=\"reset-margin\">(.+?) County</h2>")
 
 email_re = re.compile("mailto:(.+?)\"")
 website_re = re.compile("target=\"_blank\">(.+?)<")
@@ -45,6 +45,7 @@ phone_re = re.compile("Ph.+?> *(\d{3}-\d{3}-\d{4}.*?) *<")
 fax_re = re.compile("Fa.+?> *(\d{3}-\d{3}-\d{4}.*?) *<")
 
 county_data = county_re.findall(data)
+county_names = county_name_re.findall(data)
 
 address_re = re.compile("Address: </b><p>(.+?)</p><b>Phone", re.DOTALL)
 csz_re = re.compile(" *([^,\n]+?, [A-Z][A-Z] *\d{5}[\d-]*)")
@@ -53,15 +54,18 @@ state_re = re.compile(" ([A-Z][A-Z]) ")
 zip_re = re.compile(" (\d{5}[\d-]*)")
 po_re = re.compile("(PO Box .+?)<br")
 
-for county in county_data:
+print county_names
+print county_data
+
+for idx, county in enumerate(county_data):
 
 	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
 
-	county_name = county_name_re.findall(county)[0]
+	county_name = county_names[idx]
 	email = dogcatcher.find_emails(email_re, county)
-	website = dogcatcher.website_find(website_re, county)
-	phone = dogcatcher.phone_find(phone_re, county)
-	fax = dogcatcher.phone_find(fax_re, county)
+	website = dogcatcher.find_website(website_re, county)
+	phone = dogcatcher.find_phone(phone_re, county)
+	fax = dogcatcher.find_phone(fax_re, county)
 
 	#This section finds the full address. After finding the address, it identifies a city/state/zip (csz) combination and a PO Box number if that exists.
     #It removes both the CSZ and the PO Address (if it exists) from the full address, leaving behind a street address with some garbage.
@@ -95,7 +99,7 @@ for county in county_data:
 
 	print "----------------------------------------------------------"
 
-	fips = dogcatcher.fips_find(county_name, voter_state)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 		street, city, address_state, zip_code,
@@ -107,10 +111,4 @@ for county in county_data:
 		phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "washington.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

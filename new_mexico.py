@@ -10,16 +10,11 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
-
-#acquiring the FIPs lists that are necessary later
-fips_data_re = re.compile(".+?NM.+?\n")
-fips_data = dogcatcher.make_fips_data(fips_data_re)
-fips_numbers = dogcatcher.make_fips_numbers(fips_data)
-fips_names = dogcatcher.make_fips_names(fips_data)
+tmpdir = cdir + "tmp/"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-file_path = cdir + "new-mexico-clerks.html"
+file_path = tmpdir + "new-mexico-clerks.html"
 
 url = "http://www.sos.state.nm.us/Voter_Information/County_Clerk_Information.aspx"
 data = urllib.urlopen(url).read()
@@ -58,7 +53,7 @@ csz_re = re.compile("[A-Za-z ]+, [A-Z]{2,2} +\d{5}[\d-]*")
 
 dona_ana_re = re.compile("Do.+a Ana")
 
-	
+
 data = data.replace("&nbsp;"," ")
 data = data.replace("P.O. Box 767Estancia","P.O. Box 767<BR>Estancia")#second replace fixes a bug in Estancia, NM
 
@@ -69,7 +64,7 @@ for item in dona_ana_re.findall(data): #There's an accent mark in Dona Ana that 
 county_data = county_data_re.findall(data)
 
 for county in county_data:
-	
+
 	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
 
 	county_name = county_name_re.findall(county)[0]
@@ -114,7 +109,7 @@ for county in county_data:
 
 
 	street = " ".join(street.strip(",- ").split())
-	po_street = " ".join(po_street.strip(",- ").split())		
+	po_street = " ".join(po_street.strip(",- ").split())
 
 	email = dogcatcher.find_emails(email_re, county)
 
@@ -122,7 +117,7 @@ for county in county_data:
 
 	fax = dogcatcher.find_phone(fax_re, county)
 
-	fips = dogcatcher.find_fips(county_name, fips_names, fips_numbers)
+	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
@@ -134,10 +129,4 @@ for county in county_data:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "new_mexico.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)
