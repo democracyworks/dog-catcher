@@ -59,9 +59,11 @@ def find_fips(county_name, voter_state):
 
 	fips_re = re.compile(fips_re_string)
 
-	fips = fips_re.findall(fips_text)[0]
-
-	return fips.title()
+	fips_search = fips_re.findall(fips_text)
+	if len(fips_search) == 0:
+		return None
+	else:
+		return fips_search[0].title()
 
 def insert(original, new, pos):
 	"Inserts a string into a larger string."
@@ -319,7 +321,7 @@ def output(results, state, edir, type = "counties", results_city = ""):
 		output.write("\n")
 	output.close()
 
-def pdf_to_text(data):
+def pdf_to_text(data, pages=None):
 	"Converts a PDF to text, as neatly as can reasonably be hoped. Found from Herb Lainchbury in http://www.herblainchbury.com/2010_05_01_archive.html"
 	from pdfminer.pdfinterp import PDFResourceManager, process_pdf
 	from pdfminer.pdfdevice import PDFDevice
@@ -334,7 +336,7 @@ def pdf_to_text(data):
 
 	rsrcmgr = PDFResourceManager()
 	device = TextConverter(rsrcmgr, outfp, laparams=LAParams())
-	process_pdf(rsrcmgr, device, fp)
+	process_pdf(rsrcmgr, device, fp, pages)
 	device.close()
 
 	t = outfp.getvalue()
