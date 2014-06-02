@@ -8,6 +8,7 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "NE"
 source = "State"
@@ -22,7 +23,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
-file_path = cdir + "nebraska-clerks.html"
+file_path = tmpdir + "nebraska-clerks.html"
 url = "http://www.sos.ne.gov/elec/clerks.html"
 
 data = urllib.urlopen(url).read()
@@ -76,7 +77,7 @@ for county in county_data:
 	#There's only a single physical or mailing address, and all addresses are only two lines. State is not included.
 	#Address_re finds the address. We then check whether it's a physical or mailing address, and assign the other variables accordingly.
 	#Since the city and zip code are explicitly set out in the data (as City: Foovile \n Zip: 11111), this gets both directly from the county data, instead of extracting it from the complete address.
-	
+
 	address = address_re.findall(county)[0].strip()
 
 	if "PO " in address:
@@ -106,9 +107,4 @@ for county in county_data:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "nebraska.txt", "w")
-for r in result:
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

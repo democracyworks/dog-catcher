@@ -10,6 +10,7 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "OK"
 source = "state"
@@ -26,7 +27,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
 
 #The following section grabs the pdf and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-file_path = cdir + "oklahoma-clerks.pdf"
+file_path = tmpdir + "oklahoma-clerks.txt"
 url = "http://www.ok.gov/elections/documents/cebinfo.pdf"
 user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
 headers = {'User-Agent' : user_agent}
@@ -130,6 +131,11 @@ for item in multi_break_re.findall(data):
 #Finally, we turn the address blocks into a list of addresses.
 address_blocks = address_block_re.findall(data)
 
+print "Number of phone_names", len(phone_names)
+print "Number of hours_all", len(hours_all)
+print "Number of county_names", len(county_names)
+print "Number of address_blocks", len(address_blocks)
+
 if len(phone_names) != 77:
     sys.exit("ISSUE: Something's wrong with the phone, fax, or names items. There are the wrong number of items.")
 if len(hours_all) != 77:
@@ -198,7 +204,7 @@ for i in range(0,77):
     reg_phone = "(405) 521-2391"
     reg_email = "info@elections.ok.gov"
 
-    
+
     fips = dogcatcher.find_fips(county_name, voter_state)
 
     result.append([authority_name, first_name, last_name, county_name, fips,
@@ -211,10 +217,4 @@ for i in range(0,77):
     phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "oklahoma.txt", "w")
-for r in result:
-    r = h.unescape(r)
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

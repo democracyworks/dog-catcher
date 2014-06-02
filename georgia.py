@@ -9,12 +9,13 @@ voter_state = "GA"
 source = "State"
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 #Every county is a different item in a dropdown menu, so we have to cycle through them all.
 #To do so, we grab the dropdown menu, extract a list of counties, then grab a series of web pages based on that list.
 #This grabs a page containing a list of GA counties and writes it to a file. Writing it isn't strictly necessary, but saves some run time in the long run.
 
-file_path = cdir + "georgia-counties.html"
+file_path = tmpdir + "georgia-counties.html"
 
 url = "http://sos.georgia.gov/cgi-bin/countyregistrarsindex.asp"
 data = urllib.urlopen(url).read()
@@ -35,7 +36,7 @@ trim_re = re.compile("<span class=\"Style49\"><b>(.+?)</b></span>", re.DOTALL)
 
 for county in county_list:
 #	print county
-	
+
 	br = mechanize.Browser() #Creates a mechanize browser object.
 	br.set_handle_robots(False) # ignore robots
 	br.open(url) #Opens the page.
@@ -43,9 +44,16 @@ for county in county_list:
 	br["CountyName"] = [county,] #It takes an input called CountyName.
 	res = br.submit() #res is the resulting page when we submit the inputs from earlier
 	content = res.read() #this creates a string of the page.
-	trimmed_content = trim_re.findall(content)[0] #this trims the page down to only what we need.
+
+	trimmed_content = trim_re.findall(content)
+	if trimmed_content != None and len(trimmed_content) > 0:
+		trimmed_content = trimmed_content[0]
+	else:
+		print "No content found for", county
+		continue
+
 	#This writes the page to a file.
-	file_path = cdir + county + "-ga-clerks.html"
+	file_path = tmpdir + county + "-ga-clerks.html"
 	output = open(file_path,"w")
 	output.write(trimmed_content)
 	output.close()
@@ -79,7 +87,7 @@ paren_re = re.compile("\(.+?\)")
 
 for county_name in county_list:
 
-	file_path = cdir + county_name + "-ga-clerks.html"
+	file_path = tmpdir + county_name + "-ga-clerks.html"
 
 	county = open(file_path).read().replace("&nbsp;"," ").replace("Post Office","P.O.")
 
@@ -92,7 +100,7 @@ for county_name in county_list:
 	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
 
 	phone = dogcatcher.find_phone(phone_re, county)
-	
+
 	fax = dogcatcher.find_phone(fax_re,county)
 
 	email = dogcatcher.find_emails(email_re, county)
@@ -161,9 +169,9 @@ for county_name in county_list:
 		if digit_re.findall(paren[0]):
 			zip_code = paren[0].strip("()")
 		street = street.replace(paren[0],"").strip(", \n/")
-		
+
 	fips = dogcatcher.find_fips(county_name, voter_state)
-	
+
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
 	po_street, po_city, po_state, po_zip_code,
@@ -174,9 +182,4 @@ for county_name in county_list:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "georgia.txt", "w")
-for r in result:
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

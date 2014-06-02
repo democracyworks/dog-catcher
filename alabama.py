@@ -13,6 +13,7 @@ source = "State"
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 result = [("authority_name", "first_name", "last_name", "county_name", "fips",
 	"street", "city", "address_state", "zip_code",
@@ -26,8 +27,8 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
 #Alabama has two sets of offices; one which handles registrations, and one which handles absentee ballot requests. Each one's data is on a different webpage.
 #The following section grabs the websites and writes them to files. (Writing it to a file isn't strictly necessary, but saves some time in testing.)
 
-file_path_1 = cdir + "alabama-clerks-1.html"
-file_path_2 = cdir + "alabama-clerks-2.html"
+file_path_1 = tmpdir + "alabama-clerks-1.html"
+file_path_2 = tmpdir + "alabama-clerks-2.html"
 url_1 = "http://www.sos.state.al.us/vb/election/all.aspx?trgtoffice=Board%20of%20Registrars"
 url_2 = "http://www.sos.state.al.us/vb/election/all.aspx?trgtoffice=Absentee%20Election%20Manager"
 
@@ -164,7 +165,7 @@ for abse in county_abs:
 		reg_state = state_re.findall(reg_csz)[0].strip()
 		reg_zip_code = zip_re.findall(reg_csz)[0].strip()
 
-	
+
 	phone = dogcatcher.find_phone(phone_re, abse)
 
 	reg_phone = dogcatcher.find_phone(phone_re, reg)

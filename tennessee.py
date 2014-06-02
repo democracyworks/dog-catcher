@@ -11,6 +11,7 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "TN"
 source = "State"
@@ -29,7 +30,7 @@ result = [("authory_name", "first_name", "last_name", "county_name", "fips",
 #To do so, we go elsewhere, extract a list of counties, then later grab a series of web pages based on that list.
 #(Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-file_path = cdir + "tennessee-counties.html"
+file_path = tmpdir + "tennessee-counties.html"
 url = "http://www.tdot.state.tn.us/longrange/countylist.htm"
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -73,7 +74,7 @@ for county_id in county_names:
 	#The URLs are uniformly formatted; we insert every county on the list of county names into the URL format, and then grab and save a webpage based on that.
 	#(Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-	file_name = cdir + county_id + "-TN-clerks.html"
+	file_name = tmpdir + county_id + "-TN-clerks.html"
 	county_url = "http://tnsos.org/elections/election_commissions.php?County=" + county_id
 
 	data = urllib.urlopen(county_url).read()
@@ -136,10 +137,4 @@ for county_id in county_names:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "tennessee.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

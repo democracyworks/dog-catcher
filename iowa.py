@@ -8,10 +8,11 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-file_path = cdir + "iowa-counties.html"
+file_path = tmpdir + "iowa-counties.html"
 url = "http://sos.iowa.gov/elections/auditors/auditor.asp?CountyID=00"
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -52,7 +53,7 @@ city_re = re.compile("(.+?)[A-Z][A-Z]")
 state_re = re.compile("[A-Z][A-Z]")
 zip_re = re.compile("\d{5}[\d-]*")
 
-#The first change makes the data more approachable 
+#The first change makes the data more approachable
 
 #data = data.replace("\r\n\t\t\t\t\t\t\t\t","\r\n")
 data = data.replace("&nbsp;","")
@@ -71,7 +72,7 @@ for county in county_data:
 	# print county
 	# print "++++++++++++++++++++++++++++++++++++++++++++++"
 
-	official_name = official_name_re.findall(county)[0].partition(" ")
+	official_name = official_name_re.findall(county)[0]
 	first_name, last_name, review = dogcatcher.split_name(official_name, review)
 
 	county_name = county_name_re.findall(county)[0]
@@ -98,7 +99,9 @@ for county in county_data:
 	mailing_csz = csz_re.findall(mailing)[0]
 
 	street = address.replace(address_csz,"").strip("\r\n\t ")
-	po_street = mailing.replace(mailing_csz,"").strip("\r\n\t ").replace(street)
+	po_street = mailing.replace(mailing_csz,"").strip("\r\n\t ")
+	if po_street == street:
+		po_street = ""
 
 	if po_street:
 		city = city_re.findall(address_csz)[0].strip()
@@ -107,15 +110,15 @@ for county in county_data:
 		po_city = city_re.findall(mailing_csz)[0].strip()
 		po_state = state_re.findall(mailing_csz)[0].strip()
 		po_zip_code = zip_re.findall(mailing_csz)[0].strip()
-	else:		
+	else:
 		city = city_re.findall(address_csz)[0].strip()
 		address_state = state_re.findall(address_csz)[0].strip()
 		zip_code = zip_re.findall(address_csz)[0].strip()
 
-	if "PO Box" not in po_street and po_street:
+	if po_street and "PO Box" not in po_street:
 		review = review + "h"
 
-	if po_street.find("PO Box") !=0 and po_street:
+	if po_street and po_street.find("PO Box") !=0:
 		review = review + "j"
 
 	fips = dogcatcher.find_fips(county_name, voter_state)
@@ -130,10 +133,4 @@ for county in county_data:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "iowa.txt", "w")
-for r in result:
-    r = h.unescape(r)
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

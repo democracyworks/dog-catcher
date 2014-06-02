@@ -11,7 +11,7 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
-
+tmpdir = cdir + "tmp/"
 
 voter_state = "SC"
 source = "State"
@@ -30,7 +30,7 @@ result = [("authory_name", "first_name", "last_name", "county_name", "fips",
 #To do so, we go elsewhere, extract a list of counties, then later grab a series of web pages based on that list.
 #(Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-file_path = cdir + "south_carolina-counties.html"
+file_path = tmpdir + "south_carolina-counties.html"
 url = "http://www.scvotes.org/how_to_register_absentee_voting"
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -54,7 +54,7 @@ county_link_names = county_link_name_re.findall(data)
 #Once we have those in place, we start setting up regexes that are used in cleaning individual counties.
 
 county_name_re = re.compile(">([^<>]+? County) .+?<[pbr /]>")
-relevant_re = re.compile("(<div class=\"info.+?)http://www.adobe.com", re.DOTALL)
+relevant_re = re.compile("(<div class=\"content.+?)<!-- end content", re.DOTALL)
 
 phone_re =re.compile(">[^x]*?(\(*\d{3}\)*[ -]*\d{3}-.+?)[<F]")
 phone_format_re = re.compile("(\(*\d{3}\)* *\d{3}-\d{4})")
@@ -104,8 +104,8 @@ for link in county_links:
 	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
 
 	link_name = county_link_names[county_links.index(link)]
-	
-	file_name = cdir  + link_name + "-sc-clerks.html"
+
+	file_name = tmpdir  + link_name + "-sc-clerks.html"
 	url = "http://www.scvotes.org" + link
 
 	data = urllib.urlopen(url).read()
@@ -125,7 +125,7 @@ for link in county_links:
 	for font in font_re.findall(county):
 		county = county.replace(font,"")
 	for style in style_re.findall(county):
-		county = county.replace(style,"")		
+		county = county.replace(style,"")
 	for span in span_re.findall(county):
 		county = county.replace(span,"")
 	for w in w_re.findall(county):
@@ -154,7 +154,7 @@ for link in county_links:
 		reg_email = "cholland@aikencountysc.gov"
 		county.replace("cholland@aikencountysc.gov","")
 
-	
+
 
 	phone = dogcatcher.find_phone(phone_re, county)
 	for item in phone_re.findall(county):
@@ -197,7 +197,7 @@ for link in county_links:
 		reg_email = reg_email.strip(", ")
 	else:
 		for item in email_re.findall(county):
-			county = county.replace(item, "")		
+			county = county.replace(item, "")
 
 	website = dogcatcher.find_website(website_re, county)
 
@@ -220,8 +220,8 @@ for link in county_links:
 
 	print [email]
 
-	
-	
+
+
 	#There are many forms the official's name can take. This tries all of them.
 
 	if official_name_1_re.findall(county):
@@ -244,7 +244,7 @@ for link in county_links:
 		first_name, last_name, review = dogcatcher.split_name(official_name, review)
 
 	county = county.replace(official_name,"")
-	
+
 
 	print "++++++++++++++++++++++++++++++++++++++"
 	if county_name == "Charleston County":
@@ -327,10 +327,4 @@ for link in county_links:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "south_carolina.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

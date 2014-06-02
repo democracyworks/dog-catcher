@@ -11,6 +11,7 @@ import csv
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
@@ -27,8 +28,8 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
 	"reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
 	"phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
-file_path = cdir + "texas-clerks.html"
-reg_file_path = cdir + "texas-reg-clerks.html"
+file_path = tmpdir + "texas-clerks.html"
+reg_file_path = tmpdir + "texas-reg-clerks.html"
 
 url = "http://www.sos.state.tx.us/elections/voter/county.shtml"
 data = urllib.urlopen(url).read()
@@ -44,6 +45,9 @@ output.close()
 
 data = open(file_path).read()
 reg_data = open(reg_file_path).read()
+
+# fix some issues in the data
+# data = data.replace("550 E. 2nd Ave Belton 76513", "550 E. 2nd Ave, Belton 76513")
 
 data = dogcatcher.po_standardize(data.replace("&quot;","'").replace("&amp;","&").replace(", TX",""))
 reg_data = dogcatcher.po_standardize(reg_data.replace("&quot;","'").replace(", TX",""))
@@ -74,7 +78,7 @@ suite_re = re.compile("Ste[. ]+[\dA-Z]+")
 zip_re = re.compile("(?<!\d)\d{5}(?!\d)[-\d]*")
 
 city_1_re = re.compile("\d ([^,\d]+?) \d{5}[-\d]*") #If the street address ends in a digit and the city is one word, it's very easy to tell where the street address ends.
-city_2_re = re.compile(" ([A-Za-z]) [^,\d]+? \d{5}[-\d]*") 
+city_2_re = re.compile(" ([A-Za-z]) [^,\d]+? \d{5}[-\d]*")
 city_3_re = re.compile(", ([^,\d]+?) \d{5}[-\d]*")  #Here, we take the last comma (if there's one with no digits after it) and get everything after it.
 city_4_re = re.compile(" ([^,\d]+?) \d{5}[-\d]*") #Here, we just take the last several words without commas or digits. This is not a promising regex.
 
@@ -91,13 +95,18 @@ digit_re = re.compile("\d")
 county_data = county_re.findall(data)
 reg_county_data = county_re.findall(reg_data)
 
+# fixes some formatting issues
+reg_county_data = reg_county_data.replace("Shawn Snyder<br />", "Shawn Snyder</dd>")
+reg_county_data = reg_county_data.replace("550 E. 2nd Ave Belton  76513 </dd>", "<dd>550 E. 2nd Ave Belton  76513 </dd>")
+
+
 for county in county_data:
 
 	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
 
 	reg_county = reg_county_data[county_data.index(county)]
 
-	#Splits both the reg data and the absentee official data 
+	#Splits both the reg data and the absentee official data
 	county_data_item = county_data_item_re.findall(county)
 	reg_county_data_item = county_data_item_re.findall(reg_county)
 
@@ -111,7 +120,7 @@ for county in county_data:
 
 	authority_name = county_data_item[0]
 	reg_authority_name = reg_county_data_item[0]
-		
+
 	county_name = county_name_re.findall(county)[0].title().replace(" County","")
 
 	official_name = county_data_item[1]
@@ -191,7 +200,7 @@ for county in county_data:
 			cityzip = cityzip.split()
 			zip_code = cityzip.pop()
 			city = " ".join(cityzip)
-		
+
 	elif len(address_components) > 2:
 
 		street = " ".join(address_components[0:end])
@@ -220,9 +229,10 @@ for county in county_data:
 
 	#This section finds the address for the registration official.
 	#Todo: document.
-	
-	reg_address = " ".join(reg_county_data_item[2].strip().replace("\r\n", " ").split()).replace(", Texas, ",", ")
 
+	reg_address = " ".join(reg_county_data_item[2].strip().replace("\r\n", " ").split()).replace(", Texas, ",", ")
+	print reg_county_data_item
+	#print reg_address
 
 	if re.search("\d,* [A-Z][a-zA-Z]+ \d{5}[\d-]*", reg_address):
 
@@ -235,7 +245,7 @@ for county in county_data:
 				reg_po_street = po_letter_re.findall(reg_address)[0]
 
 			reg_address = reg_address.replace(reg_po_street, "")
-			
+
 			reg_po_zip_code = zip_re.findall(reg_address)[0]
 
 			reg_address = reg_address.replace(reg_po_zip_code, "").strip(", ")
@@ -253,7 +263,7 @@ for county in county_data:
 				reg_po_city = reg_city.strip(", ")
 				reg_street = "".join(reg_address_components[0 : end - digit])
 				reg_zip_code = reg_po_zip_code
-				
+
 			elif re.search("\d", reg_address):
 				print "You have an address with both a PO box and a street address, and a multi-word city name (maybe)."
 				print "This wasn't set up to handle that. Bet you wished you'd written that edge case now, huh?"
@@ -269,13 +279,13 @@ for county in county_data:
 			cityzip = cityzip_re_1.findall(reg_address)[0]
 
 			reg_zip_code = zip_re.findall(cityzip)[0]
-			
+
 			reg_city = cityzip.replace(reg_zip_code,"").strip(", ")
 
 			reg_street = reg_address.replace(cityzip,"").strip(", ")
 
 	elif re.search(", [A-Z][a-z]+ \d{5}[\d-]*", reg_address):
-		
+
 
 		if po_re.findall(reg_address):
 			if po_street_re.findall(reg_address):
@@ -316,8 +326,8 @@ for county in county_data:
 	else:
 		reg_comp = csv.reader([reg_address], skipinitialspace=True)
 		reg_address_components = reg_comp.next()
-		
-		
+
+
 		if po_re.findall(reg_address):
 			if po_street_re.findall(reg_address):
 				reg_po_street = po_street_re.findall(reg_address)[0]
@@ -327,7 +337,7 @@ for county in county_data:
 		reg_address = " ".join(reg_address.replace(reg_po_street,"").split()).strip(", ")
 
 		if not re.search("\d[A-Za-z,]* [A-Za-z \.,#]+? \d{5}[\d-]*", reg_address):
-
+			print reg_address
 			reg_po_zip_code = zip_re.findall(reg_address)[0]
 			reg_po_city = reg_address.replace(reg_po_zip_code,"")
 
@@ -339,7 +349,7 @@ for county in county_data:
 				reg_address_components = reg_address.split()
 				end = len(reg_address_components)
 				reg_city_try = " ".join(reg_address_components[end - words: end])
-				
+
 				base_url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=%s"
 				url = base_url % urllib.quote(reg_city_try)
 
@@ -381,8 +391,8 @@ for county in county_data:
 			if reg_po_street:
 				reg_po_city = reg_city
 				reg_po_zip_code = reg_zip_code
-	
-	
+
+
 	fips = dogcatcher.find_fips(county_name, voter_state)
 
 	result.append([authority_name, first_name, last_name, county_name, fips,
@@ -395,5 +405,4 @@ for county in county_data:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
 dogcatcher.output(result, voter_state, cdir)

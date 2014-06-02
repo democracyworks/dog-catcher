@@ -8,6 +8,7 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "NJ"
 source = "state"
@@ -23,7 +24,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-file_path = cdir + "new_jersey-clerks.txt"
+file_path = tmpdir + "new_jersey-clerks.txt"
 url = "http://www.nj.gov/state/elections/voting-information-local-officials.html"
 
 data = urllib.urlopen(url).read()
@@ -78,7 +79,7 @@ for county in county_data:
 	#This isolates the county clerk data from the complete county.
 	clerk = clerk_re.findall(county)[0]
 
-	clerk_name = name_re.findall(clerk)[0]	
+	clerk_name = name_re.findall(clerk)[0]
 	first_name, last_name, review = dogcatcher.split_name(clerk_name, review)
 
 	phone = dogcatcher.find_phone(phone_re, clerk)
@@ -221,5 +222,4 @@ for county in county_data:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
 dogcatcher.output(result, voter_state, cdir)

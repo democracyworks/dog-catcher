@@ -11,6 +11,7 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "OR"
 source = "State"
@@ -18,7 +19,7 @@ source = "State"
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
 url = "http://oregonvotes.org/pages/voterresources/clerk.html"
-file_path = cdir + "oregon-clerks.html"
+file_path = tmpdir + "oregon-clerks.html"
 
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -86,7 +87,7 @@ for county in county_data:
 		authority_name = "County Clerk"
 
 	#print [county]
-	
+
 	phone = dogcatcher.find_phone(phone_re, county)
 
 	fax = dogcatcher.find_phone(fax_re, county)
@@ -124,10 +125,4 @@ for county in county_data:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "oregon.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

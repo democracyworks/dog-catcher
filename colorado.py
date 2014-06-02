@@ -11,6 +11,7 @@ import urllib2
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
@@ -28,7 +29,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
 
-file_path = cdir + "colorado-clerks.pdf"
+file_path = tmpdir + "colorado-clerks.pdf"
 url = "http://www.sos.state.co.us/pubs/elections/Resources/files/CountyClerkRosterWebsite.pdf"
 user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
 headers = {'User-Agent' : user_agent}
@@ -102,15 +103,15 @@ for county in names_block:
     county_split = county.partition(" \n")
     county_name = county_split[0].title()
     official_name = county_split[2]
-    
+
     #Manual fix for the curly quotes around Madene Cumming of Phillips county
     if re.search('Beth', official_name) is not None:
-        official_name = "Madene Beth Cumming" 
+        official_name = "Madene Beth Cumming"
 
     first_name, last_name, review = dogcatcher.split_name(official_name, review, "ignore")
 
     authority_name = "County Clerk"
-    
+
     address_state = voter_state
 
     phone = dogcatcher.find_phone(phone_re, county_phones)

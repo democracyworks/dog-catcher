@@ -11,7 +11,7 @@ import urllib2
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
-
+tmpdir = cdir + "tmp/"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
@@ -29,7 +29,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
 
-file_path = cdir + "delaware-clerks.pdf"
+file_path = tmpdir + "delaware-clerks.pdf"
 url = "http://elections.delaware.gov/services/voter/pdfs/absentee.pdf"
 user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
 headers = {'User-Agent' : user_agent}
@@ -74,7 +74,7 @@ for county in county_data:
     authority_name = "Department of Elections"
 
     county_name = county_name_re.findall(county)[0].strip()
-    
+
 
     phone = dogcatcher.clean_phone(phone_re.findall(county)[0])
     fax = dogcatcher.clean_phone(phone_re.findall(county)[1])
@@ -116,10 +116,4 @@ for county in county_data:
         phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "delaware.txt", "w")
-for r in result:
-    r = h.unescape(r)
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

@@ -5,12 +5,13 @@ import sys
 import dogcatcher
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 #Every county is on a different webpage, so we have to grab every webpage. To do so, we grab a list of counties and then grab a series of web pages based on that list.
 #This grabs a page containing a list of NY counties and writes it to a file. Writing it isn't strictly necessary, but saves some run time in the long run.
 
 url = "http://www.nysegov.com/map-ny.cfm"
-file_path = cdir + "new-york-counties.html"
+file_path = tmpdir + "new-york-counties.html"
 
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -69,8 +70,8 @@ for item in county_names:
 		county_name_use = "New+York"
 
 	#Here we define the URL that the county's webpage is at, grab the page, and write it to a file. The writing to a file isn't strictly necessary, but speeds things up.
-	
-	file_name = cdir + county_name_use + "-NY-clerks.html"
+
+	file_name = tmpdir + county_name_use + "-NY-clerks.html"
 	county_url = "http://www.elections.ny.gov:8080/plsql_browser/county_boards?county_in=" + county_name_use
 	data = urllib.urlopen(county_url).read()
 	output = open(file_name,"w")

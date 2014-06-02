@@ -12,7 +12,7 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
-
+tmpdir = cdir + "tmp/"
 
 voter_state = "NV"
 source = "State"
@@ -27,7 +27,7 @@ result = [("authory_name", "first_name", "last_name", "county_name", "fips",
     "reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
-file_path = cdir + "nevada-clerks.html"
+file_path = tmpdir + "nevada-clerks.html"
 url = "http://nvsos.gov/index.aspx?page=81"
 user_agent = 'Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20120716 Firefox/15.0a2'
 headers = {'User-Agent' : user_agent}
@@ -102,7 +102,7 @@ for i in range(0,len(county_data)):
             print county
     except:
         continue
-    
+
 
 
 for county in county_data:
@@ -200,10 +200,4 @@ for county in county_data:
         phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "nevada.txt", "w")
-for r in result:
-    r = h.unescape(r)
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

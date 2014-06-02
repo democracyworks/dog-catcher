@@ -8,9 +8,10 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
-file_path = cdir + "maryland-clerks.html"
+file_path = tmpdir + "maryland-clerks.html"
 url = "http://www.elections.state.md.us/about/county_boards.html"
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -114,7 +115,7 @@ for county in county_data:
 		zip_code = zip_re.findall(street_csz)[0]
 		street = street_address.replace(street_csz,"").replace("\r\n",", ").replace("<br />","").strip(", ")
 
-		if county_name == "Montgomery" and "4333" in county and "20849-0369" in county: #Montgomery County is a mess; they use three separate PO boxes. 
+		if county_name == "Montgomery" and "4333" in county and "20849-0369" in county: #Montgomery County is a mess; they use three separate PO boxes.
 			reg_authority_name = "Election Director"
 			reg_po_street = "P.O. Box 4333"
 			reg_po_city = "Rockville"
@@ -151,7 +152,7 @@ for county in county_data:
 	# po_street = po_street.replace("<br />",", ").strip(",- ")
 
 
-	
+
 	if "FrederickCounty" in county:
 		hours = "8:00 a.m to 4:30 p.m"
 	else:

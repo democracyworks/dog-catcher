@@ -10,13 +10,14 @@ import dogcatcher
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "RI"
 source = "State"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-file_path = cdir + "rhode_island-clerks.html"
+file_path = tmpdir + "rhode_island-clerks.html"
 url = "http://www.elections.state.ri.us/canvassers/index.php"
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -83,9 +84,9 @@ for town in town_data:
 
 	hours = hours_re.findall(town)[0]
 	hours = " ".join(hours.replace("\r\n","").replace("<br />"," ").split())
-	
+
 	email = dogcatcher.find_emails(email_re, town)
-	
+
 	phone = dogcatcher.find_phone(phone_re, town)
 	fax = dogcatcher.find_phone(fax_re, town)
 
@@ -131,10 +132,4 @@ for town in town_data:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "rhode_island.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

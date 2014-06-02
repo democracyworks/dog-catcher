@@ -11,7 +11,7 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
-
+tmpdir = cdir + "tmp/"
 
 voter_state = "PA"
 source = "State"
@@ -36,7 +36,7 @@ result = [("authory_name", "first_name", "last_name", "county_name", "fips",
 county_ref_list_re = re.compile("option value=\"(.+?)\">[A-Z ]+</option>")
 county_names_re = re.compile("option value=\".+?\">([A-Z ]+)</option>")
 
-file_path = cdir + "pennsylvania-counties.html"
+file_path = tmpdir + "pennsylvania-counties.html"
 url = "http://www.portal.state.pa.us/portal/server.pt?open=514&objID=1174076&parentname=ObjMgr&parentid=60&mode=2"
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -54,7 +54,7 @@ trim_re = re.compile("<div id=\"ContactInfo99273.+?<div(.+?)</form>", re.DOTALL)
 
 for county in county_ref_list:
 	print county
-	
+
 	br = mechanize.Browser() #Creates a mechanize browser object.
 	br.set_handle_robots(False) # ignore robots.txt
 	br.open(url) #Opens the page.
@@ -64,7 +64,7 @@ for county in county_ref_list:
 	content = res.read() #this creates a string of the page.
 	trimmed_content = trim_re.findall(content)[0] #this trims the page down to only what we need.
 	#This writes the page to a file.
-	file_path = cdir + county + "-pa-clerks.html"
+	file_path = tmpdir + county + "-pa-clerks.html"
 	output = open(file_path,"w")
 	output.write(trimmed_content)
 	output.close()
@@ -95,10 +95,10 @@ clean_re = re.compile("[a-z]+=\".+?\"")
 t_re = re.compile("\t+")
 
 for county_id in county_ref_list:
-	
+
 	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
 
-	file_path = cdir + county_id + "-pa-clerks.html"
+	file_path = tmpdir + county_id + "-pa-clerks.html"
 
 
 	county = open(file_path).read().replace("&nbsp;"," ").replace("&nbsp","").replace("Post Office","P.O.")
@@ -126,7 +126,7 @@ for county_id in county_ref_list:
 	registration = regweb[0]
 	county_web = regweb[2]
 
-	
+
 	website = dogcatcher.find_website(website_re, county_web)
 	reg_website = website
 
@@ -169,7 +169,7 @@ for county_id in county_ref_list:
     #It then cleans up the street address and pulls the city, state, and zip out of the csz, and assigns them as appropriate to the street address and mailing address.
 
 	abs_address = address_re.findall(absentee)[0]
-	
+
 	csz = csz_re.findall(abs_address)[0].strip()
 
 	try:

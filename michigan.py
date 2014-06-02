@@ -11,6 +11,7 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "MI"
 source = "State"
@@ -38,7 +39,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
 
 county_list_re = re.compile("<option value=\"(.+?)\">.+? County</option>")
 county_name_re = re.compile("<option value=\".+?\">(.+?) County</option>")
-output_path = os.path.join(cdir, "michigan-counties.html")
+output_path = os.path.join(tmpdir, "michigan-counties.html")
 
 url = "https://webapps.sos.state.mi.us/mivote/ClerkSearch.aspx"
 data = urllib.urlopen(url).read()
@@ -51,7 +52,7 @@ county_names = county_name_re.findall(data)
 
 #This uses the mechanize package to submit every item in county_list--the list of county names as used in the menu--and grab and save a webpage for each one.
 
-trim_re = re.compile("(<td valign=\"top\">.+)\s+</tr>\s+</table>\s+</div>\s+</td>", re.DOTALL)
+trim_re = re.compile("(<td style=\"vertical-align:top;\">.+)\s+</tr>\s+</table>\s+</div>\s+</td>", re.DOTALL)
 
 for county in county_list:
 	print county
@@ -65,63 +66,45 @@ for county in county_list:
 	content = res.read() #this creates a string of the page.
 	trimmed_content = trim_re.findall(content)[0] #this trims the page down to only what we need.
 	#This writes the page to a file.
-	file_path = cdir + county + "-MI-clerks.html"
+	file_path = tmpdir + county + "-MI-clerks.html"
 	output = open(file_path,"w")
 	output.write(trimmed_content)
 	output.close()
 
-#output_path points to a file in which we'll insert a trimmed version of the data in each michigan county.
-#Once we have that file, we'll break it down into each county and extract data out of each of those.
-
-
-
-output_path = cdir + "michigan-county-clerks.html"
-
-clerks = open(output_path,"w")
-clerks.write("")
-clerks.close
-clerks = open(output_path,"a")
-
-
-
-for county in county_list:
-	file_path = cdir + county + "-mi-clerks.html"
-	data = open(file_path).read()
-
- 	clerks.write(data)
-
-clerks.close()
-
-data = open(output_path).read()
-
-county_data_re = re.compile("<td valign=\"top\">.+?</td>", re.DOTALL)
-
-county_data = county_data_re.findall(data)
-
-official_name_re = re.compile("ClerkorLocationName.+?class=\"clerkText\">(.+?)</span>")
-
-phone_re = re.compile("Ph:(.+?)</span>")
-fax_re = re.compile("Fax:(.+?)</span>")
-
-address_re = re.compile("Address\" class=\"clerkText\">(.+?)</span><br />", re.DOTALL)
-
-csz_re = re.compile("CityStateZip.+?>(.+?)</span><br />")
-city_re = re.compile("(.+?) [A-Z][A-Z]")
-state_re = re.compile(" ([A-Z][A-Z]) ")
-zip_re = re.compile(" (\d{5}[\d-]*)")
-po_re = re.compile("(P[oO] Box .+) *", re.DOTALL)
-email_re = re.compile("Email: (.+?) *<")
-
-municipal_re = re.compile("href=\"LocalClerk\.aspx\?jd=(\d{5})")
 
 municipality_list = []
 
-for county in county_data:
+for county_id in county_list:
+
+	file_path = tmpdir + county_id + "-MI-clerks.html"
+	data = open(file_path).read()
+
+	county_data_re = re.compile("<td style=\"vertical-align:top;\">.+?</td>", re.DOTALL)
+
+	county = county_data_re.findall(data)[0]
+
+	county_name_re = re.compile(">(.+?)\s+County</span>")
+	official_name_re = re.compile("ClerkorLocationName.+?class=\"clerkText\">(.+?)</span>")
+
+	phone_re = re.compile("Ph:(.+?)</span>")
+	fax_re = re.compile("Fax:(.+?)</span>")
+
+	address_re = re.compile("Address\" class=\"clerkText\">(.+?)</span><br />", re.DOTALL)
+
+	csz_re = re.compile("CityStateZip.+?>(.+?)</span><br />")
+	city_re = re.compile("(.+?) [A-Z][A-Z]")
+	state_re = re.compile(" ([A-Z][A-Z]) ")
+	zip_re = re.compile(" (\d{5}[\d-]*)")
+	po_re = re.compile("(P[oO] Box .+) *", re.DOTALL)
+	email_re = re.compile("Email: (.+?) *<")
+
+	municipal_re = re.compile("href=\"LocalClerk\.aspx\?jd=(\d{5})")
+	municipality_list.extend(municipal_re.findall(data))
 
 	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
 
-	county_name = county_names[county_data.index(county)].strip()
-	
+	county_name = county_name_re.findall(county)[0]
+
 	official = official_name_re.findall(county)[0]
 
 	first_name, last_name, official_name, review = dogcatcher.make_name(official, ",", review)
@@ -134,7 +117,7 @@ for county in county_data:
     #It removes both the CSZ and the PO Address (if it exists) from the full address, leaving behind a street address with some garbage.
     #It then cleans up the street address and pulls the city, state, and zip out of the csz, and assigns them as appropriate to the street address and state.
 
-	address = address_re.findall(county)[0]
+	address = address_re.findall(county)[0].replace("</span><br><span ID=\"lblAddress2\" Class=\"clerkText\">","")
 
 	csz = csz_re.findall(county)[0]
 
@@ -170,23 +153,9 @@ for county in county_data:
 	phone, fax, email, website, hours, voter_state, source, review])
 
 #This outputs the results to a separate text file.
+dogcatcher.output(result, voter_state, cdir)
 
-output = open(cdir + "michigan-counties.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
-
-municipality_list = municipal_re.findall(data)
 print municipality_list
-
-
-
-
-
-
-
 
 #Note that in MI, we give an unusual item: town_name_full. This is the town name, but with "Township" or "City of" included.
 #This is necessary because, in at least one county, there is a city and a county by the same name.
@@ -199,9 +168,6 @@ result = [("authority_name", "first_name", "last_name", "town_name", "county_nam
     "reg_po_street", "reg_po_city", "reg_po_state", "reg_po_zip_code",
     "reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review", "town_name_full")]
-
-
-
 
 
 town_data_re = re.compile("<span id=\"ctl00_ContentPlaceHolder1_lblCounty\".+?</td>\s", re.DOTALL)
@@ -223,7 +189,7 @@ for town_id in municipality_list:
 	#The URLs are uniformly formatted; we insert every URL suffix on municipality_list into the URL format, and then grab and save a webpage based on that.
 	#(Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
-	file_name = cdir + town_id + "-MI-municipal-clerks.html"
+	file_name = tmpdir + town_id + "-MI-municipal-clerks.html"
 
 	#To be used when part of the data has already been extracted.
 	try:
@@ -254,7 +220,7 @@ for town_id in municipality_list:
 	# town = town_data_re.findall(data)[0]
 
 	# data = open(file_name).read()
-	
+
 
 
 	authority_name, first_name, last_name, county_name, town_name, fips, street, city, address_state, zip_code, po_street, po_city, po_state, po_zip_code, reg_authority_name, reg_first, reg_last, reg_street, reg_city, reg_state, reg_zip_code, reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code, reg_phone, reg_fax, reg_email, reg_website, reg_hours, phone, fax, email, website, hours, review = dogcatcher.begin(voter_state)
@@ -288,7 +254,7 @@ for town_id in municipality_list:
 	# 	fax = "517-431-2320"
 	# elif town_name == "Hamtramck":
 	# 	fax = "313-876-7703"
-	
+
 	#A few towns don't have addresses listed; this catches them before we try to clean addresses from them.
 
 	if "Address\" class=\"clerkText\"><" in town:
@@ -358,7 +324,7 @@ for town_id in municipality_list:
 	print [address]
 
 	fips = dogcatcher.find_fips(county_name, voter_state)
-	
+
 	result.append([authority_name, first_name, last_name, town_name, county_name, fips,
 	street, city, address_state, zip_code,
 	po_street, po_city,	po_state, po_zip_code,
@@ -369,10 +335,4 @@ for town_id in municipality_list:
 	phone, fax, email, website, hours, voter_state, source, review, town_name_full])
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "michigan-cities.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir, "cities")

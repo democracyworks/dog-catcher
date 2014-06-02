@@ -8,12 +8,13 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "MS"
 source = "State"
 
 #The following section grabs the website and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
-file_path = cdir + "mississippi-clerks.html"
+file_path = tmpdir + "mississippi-clerks.html"
 url = "http://www.sos.ms.gov/elections_voter_info_center_absentee.aspx"
 data = urllib.urlopen(url).read()
 output = open(file_path,"w")
@@ -31,7 +32,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
     "reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
-county_data_re = re.compile("<tr>[^<]+?<td>.+?\d.+?</td>[^<]+?</tr>", re.DOTALL)
+county_data_re = re.compile("<tr>[^<]+?<td>[^<].+?\d.+?</td>[^<]+?</tr>", re.DOTALL)
 county_name_re = re.compile("<td> *([A-Z \n\r]+) *</td>")
 
 phone_fax_re = re.compile("\d{3}-\d{3}-.+?<.+?\d{4}", re.DOTALL)
@@ -44,7 +45,6 @@ zip_re = re.compile(" (\d{5}[\d-]*)")
 
 county_data = county_data_re.findall(data)
 
-
 for county in county_data:
 	print "__________________________________________________"
 
@@ -53,7 +53,7 @@ for county in county_data:
 	authority_name = "County Voter Registrar"
 
 	print county
-	
+
 	county_name = " ".join(county_name_re.findall(county)[0].replace("\r\n"," ").title().split())
 
 	#There is only one address in any town, which is either a PO box or physical address.
@@ -97,10 +97,4 @@ for county in county_data:
 
 
 #This outputs the results to a separate text file.
-
-output = open(cdir + "mississippi.txt", "w")
-for r in result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
-output.close()
+dogcatcher.output(result, voter_state, cdir)

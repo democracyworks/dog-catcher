@@ -18,7 +18,7 @@ def begin(state):
 	website = ""
 	hours = ""
 	reg_street = ""
-	reg_city = "" 
+	reg_city = ""
 	reg_state = state
 	reg_zip_code = ""
 	reg_po_street = ""
@@ -59,9 +59,11 @@ def find_fips(county_name, voter_state):
 
 	fips_re = re.compile(fips_re_string)
 
-	fips = fips_re.findall(fips_text)[0]
-
-	return fips.title()
+	fips_search = fips_re.findall(fips_text)
+	if len(fips_search) == 0:
+		return None
+	else:
+		return fips_search[0].title()
 
 def insert(original, new, pos):
 	"Inserts a string into a larger string."
@@ -187,7 +189,7 @@ def map_fips(city, state, zip_code, alternate_city = ""):
 	#To begin with, we define an address for the place and grab it from the Google Maps API. Since this leaves us with a pile of JSON, we load it into a JSON object.
 
 	base_url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=%s"
-	
+
 	address = city + " " + state + " " #+ zip_code
 
 	url = base_url % urllib.quote(address)
@@ -269,28 +271,28 @@ def make_name(name_line, separator, review, order="", ignore = ""):
 
 def split_name(official_name, review, ignore = ""):
 	"This function takes a name, checks for a middle name or prefix (and removes it if necessary), and returns a first name and last name."
-	
+
 	import re
 
 	middle_name_re = re.compile(" [A-Z]\.* ")
 	nick_re = re.compile("[\(\"\'].+?[\)\"\'] ")
 	prefix_re = re.compile("[MD][rs]*\. ")
-	
+
 	for item in middle_name_re.findall(official_name):
 		official_name = official_name.replace(item," ")
 	for item in nick_re.findall(official_name):
 		official_name = official_name.replace(item," ")
 	for item in prefix_re.findall(official_name):
 		official_name = official_name.replace(item," ")
-	
+
 	if not ignore:
 		official_name = official_name.encode("ascii", "ignore").strip()
-	
+
 	name_split = official_name.partition(" ")
 	first_name = name_split[0].title().strip(", \r\n")
 	last_name = name_split[2].title().strip(", \r\n")
-	
-	
+
+
 	if "Hon." in first_name:
 		last_fixer = last_name.partition(" ")
 		first_name = first_name + " " + last_fixer[0]
@@ -319,36 +321,27 @@ def output(results, state, edir, type = "counties", results_city = ""):
 		output.write("\n")
 	output.close()
 
-	if results_city:
-		output = open(edir + "/cities/" + state.lower() + ".txt", "w")
-
-	for r in results_city:
-		output.write("\t".join(r))
-		output.write("\n")
-	output.close()
-
-
-def pdf_to_text(data): 
+def pdf_to_text(data, pages=None):
 	"Converts a PDF to text, as neatly as can reasonably be hoped. Found from Herb Lainchbury in http://www.herblainchbury.com/2010_05_01_archive.html"
-	from pdfminer.pdfinterp import PDFResourceManager, process_pdf 
-	from pdfminer.pdfdevice import PDFDevice 
-	from pdfminer.converter import TextConverter 
-	from pdfminer.layout import LAParams 
+	from pdfminer.pdfinterp import PDFResourceManager, process_pdf
+	from pdfminer.pdfdevice import PDFDevice
+	from pdfminer.converter import TextConverter
+	from pdfminer.layout import LAParams
 
-	import StringIO 
-	fp = StringIO.StringIO() 
-	fp.write(data) 
-	fp.seek(0) 
-	outfp = StringIO.StringIO() 
+	import StringIO
+	fp = StringIO.StringIO()
+	fp.write(data)
+	fp.seek(0)
+	outfp = StringIO.StringIO()
 
-	rsrcmgr = PDFResourceManager() 
-	device = TextConverter(rsrcmgr, outfp, laparams=LAParams()) 
-	process_pdf(rsrcmgr, device, fp) 
-	device.close() 
+	rsrcmgr = PDFResourceManager()
+	device = TextConverter(rsrcmgr, outfp, laparams=LAParams())
+	process_pdf(rsrcmgr, device, fp, pages)
+	device.close()
 
-	t = outfp.getvalue() 
-	outfp.close() 
-	fp.close() 
+	t = outfp.getvalue()
+	outfp.close()
+	fp.close()
 	return t
 
 def po_standardize(data):
@@ -356,7 +349,7 @@ def po_standardize(data):
 
 	import re
 
-	po_re = re.compile("P[ \.]*O[ \.]* [BD]")	
+	po_re = re.compile("P[ \.]*O[ \.]* [BD]")
 
 	for po in po_re.findall(data):
 		if "PO " not in po:

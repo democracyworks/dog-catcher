@@ -8,6 +8,7 @@ import HTMLParser
 
 h = HTMLParser.HTMLParser()
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "FL"
 source = "State"
@@ -24,7 +25,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips"
 #The following section grabs the spreadsheet and writes it to a file. (Writing it to a file isn't strictly necessary, but saves some time down the line.)
 
 url = "http://election.dos.state.fl.us/SOE/FloridaSOE.xls"
-filename = cdir + "florida-clerks.xls"
+filename = tmpdir + "florida-clerks.xls"
 
 urllib.urlretrieve(url, filename)
 
@@ -42,7 +43,7 @@ for row in range(1, data.nrows):
 
 	authority_name = "Supervisor of Elections"
 
-	
+
 	first_name = " ".join(data.cell(row,2).value.split())
 	last_name = " ".join(data.cell(row,4).value.split())
 
@@ -78,7 +79,7 @@ for row in range(1, data.nrows):
 	website = dogcatcher.clean_website(data.cell(row,14).value.rstrip().replace("//","+++++"))
 
 	fips = dogcatcher.find_fips(county_name, voter_state)
-	
+
 	result.append([authority_name, first_name, last_name, county_name, fips,
 	street, city, address_state, zip_code,
 	po_street, po_city,	po_state, po_zip_code,

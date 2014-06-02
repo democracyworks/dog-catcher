@@ -10,6 +10,7 @@ import os
 h = HTMLParser.HTMLParser()
 
 cdir = os.path.dirname(os.path.abspath(__file__)) + "/"
+tmpdir = cdir + "tmp/"
 
 voter_state = "IL"
 source = "State"
@@ -45,7 +46,7 @@ br.select_form(name = "aspnetForm")
 br["ctl00$ContentPlaceHolder1$ddlCounty"] = ["All",]
 res = br.submit()
 content = res.read()
-file_path = cdir + "illinois-clerks.html"
+file_path = tmpdir + "illinois-clerks.html"
 output = open(file_path,"w")
 output.write(content)
 output.close()
@@ -83,7 +84,7 @@ for county in county_data:
 
 	county_name = county_name_re.findall(county)[0].title().replace("Dekalb","DeKalb").replace("Dewitt","De Witt").replace("Dupage","DuPage").replace("Jodaviess","Jo Daviess")
 	county_name = county_name.replace("Lasalle","LaSalle").replace("Mcd","McD").replace("Mcl","McL").replace("Mch","McH")
-	
+
 	authority_name = office_name_re.findall(county)[0].strip().title()
 	official_name = name_re.findall(county)[0].strip()
 	first_name, last_name, review = dogcatcher.split_name(official_name, review)
@@ -156,12 +157,14 @@ for county in county_data:
 
 
 #This outputs the results to two separate text files: one for counties in IL, and one for cities.
+dogcatcher.output(county_result, voter_state, cdir)
+dogcatcher.output(city_result, voter_state, cdir, "cities")
 
 output = open(cdir+ "illinois-counties.txt", "w")
 for r in county_result:
-	r = h.unescape(r)
-	output.write("\t".join(r))
-	output.write("\n")
+  r = h.unescape(r)
+  output.write("\t".join(r))
+  output.write("\n")
 output.close()
 
 output = open(cdir + "illinois-cities.txt", "w")
@@ -170,3 +173,4 @@ for r in city_result:
     output.write("\t".join(r))
     output.write("\n")
 output.close()
+

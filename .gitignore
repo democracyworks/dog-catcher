@@ -1,5 +1,11 @@
 *.py[co]
 
+# Ignore tmp and output directories
+
+tmp/
+cities/
+counties/
+
 # Packages
 *.egg
 *.egg-info
@@ -34,7 +40,6 @@ pip-log.txt
 .metadata
 .gradle
 bin/
-tmp/
 *.tmp
 *.bak
 *.swp
