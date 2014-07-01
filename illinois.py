@@ -159,18 +159,3 @@ for county in county_data:
 #This outputs the results to two separate text files: one for counties in IL, and one for cities.
 dogcatcher.output(county_result, voter_state, cdir)
 dogcatcher.output(city_result, voter_state, cdir, "cities")
-
-output = open(cdir+ "illinois-counties.txt", "w")
-for r in county_result:
-  r = h.unescape(r)
-  output.write("\t".join(r))
-  output.write("\n")
-output.close()
-
-output = open(cdir + "illinois-cities.txt", "w")
-for r in city_result:
-    r = h.unescape(r)
-    output.write("\t".join(r))
-    output.write("\n")
-output.close()
-
