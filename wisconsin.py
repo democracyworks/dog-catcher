@@ -6,37 +6,31 @@ from file_utils import *
 voter_state = "WI"
 source = "State"
 
-po_address_re = re.compile(r'\sPO\sBOX')
+po_address_re = re.compile(r'(\d+)\s+PO\sBOX')
+missing_number_identifier_re = re.compile(r'\s{2,}\d+\s*\Z')
 town_name_full_re = re.compile(r'(.+?)\s-\s')
 
 def format_datum(datum):
   return (str(datum)).strip()
 
-def county_data(county_name, county_fips, row):
-  street, city, address_state, zip_code = "","","",""
-  po_street, po_city, po_state, po_zip_code = "","","",""
-
-  if po_address_re.search(row[6]) == None:
-    street, city, address_state, zip_code = row[6],row[7],row[8],row[9]
-  else:
-    po_street, po_city, po_state, po_zip_code = row[6],row[7],row[8],row[9]
-
-  data = ['', row[3], row[2], county_name, county_fips,
-          street, city, address_state, zip_code,
-          po_street, po_city, po_state, po_zip_code,
-          '','','','','','','','',
-          '','','','','','','','',
-          row[10],'',row[5],'','',voter_state,source,'']
-  return map(format_datum, data)
-
 def city_data(county_name, county_fips, town_name, row):
   street, city, address_state, zip_code = "","","",""
   po_street, po_city, po_state, po_zip_code = "","","",""
 
-  if po_address_re.search(row[6]) == None:
-    street, city, address_state, zip_code = row[6],row[7],row[8],row[9]
+  po_address = po_address_re.search(row[6])
+  if po_address == None:
+    if missing_number_identifier_re.search(row[6]):
+      s = str(row[6]).strip()
+      index = s.rfind("  ")
+      street = s[:index].strip() + " # " + s[index:].strip()
+    else:
+      street = row[6]
+    city, address_state, zip_code = row[7],row[8],row[9]
   else:
-    po_street, po_city, po_state, po_zip_code = row[6],row[7],row[8],row[9]
+    # In the data set, po address is listed as "XXX PO BOX", we want
+    # to swap that around to "PO BOX XXX"
+    po_street = "PO BOX " + po_address.group(1)
+    po_city, po_state, po_zip_code = row[7],row[8],row[9]
 
   town_name_full = town_name_full_re.search(row[1]).group(1)
 
@@ -63,23 +57,20 @@ worksheet = workbook.sheet_by_name('Sheet1')
 
 current_county = None
 current_fips = None
-county_header_row = ["authority_name", "first_name", "last_name", "county_name", "fips",
-    "street", "city", "address_state", "zip_code",
+header_row = ["authority_name", "first_name", "last_name", "town_name",
+    "county_name", "fips", "street", "city", "address_state", "zip_code",
     "po_street", "po_city", "po_state", "po_zip_code",
     "reg_authority_name", "reg_first", "reg_last",
     "reg_street", "reg_city", "reg_state", "reg_zip_code",
     "reg_po_street", "reg_po_city", "reg_po_state", "reg_po_zip_code",
     "reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
-    "phone", "fax", "email", "website", "hours", "voter_state", "source", "review"]
+    "phone", "fax", "email", "website", "hours", "voter_state",
+    "source", "review", "town_name_full"]
 
-counties = [county_header_row]
-city_header_row = list(county_header_row)
-city_header_row.insert(3, "town_name")
-city_header_row.append("town_name_full")
-cities = [city_header_row]
+cities = [header_row]
 
 county_name_re = re.compile(r'(.+?)\sCOUNTY\s')
-town_name_re = re.compile(r'OF\s(.+?)\s-\s')
+town_name_re = re.compile(r'^(TOWN|CITY|VILLAGE)\sOF\s(.+?)\s-.*', re.DOTALL)
 
 # process XLS, separate counties from cities
 for curr_row in range(1, worksheet.nrows):
@@ -88,10 +79,11 @@ for curr_row in range(1, worksheet.nrows):
   if county_name:
     current_county = county_name.group(1)
     current_fips = dogcatcher.find_fips(current_county, voter_state)
-    counties.append(county_data(current_county, current_fips, row))
   else:
-    town_name = town_name_re.search(row[1]).group(1)
-    cities.append(city_data(current_county, current_fips, town_name, row))
+    town_name = town_name_re.search(row[1])
+    if town_name:
+      cities.append(city_data(current_county, current_fips, town_name.group(2), row))
+    else:
+      print "skipping: " + row[1]
 
-dogcatcher.output(counties, voter_state, base_dir())
 dogcatcher.output(cities, voter_state, base_dir(), "cities")
