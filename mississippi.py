@@ -39,7 +39,7 @@ phone_fax_re = re.compile("\d{3}-\d{3}-.+?<.+?\d{4}", re.DOTALL)
 number_re = re.compile("\d{3}-\d{3}-\d{4}")
 
 address_re = re.compile("<td>.+?<td>(.+?)</td>[\s]+<td>\d{3}-\d{3}", re.DOTALL)
-csz_re = re.compile("<br>[\s]*([^<]+? \d{5}[\d-]*)", re.DOTALL)
+csz_re = re.compile("<br />[\s]*([^<]+? \d{5}[\d-]*)", re.DOTALL)
 city_re = re.compile("([^\d]+?) \d{5}")
 zip_re = re.compile(" (\d{5}[\d-]*)")
 
@@ -66,11 +66,11 @@ for county in county_data:
 	if "P.O. Box" in address:
 		po_city = city_re.findall(csz)[0]
 		po_zip_code = zip_re.findall(csz)[0]
-		po_street = address.replace(csz,"").replace("\n\r",", ").replace("<br>","").strip(" \n\r,")
+		po_street = address.replace(csz,"").replace("\n\r",", ").replace("<br />","").strip(" \n\r,")
 	else:
 		city = city_re.findall(csz)[0]
 		zip_code = zip_re.findall(csz)[0]
-		street = " ".join(address.replace(csz,"").split()).replace("<br>","").strip(" \n\r,")
+		street = " ".join(address.replace(csz,"").split()).replace("<br />","").strip(" \n\r,")
 
 	print "++++++++++++++++++++++++++++++++++++++++++++"
 

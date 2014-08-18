@@ -30,7 +30,7 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
 
 
 file_path = tmpdir + "delaware-clerks.pdf"
-url = "http://elections.delaware.gov/services/voter/pdfs/absentee.pdf"
+url = "http://elections.delaware.gov/voter/pdfs/absentee.pdf"
 user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
 headers = {'User-Agent' : user_agent}
 

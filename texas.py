@@ -93,12 +93,11 @@ digit_re = re.compile("\d")
 #The part where the intern adds a bunch of code copied from other scrapers without knowing what it does.
 
 county_data = county_re.findall(data)
+
+reg_data = reg_data.replace("Shawn Snyder<br />", "Shawn Snyder</dd>")
+reg_data = reg_data.replace("PO Box 1629 Belton  76513</dd>", "<dd>PO Box 1629 Belton 76513 </dd>")
+
 reg_county_data = county_re.findall(reg_data)
-
-# fixes some formatting issues
-reg_county_data = reg_county_data.replace("Shawn Snyder<br />", "Shawn Snyder</dd>")
-reg_county_data = reg_county_data.replace("550 E. 2nd Ave Belton  76513 </dd>", "<dd>550 E. 2nd Ave Belton  76513 </dd>")
-
 
 for county in county_data:
 

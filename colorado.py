@@ -45,7 +45,7 @@ output.close()
 data = open(file_path).read()
 
 
-name_block_re = re.compile("[^ ]([A-Z]+[ ]*[A-Z]+[\s][\s][A-Z][a-z][^\n]+)", re.DOTALL)
+name_block_re = re.compile("[^ ]([A-Z]+[ ]*[A-Z]+[\s][\s][A-Z][a-z\.][^\n]+)", re.DOTALL)
 address_block_re = re.compile("\n\n(\d[^@]+?\d{5}[-\d]*)\s", re.DOTALL)
 phone_block_re = re.compile("\n[^\n]+?\nFax *:[^\n]+?\n[^\n]+?\n", re.DOTALL)
 po_full_re = re.compile("\d{5}[-\d]*[\s]*(P\.O\. Box [^ ]+? .+?\d{5}-*\d*)", re.DOTALL)
@@ -77,8 +77,9 @@ names_block = name_block_re.findall(data)
 address_block = address_block_re.findall(data)
 phone_block = phone_block_re.findall(data)
 
-if len(names_block) != len(address_block) or len(address_block) != len(phone_block) or len(names_block) != len(phone_block):
+if len(names_block) != len(address_block) or len(address_block) != len(phone_block):
     sys.exit("There's a mismatch in the lengths of the content blocks.")
+    
 
 
 #PO Boxes are the only text blocks that don't have 1/county. So we cycle through all of the PO Box items,
