@@ -31,11 +31,10 @@ result = [("authority_name", "first_name", "last_name", "county_name", "fips",
 
 data = open(file_path).read()
 
-
 county_name_re = re.compile("<h2>(.+?) \(\d{2}\)</h2>")
 county_data_re = re.compile("(<h2>[^\n]+? \(\d{2}\)</h2>[\s]*<ul class=\"list-no-disc\">.+?)</ul>", re.DOTALL)
 county_data_item_re = re.compile("<li.*?>(.+?)</li")
-phone_re = re.compile("(\(\d{3}\) \d{3}-\d{4})[^F]*<")
+phone_re = re.compile("(\(\d{3}\) \d{3}-\d{4})[^ F]")
 fax_re = re.compile("(\(\d{3}\) \d{3}-\d{4}) F")
 email_re = re.compile("E-[Mm]ail: <a href=[ \"]*m.*?>(.+?)</a>")
 website_re = re.compile("Website: <a href= *\"(.*?)\">.+?</a>", re.DOTALL)
@@ -51,7 +50,6 @@ data = data.replace("&amp;","&")
 #This splits the complete data into a list containing one item/county.
 
 county_data = county_data_re.findall(data)
-
 
 for county in county_data:
 
@@ -111,12 +109,8 @@ for county in county_data:
     city = "Martinez"
     address_state = "CA"
 
-  phone_data = dogcatcher.find_phone(phone_re, county)
+  phone = dogcatcher.find_phone(phone_re, county)
   fax = dogcatcher.find_phone(fax_re, county)
-
-  # phone_re.findall(county)
-  # phone = phone_data[0][0]
-  # fax = phone_data[1][0]
 
   email = dogcatcher.find_emails(email_re, county)
   if county == "Ventura":
