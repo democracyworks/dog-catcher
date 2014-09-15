@@ -235,9 +235,9 @@ for town_id in municipality_list:
 	official_name = official_name_re.findall(town)[0].partition(",")[0]
 	first_name, last_name, review = dogcatcher.split_name(official_name, review)
 
-	email = dogcatcher.find_emails(email_re, county)
-	phone = dogcatcher.find_phone(phone_re, county)
-	fax = dogcatcher.find_phone(fax_re, county)
+	email = dogcatcher.find_emails(email_re, town)
+	phone = dogcatcher.find_phone(phone_re, town)
+	fax = dogcatcher.find_phone(fax_re, town)
 
 	#There are many known errors in both phone numbers or fax numbers. This fixes them.
 	#They're currently commented out because they don't work well with phone_find as written.
