@@ -46,6 +46,8 @@ state_re = re.compile(" [A-Z][A-Z] ")
 zip_re = re.compile("\d{5}[\d-]*")
 po_re = re.compile("(P\.\s*O\..+?)<br>")
 comma_re = re.compile("[, ]{2,}")
+
+website_re = re.compile("HREF=\"([^m].+?)\">Visit")
 #This reduces the web page grabbed earlier to a simple list of county names. For each county name, we then turn it into a URL, grab an associated county webpage, extract the data, add that data to the Results matrix, and move on to the next county name.
 
 county_names = county_name_re.findall(data)
@@ -143,6 +145,9 @@ for item in county_names:
 
 	print "_______________________________________________________"
 
+
+	website = dogcatcher.find_website(website_re, county)
+	print website
 
 	if county_name == "Genesee":
 		po_street = "P.O. Box 284"
