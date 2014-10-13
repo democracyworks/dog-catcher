@@ -77,16 +77,6 @@ county_result = [("authority_name", "first_name", "last_name", "county_name", "f
     "reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
     "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
 
-city_result = [("authority_name", "first_name", "last_name", "town_name", "fips",
-    "street", "city", "address_state", "zip_code",
-    "po_street", "po_city", "po_state", "po_zip_code",
-    "reg_authority_name", "reg_first", "reg_last",
-    "reg_street", "reg_city", "reg_state", "reg_zip_code",
-    "reg_po_street", "reg_po_city", "reg_po_state", "reg_po_zip_code",
-    "reg_phone", "reg_fax", "reg_email", "reg_website", "reg_hours",
-    "phone", "fax", "email", "website", "hours", "voter_state", "source", "review")]
-
-
 county_re = re.compile("Voter Registration Office Contact Information.+?(?=Voter Registration Office Contact Information)", re.DOTALL)
 
 name_re = re.compile("<span id=\"_lblGeneralRegistrar\" class=\"lblDisplay\">(.+?)</span>")
@@ -210,27 +200,17 @@ for county in county_list:
 
 	fips = dogcatcher.find_fips(county_name, voter_state)
 
-	if "City" not in county_name:
-		county_result.append([authority_name, first_name, last_name, county_name, fips,
-		street, city, address_state, zip_code,
-		po_street, po_city, po_state, po_zip_code,
-		reg_authority_name, reg_first, reg_last,
-		reg_street, reg_city, reg_state, reg_zip_code,
-		reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code,
-		reg_phone, reg_fax, reg_email, reg_website, reg_hours,
-		phone, fax, email, website, hours, voter_state, source, review])
-	else:
-		print county_name
-		city_result.append([authority_name, first_name, last_name, county_name, "", fips,
-		street, city, address_state, zip_code,
-		po_street, po_city, po_state, po_zip_code,
-		reg_authority_name, reg_first, reg_last,
-		reg_street, reg_city, reg_state, reg_zip_code,
-		reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code,
-		reg_phone, reg_fax, reg_email, reg_website, reg_hours,
-		phone, fax, email, website, hours, voter_state, source, review])
 
-#These output the results to two separate text files: one for counties in VA, and one for cities.
+	county_result.append([authority_name, first_name, last_name, county_name, fips,
+	street, city, address_state, zip_code,
+	po_street, po_city, po_state, po_zip_code,
+	reg_authority_name, reg_first, reg_last,
+	reg_street, reg_city, reg_state, reg_zip_code,
+	reg_po_street, reg_po_city, reg_po_state, reg_po_zip_code,
+	reg_phone, reg_fax, reg_email, reg_website, reg_hours,
+	phone, fax, email, website, hours, voter_state, source, review])
 
+# Note: merged the city output back into the county output temporarily because that's
+# how TurboVote injests it. We have a card to address the true nature of this data
+# both here and in TV at a later time.
 dogcatcher.output(county_result, voter_state, cdir)
-dogcatcher.output(city_result, voter_state, cdir, "cities")
