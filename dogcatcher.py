@@ -55,9 +55,9 @@ def find_fips(county_name, voter_state):
 	if "St " in county_name:
 		county_name = county_name.replace("St ","St. ")
 
-	fips_re_string = county_name.lower() + "\t" + voter_state.lower() + "\t" + "(\d+)"
+	fips_re_string = "^" + county_name.lower() + "\t" + voter_state.lower() + "\t" + "(\d+)"
 
-	fips_re = re.compile(fips_re_string)
+	fips_re = re.compile(fips_re_string, re.MULTILINE)
 
 	fips_search = fips_re.findall(fips_text)
 	if len(fips_search) == 0:
